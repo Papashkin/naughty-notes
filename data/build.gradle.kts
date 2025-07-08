@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.antsfamily.data"
+    namespace = "com.antsfamily.sexcalendar.data"
     compileSdk = 35
 
     defaultConfig {
