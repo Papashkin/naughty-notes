@@ -1,4 +1,4 @@
-package com.antsfamily.android_native_template.ui.theme
+package com.antsfamily.sexcalendar.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

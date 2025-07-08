@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-native-template"
+rootProject.name = "sex-calendar"
 include(":app")
 include(":data")
