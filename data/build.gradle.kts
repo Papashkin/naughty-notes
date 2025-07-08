@@ -35,10 +35,9 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.androidx.core.testing)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockito)
-    testImplementation(libs.junit)
+    implementation(libs.room.runtime)
+    ksp(libs.room)
+    implementation(libs.room.ktx)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
@@ -46,4 +45,9 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito)
+    testImplementation(libs.junit)
 }
