@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.antsfamily.android_native_template"
+    namespace = "com.antsfamily.sexcalendar"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.antsfamily.android_native_template"
+        applicationId = "com.antsfamily.sexcalendar"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
