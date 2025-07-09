@@ -1,79 +1,73 @@
 package com.antsfamily.sexcalendar.presentation.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kizitonwose.calendar.compose.VerticalCalendar
-import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.daysOfWeek
+import java.time.Month
 import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(0) } // Adjust as needed
-    val endMonth = remember { currentMonth.plusMonths(0) } // Adjust as needed
 
-    val daysOfWeek = remember { daysOfWeek() }
+    val state = viewModel.state.collectAsState()
 
-    val state = rememberCalendarState(
-        startMonth = startMonth,
-        endMonth = endMonth,
-        firstVisibleMonth = currentMonth,
-        firstDayOfWeek = daysOfWeek.first()
-    )
-
-    Box(modifier = Modifier.statusBarsPadding()) {
-        Column {
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp)
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                items(daysOfWeek) { day ->
-                    Text(day.name.take(2))
-                }
+    when (val uiState = state.value) {
+        is HomeUiState.Loading -> FullScreenLoading()
+        is HomeUiState.Content -> HomeContent(
+            year = uiState.yearMonth.year,
+            month = uiState.yearMonth.month,
+            isNavigationBackVisible = uiState.isNavigationBackVisible,
+            isNavigationForwardVisible = uiState.isNavigationForwardVisible,
+            onNavigationBackClick = {
+                viewModel.onPreviousMonthClick()
+            },
+            onNavigationForwardClick = {
+                viewModel.onNextMonthClick()
             }
-
-            HorizontalDivider(thickness = 8.dp, color = Color.Transparent)
-
-            VerticalCalendar(
-                state = state,
-                dayContent = { Day(it, currentMonth.month.value) }
-            )
-        }
-
+        )
     }
 }
 
 @Composable
-fun Day(day: CalendarDay, currentMonthIndex: Int) {
-    Box(
-        modifier = Modifier.aspectRatio(1f), // This is important for square sizing!
-        contentAlignment = Alignment.Center
-    ) {
-        if (day.date.month.value == currentMonthIndex) {
-            Text(text = day.date.dayOfMonth.toString())
+fun HomeContent(
+    year: Int,
+    month: Month,
+    isNavigationBackVisible: Boolean,
+    isNavigationForwardVisible: Boolean,
+    onNavigationBackClick: () -> Unit,
+    onNavigationForwardClick: () -> Unit
+) {
+
+    Column {
+        TopBar(
+            modifier = Modifier.statusBarsPadding(),
+            title = month.name.plus(" ").plus(year).lowercase(),
+            isNavigationBackVisible = isNavigationBackVisible,
+            isNavigationForwardVisible = isNavigationForwardVisible,
+            onNavigationBack = { onNavigationBackClick.invoke() },
+            onNavigationForward = { onNavigationForwardClick.invoke() }
+        )
+
+        Box(
+            modifier = Modifier
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
+            CalendarView(month = month)
         }
     }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun HomeContentPreview() {
+    HomeContent(YearMonth.now().year, Month.APRIL, true, false, {}, {})
 }
