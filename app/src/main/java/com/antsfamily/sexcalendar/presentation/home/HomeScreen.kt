@@ -1,13 +1,24 @@
 package com.antsfamily.sexcalendar.presentation.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import java.time.Month
 import java.time.YearMonth
@@ -22,52 +33,54 @@ fun HomeScreen(
     when (val uiState = state.value) {
         is HomeUiState.Loading -> FullScreenLoading()
         is HomeUiState.Content -> HomeContent(
-            year = uiState.yearMonth.year,
-            month = uiState.yearMonth.month,
+            yearMonth = uiState.yearMonth,
             isNavigationBackVisible = uiState.isNavigationBackVisible,
             isNavigationForwardVisible = uiState.isNavigationForwardVisible,
-            onNavigationBackClick = {
-                viewModel.onPreviousMonthClick()
-            },
-            onNavigationForwardClick = {
-                viewModel.onNextMonthClick()
-            }
+            onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
+            onNextMonthClick = { viewModel.onNextMonthClick() }
         )
     }
 }
 
 @Composable
 fun HomeContent(
-    year: Int,
-    month: Month,
+    yearMonth: YearMonth,
     isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
-    onNavigationBackClick: () -> Unit,
-    onNavigationForwardClick: () -> Unit
+    onPreviousMonthClick: () -> Unit,
+    onNextMonthClick: () -> Unit
 ) {
 
     Column {
-        TopBar(
-            modifier = Modifier.statusBarsPadding(),
-            title = month.name.plus(" ").plus(year).lowercase(),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "Journal",
+                maxLines = 1,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Start
+            )
+        }
+
+        Spacer(Modifier.height(40.dp))
+
+        CalendarView(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            yearMonth = yearMonth,
             isNavigationBackVisible = isNavigationBackVisible,
             isNavigationForwardVisible = isNavigationForwardVisible,
-            onNavigationBack = { onNavigationBackClick.invoke() },
-            onNavigationForward = { onNavigationForwardClick.invoke() }
+            onPreviousMonthClick = { onPreviousMonthClick.invoke() },
+            onNextMonthClick = { onNextMonthClick.invoke() }
         )
-
-        Box(
-            modifier = Modifier
-                .statusBarsPadding()
-                .navigationBarsPadding()
-        ) {
-            CalendarView(year = year, month = month)
-        }
     }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(YearMonth.now().year, Month.APRIL, true, false, {}, {})
+    HomeContent(YearMonth.now(), true, false, {}, {})
 }
