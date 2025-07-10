@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.antsfamily.sexcalendar.presentation.home.HomeScreen
-import com.antsfamily.sexcalendar.ui.theme.AndroidnativetemplateTheme
+import com.antsfamily.sexcalendar.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AndroidnativetemplateTheme {
+            AppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
                     HomeScreen()
                 }
