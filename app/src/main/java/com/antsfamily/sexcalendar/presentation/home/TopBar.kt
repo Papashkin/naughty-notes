@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -35,46 +34,38 @@ fun TopBar(
             .height(40.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier.padding(end = 8.dp),
-            horizontalArrangement = Arrangement.Start
+        IconButton(
+            onClick = { if (isNavigationBackVisible) onNavigationBack?.invoke() }
         ) {
-            IconButton(
-                onClick = { if (isNavigationBackVisible) onNavigationBack?.invoke() }
-            ) {
-                if (isNavigationBackVisible) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                contentDescription = null,
+                tint = if (isNavigationBackVisible) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+            )
+        }
 
-            if (title != null) {
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Text(
-                        title,
-                        maxLines = 1,
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Start
-                    )
-                }
+        if (title != null) {
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    title,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Start
+                )
             }
         }
+
         IconButton(
             onClick = { if (isNavigationForwardVisible) onNavigationForward?.invoke() }
         ) {
-            if (isNavigationForwardVisible) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = if (isNavigationForwardVisible) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+            )
         }
     }
 }

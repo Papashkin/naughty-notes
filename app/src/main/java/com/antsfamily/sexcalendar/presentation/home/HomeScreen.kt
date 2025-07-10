@@ -61,7 +61,7 @@ fun HomeContent(
                 .statusBarsPadding()
                 .navigationBarsPadding()
         ) {
-            CalendarView(month = month)
+            CalendarView(year = year, month = month)
         }
     }
 }
