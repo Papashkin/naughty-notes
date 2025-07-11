@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.design.navigation
+package com.antsfamily.sexcalendar.design
 
 import kotlinx.serialization.Serializable
 

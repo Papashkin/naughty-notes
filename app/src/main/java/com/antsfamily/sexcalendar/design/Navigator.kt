@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.design.navigation
+package com.antsfamily.sexcalendar.design
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Scaffold
