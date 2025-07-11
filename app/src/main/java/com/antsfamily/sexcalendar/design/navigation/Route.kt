@@ -9,3 +9,6 @@ data object Splash: Route()
 
 @Serializable
 data object Home: Route()
+
+@Serializable
+data object CreateNote: Route()
