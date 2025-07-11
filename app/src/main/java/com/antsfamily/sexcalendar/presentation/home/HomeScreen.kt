@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -25,8 +26,15 @@ import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToCreateNote: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateToCreateNoteEvent.collect {
+            navigateToCreateNote()
+        }
+    }
 
     val state = viewModel.state.collectAsState()
 
@@ -37,7 +45,8 @@ fun HomeScreen(
             isNavigationBackVisible = uiState.isNavigationBackVisible,
             isNavigationForwardVisible = uiState.isNavigationForwardVisible,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
-            onNextMonthClick = { viewModel.onNextMonthClick() }
+            onNextMonthClick = { viewModel.onNextMonthClick() },
+            onCreateNoteClick = { viewModel.onCreateNoteClick() }
         )
     }
 }
@@ -48,11 +57,14 @@ fun HomeContent(
     isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
-    onNextMonthClick: () -> Unit
+    onNextMonthClick: () -> Unit,
+    onCreateNoteClick: () -> Unit
 ) {
-    Column(modifier = Modifier
-        .padding(horizontal = 20.dp)
-        .navigationBarsPadding()) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .navigationBarsPadding()
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,12 +91,12 @@ fun HomeContent(
 
         Spacer(Modifier.height(24.dp))
 
-        NotesListView(notes = listOf())
+        NotesListView(notes = listOf(), onCreateNoteClick = onCreateNoteClick)
     }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(YearMonth.now(), true, false, {}, {})
+    HomeContent(YearMonth.now(), true, false, {}, {}, {})
 }

@@ -26,14 +26,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NotesListView(
     modifier: Modifier = Modifier,
-    notes: List<String>
+    notes: List<String>,
+    onCreateNoteClick: () -> Unit
 ) {
     Column(modifier = modifier) {
         Text("Notes", style = MaterialTheme.typography.titleMedium)
         if (notes.isNotEmpty()) {
             NotesListWithContent(notes)
         } else {
-            NotesListEmpty()
+            NotesListEmpty(onCreateNoteClick)
         }
     }
 }
@@ -48,7 +49,7 @@ fun NotesListWithContent(notes: List<String>) {
 }
 
 @Composable
-fun NotesListEmpty() {
+fun NotesListEmpty(onCreateNoteClick: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -62,9 +63,7 @@ fun NotesListEmpty() {
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                modifier = Modifier.clickable {
-                    //TODO add action
-                },
+                modifier = Modifier.clickable { onCreateNoteClick() },
                 text = AnnotatedString(
                     text = "Create a note",
                     spanStyle = SpanStyle(color = MaterialTheme.colorScheme.primary)
@@ -91,10 +90,10 @@ fun NoteCard(note: String) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun NotesListViewPreview1() {
-    NotesListView(notes = listOf("mock 1", "mock 2", "mock 3"))
+    NotesListView(notes = listOf("mock 1", "mock 2", "mock 3")) {}
 }
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun NotesListViewPreview2() {
-    NotesListView(notes = listOf())
+    NotesListView(notes = listOf()) {}
 }

@@ -11,6 +11,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.antsfamily.sexcalendar.presentation.createnote.CreateNoteScreen
 import com.antsfamily.sexcalendar.presentation.home.HomeScreen
 import com.antsfamily.sexcalendar.presentation.splash.SplashScreen
 
@@ -36,7 +37,17 @@ fun Navigator() {
                     BackHandler(true) {
                         //no-op
                     }
-                    HomeScreen()
+                    HomeScreen(
+                        navigateToCreateNote = { navController.navigate(CreateNote) }
+                    )
+                }
+                composable<CreateNote> { _ ->
+                    BackHandler(true) {
+                        //no-op
+                    }
+                    CreateNoteScreen {
+                        navController.popBackStack()
+                    }
                 }
             }
         }
