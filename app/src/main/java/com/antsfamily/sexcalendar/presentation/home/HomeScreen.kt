@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.antsfamily.sexcalendar.presentation.home.view.CalendarView
+import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
+import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
 import java.time.YearMonth
 
 @Composable
@@ -46,8 +50,9 @@ fun HomeContent(
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit
 ) {
-
-    Column {
+    Column(modifier = Modifier
+        .padding(horizontal = 20.dp)
+        .navigationBarsPadding()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,16 +67,19 @@ fun HomeContent(
             )
         }
 
-        Spacer(Modifier.height(40.dp))
+        Spacer(Modifier.height(24.dp))
 
         CalendarView(
-            modifier = Modifier.padding(horizontal = 16.dp),
             yearMonth = yearMonth,
             isNavigationBackVisible = isNavigationBackVisible,
             isNavigationForwardVisible = isNavigationForwardVisible,
             onPreviousMonthClick = { onPreviousMonthClick.invoke() },
             onNextMonthClick = { onNextMonthClick.invoke() }
         )
+
+        Spacer(Modifier.height(24.dp))
+
+        NotesListView(notes = listOf())
     }
 }
 

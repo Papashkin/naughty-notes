@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.presentation.home
+package com.antsfamily.sexcalendar.presentation.home.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

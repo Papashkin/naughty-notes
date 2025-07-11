@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.presentation.home
+package com.antsfamily.sexcalendar.presentation.home.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -175,7 +175,7 @@ fun WeekDayHeader(daysOfWeek: List<DayOfWeek>) {
         items(daysOfWeek) { day ->
             Box {
                 Text(
-                    modifier = Modifier.width(56.dp),
+                    modifier = Modifier.width(48.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     text = day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
