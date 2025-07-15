@@ -1,4 +1,4 @@
-package model
+package com.antsfamily.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,12 +7,9 @@ import androidx.room.PrimaryKey
 data class SexRecordDTO(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val date: String,
-    val types: List<SexType>,
-    val isWithCondom: Boolean
+    val type: String,
+    val isProtected: Boolean,
+    val pleasureRate: Int,
+    val painRate: Int,
+    val note: String,
 )
-
-enum class SexType {
-    VAGINAL,
-    ANAL,
-    ORAL,
-}

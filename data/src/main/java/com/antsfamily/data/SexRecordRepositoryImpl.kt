@@ -1,4 +1,6 @@
-import local.SexRecordDao
+package com.antsfamily.data
+
+import com.antsfamily.data.local.SexRecordDao
 import javax.inject.Inject
 
 class SexRecordRepositoryImpl @Inject constructor(
