@@ -1,10 +1,10 @@
-package local
+package com.antsfamily.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import model.SexRecordDTO
+import com.antsfamily.data.model.SexRecordDTO
 
 @Dao
 abstract class SexRecordDao {

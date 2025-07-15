@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Naughty Notes</string>
+
+    <string name="sex_type_anal">Anal</string>
+    <string name="sex_type_oral">Oral</string>
+    <string name="sex_type_vaginal">Vaginal</string>
+    <string name="sex_type_masturbation">Masturbation</string>
+    <string name="sex_type_tribadism">Tribadism</string>
+    <string name="sex_type_unknown">Not selected</string>
 </resources>
