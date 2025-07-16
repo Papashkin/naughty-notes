@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.SexRecordRepository
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +16,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import javax.inject.Inject
 
-@HiltViewModel
-class CreateNoteViewModel @Inject constructor(
-    private val repository: SexRecordRepository
+@HiltViewModel(assistedFactory = CreateNoteViewModel.Factory::class)
+class CreateNoteViewModel @AssistedInject constructor(
+    private val repository: SexRecordRepository,
+    @Assisted("dateEpoch") private val dateEpoch: Long,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("dateEpoch") dateEpoch: Long): CreateNoteViewModel
+    }
 
     private val _state: MutableStateFlow<CreateNoteUiState> =
         MutableStateFlow(CreateNoteUiState.Loading)
@@ -28,7 +36,8 @@ class CreateNoteViewModel @Inject constructor(
     val navigateBackEvent: SharedFlow<Unit> = _navigateBackEvent
 
     init {
-        _state.value = CreateNoteUiState.Content.Default
+        val date = LocalDate.ofEpochDay(dateEpoch)
+        _state.value = CreateNoteUiState.Content.Default.copy(date = date)
     }
 
     fun setPleasureRate(rate: Int) {
@@ -88,7 +97,7 @@ class CreateNoteViewModel @Inject constructor(
             _state.value = it.copy(isSaveButtonLoadingVisible = true)
 
             val note = NoteModel(
-                date = LocalDate.now(),
+                date = it.date,
                 type = it.type,
                 isProtected = it.isProtected,
                 rate = it.rate,

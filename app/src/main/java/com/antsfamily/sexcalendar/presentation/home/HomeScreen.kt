@@ -23,17 +23,18 @@ import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.sexcalendar.presentation.home.view.CalendarView
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
+import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToCreateNote: () -> Unit
+    navigateToCreateNote: (Long) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
         viewModel.navigateToCreateNoteEvent.collect {
-            navigateToCreateNote()
+            navigateToCreateNote(it)
         }
     }
 
@@ -48,7 +49,8 @@ fun HomeScreen(
             isNavigationForwardVisible = uiState.isNavigationForwardVisible,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
             onNextMonthClick = { viewModel.onNextMonthClick() },
-            onCreateNoteClick = { viewModel.onCreateNoteClick() }
+            onCreateNoteClick = { viewModel.onCreateNoteClick() },
+            onDayClick = { viewModel.onCreateNoteClick(it) }
         )
     }
 }
@@ -61,7 +63,8 @@ fun HomeContent(
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
-    onCreateNoteClick: () -> Unit
+    onCreateNoteClick: () -> Unit,
+    onDayClick: (LocalDate) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -96,11 +99,9 @@ fun HomeContent(
             notes = notes,
             isNavigationBackVisible = isNavigationBackVisible,
             isNavigationForwardVisible = isNavigationForwardVisible,
-            onPreviousMonthClick = { onPreviousMonthClick.invoke() },
-            onNextMonthClick = { onNextMonthClick.invoke() },
-            onDayClick = {
-                //TODO implement navigation to CreateNoteScreen
-            }
+            onPreviousMonthClick = { onPreviousMonthClick() },
+            onNextMonthClick = { onNextMonthClick() },
+            onDayClick = { onDayClick(it) }
         )
 
         Spacer(Modifier.height(24.dp))
@@ -112,5 +113,5 @@ fun HomeContent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(YearMonth.now(), listOf(), true, false, {}, {}, {})
+    HomeContent(YearMonth.now(), listOf(), true, false, {}, {}, {}, {})
 }
