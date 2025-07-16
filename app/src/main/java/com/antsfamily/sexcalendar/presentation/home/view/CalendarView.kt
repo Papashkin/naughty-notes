@@ -1,12 +1,15 @@
 package com.antsfamily.sexcalendar.presentation.home.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,14 +31,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.SexType
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -46,10 +54,12 @@ private val CALENDAR_DATE_FORMAT = DateTimeFormatter.ofPattern("MMMM yyyy")
 fun CalendarView(
     modifier: Modifier = Modifier,
     yearMonth: YearMonth,
+    notes: List<NoteModel>,
     isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
+    onDayClick: (LocalDate) -> Unit,
 ) {
     val daysOfWeek = remember { daysOfWeek() }
 
@@ -73,14 +83,20 @@ fun CalendarView(
                 onPreviousMonthClick = onPreviousMonthClick,
                 onNextMonthClick = onNextMonthClick
             )
-            
+
             VerticalCalendar(
                 modifier = Modifier
                     .padding(top = 12.dp)
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                 state = state,
-                dayContent = {
-                    Day(it, yearMonth.monthValue)
+                dayContent = { day ->
+                    Day(
+                        day,
+                        yearMonth.monthValue,
+                        notes.filter { note -> note.date == day.date }.size
+                    ) {
+                        onDayClick(it)
+                    }
                 },
                 monthHeader = {
                     WeekDayHeader(daysOfWeek)
@@ -149,16 +165,56 @@ fun CalendarHeader(
 }
 
 @Composable
-fun Day(day: CalendarDay, currentMonthIndex: Int) {
+fun Day(
+    day: CalendarDay,
+    currentMonthIndex: Int,
+    recordsAmount: Int,
+    onDayClick: (LocalDate) -> Unit,
+) {
     Box(
-        modifier = Modifier.aspectRatio(1f),
+        modifier = Modifier
+            .aspectRatio(1f)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onDayClick(day.date)
+            }
+        ,
         contentAlignment = Alignment.Center
     ) {
-        if (day.date.month.value == currentMonthIndex) {
-            Text(
-                text = day.date.dayOfMonth.toString(),
-                style = MaterialTheme.typography.bodySmall,
+        if (recordsAmount == 0) {
+            if (day.date.month.value == currentMonthIndex) {
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                    style = MaterialTheme.typography.bodySmall
                 )
+            }
+        }
+        else {
+            Card(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp),
+                shape = RoundedCornerShape(8.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (day.date.month.value == currentMonthIndex) {
+                        Text(
+                            text = day.date.dayOfMonth.toString(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -190,8 +246,19 @@ fun WeekDayHeader(daysOfWeek: List<DayOfWeek>) {
 private fun CalendarViewPreview() {
     CalendarView(
         yearMonth = YearMonth.now(),
+        notes = listOf(
+            NoteModel(
+                LocalDate.now(),
+                SexType.VAGINAL,
+                isProtected = true,
+                painRate = 2,
+                rate = 4,
+                personalNote = "That was something crazy"
+            )
+        ),
         isNavigationBackVisible = true,
         isNavigationForwardVisible = true,
         onNextMonthClick = {},
-        onPreviousMonthClick = {})
+        onPreviousMonthClick = {},
+        onDayClick = {})
 }

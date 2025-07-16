@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.sexcalendar.presentation.home.view.CalendarView
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
@@ -42,6 +43,7 @@ fun HomeScreen(
         is HomeUiState.Loading -> FullScreenLoading()
         is HomeUiState.Content -> HomeContent(
             yearMonth = uiState.yearMonth,
+            notes = uiState.notes,
             isNavigationBackVisible = uiState.isNavigationBackVisible,
             isNavigationForwardVisible = uiState.isNavigationForwardVisible,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
@@ -54,6 +56,7 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     yearMonth: YearMonth,
+    notes: List<NoteModel>,
     isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
@@ -79,24 +82,35 @@ fun HomeContent(
             )
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            "Psst! Want to add a naughty note? Just click on a date. \uD83D\uDE09",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(Modifier.height(16.dp))
 
         CalendarView(
             yearMonth = yearMonth,
+            notes = notes,
             isNavigationBackVisible = isNavigationBackVisible,
             isNavigationForwardVisible = isNavigationForwardVisible,
             onPreviousMonthClick = { onPreviousMonthClick.invoke() },
-            onNextMonthClick = { onNextMonthClick.invoke() }
+            onNextMonthClick = { onNextMonthClick.invoke() },
+            onDayClick = {
+                //TODO implement navigation to CreateNoteScreen
+            }
         )
 
         Spacer(Modifier.height(24.dp))
 
-        NotesListView(notes = listOf(), onCreateNoteClick = onCreateNoteClick)
+        NotesListView(notes = notes, onCreateNoteClick = onCreateNoteClick)
     }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(YearMonth.now(), true, false, {}, {}, {})
+    HomeContent(YearMonth.now(), listOf(), true, false, {}, {}, {})
 }
