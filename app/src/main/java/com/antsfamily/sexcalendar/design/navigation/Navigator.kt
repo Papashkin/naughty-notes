@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.design
+package com.antsfamily.sexcalendar.design.navigation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Scaffold
@@ -11,6 +11,8 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.antsfamily.sexcalendar.presentation.createnote.CreateNoteScreen
 import com.antsfamily.sexcalendar.presentation.home.HomeScreen
 import com.antsfamily.sexcalendar.presentation.splash.SplashScreen
 
@@ -36,7 +38,18 @@ fun Navigator() {
                     BackHandler(true) {
                         //no-op
                     }
-                    HomeScreen()
+                    HomeScreen(
+                        navigateToCreateNote = { navController.navigate(CreateNote(it)) }
+                    )
+                }
+                composable<CreateNote> { entry ->
+                    val data = entry.toRoute<CreateNote>()
+                    BackHandler(true) {
+                        //no-op
+                    }
+                    CreateNoteScreen(dateEpoch = data.dateEpoch) {
+                        navController.popBackStack()
+                    }
                 }
             }
         }

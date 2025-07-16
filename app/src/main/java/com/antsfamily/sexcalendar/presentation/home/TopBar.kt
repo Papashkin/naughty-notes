@@ -62,7 +62,7 @@ fun TopBar(
                     Text(
                         title,
                         maxLines = 1,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Start
                     )
                 }

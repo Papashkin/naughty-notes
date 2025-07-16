@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "sex-calendar"
 include(":app")
 include(":data")
+include(":domain")

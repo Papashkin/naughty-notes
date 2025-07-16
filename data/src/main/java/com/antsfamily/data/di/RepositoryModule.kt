@@ -1,7 +1,7 @@
-package di
+package com.antsfamily.data.di
 
-import SexRecordRepository
-import SexRecordRepositoryImpl
+import com.antsfamily.data.SexRecordRepositoryImpl
+import com.antsfamily.domain.SexRecordRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
