@@ -1,18 +1,8 @@
 package com.antsfamily.sexcalendar.presentation.createnote.model
 
 import androidx.annotation.StringRes
+import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
-
-enum class SexType {
-    UNKNOWN,
-    VAGINAL,
-    ORAL,
-    ANAL,
-    MASTURBATION,
-    TRIBADISM,
-    ;
-}
-
 
 @StringRes
 fun SexType.toStringId(): Int {

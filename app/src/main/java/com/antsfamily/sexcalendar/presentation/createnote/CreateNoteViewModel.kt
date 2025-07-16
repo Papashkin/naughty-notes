@@ -1,17 +1,24 @@
 package com.antsfamily.sexcalendar.presentation.createnote
 
 import androidx.lifecycle.ViewModel
-import com.antsfamily.sexcalendar.presentation.createnote.model.SexType
+import androidx.lifecycle.viewModelScope
+import com.antsfamily.domain.SexRecordRepository
+import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.SexType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateNoteViewModel @Inject constructor() : ViewModel() {
+class CreateNoteViewModel @Inject constructor(
+    private val repository: SexRecordRepository
+) : ViewModel() {
 
     private val _state: MutableStateFlow<CreateNoteUiState> =
         MutableStateFlow(CreateNoteUiState.Loading)
@@ -21,7 +28,7 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
     val navigateBackEvent: SharedFlow<Unit> = _navigateBackEvent
 
     init {
-        _state.value =  CreateNoteUiState.Content.Default
+        _state.value = CreateNoteUiState.Content.Default
     }
 
     fun setPleasureRate(rate: Int) {
@@ -31,6 +38,7 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
                 else -> it
             }
         }
+        checkSaveButtonAvailability()
     }
 
     fun setPainRate(painRate: Int) {
@@ -40,6 +48,7 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
                 else -> it
             }
         }
+        checkSaveButtonAvailability()
     }
 
     fun setNote(note: String) {
@@ -51,6 +60,7 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
                 else -> it
             }
         }
+        checkSaveButtonAvailability()
     }
 
     fun setSexType(type: SexType) {
@@ -60,6 +70,7 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
                 else -> it
             }
         }
+        checkSaveButtonAvailability()
     }
 
     fun setIsProtected(isProtected: Boolean) {
@@ -69,11 +80,34 @@ class CreateNoteViewModel @Inject constructor() : ViewModel() {
                 else -> it
             }
         }
+        checkSaveButtonAvailability()
     }
 
-    fun onSaveButtonClicked() {
+    fun onSaveButtonClicked() = viewModelScope.launch {
         (_state.value as? CreateNoteUiState.Content)?.let {
-            //TODO implement saving mechanism
+            _state.value = it.copy(isSaveButtonLoadingVisible = true)
+
+            val note = NoteModel(
+                date = LocalDate.now(),
+                type = it.type,
+                isProtected = it.isProtected,
+                rate = it.rate,
+                painRate = it.painRate,
+                personalNote = it.note
+            )
+
+            repository.saveData(note)
+
+            _state.value = CreateNoteUiState.Content.Default
+        }
+    }
+
+    private fun checkSaveButtonAvailability() {
+        _state.update {
+            when (it) {
+                is CreateNoteUiState.Content -> it.copy(isSaveButtonEnabled = it.isValid)
+                else -> it
+            }
         }
     }
 }
