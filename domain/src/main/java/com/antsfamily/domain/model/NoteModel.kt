@@ -1,4 +1,4 @@
-package com.antsfamily.sexcalendar.presentation.createnote.model
+package com.antsfamily.domain.model
 
 import java.time.LocalDate
 

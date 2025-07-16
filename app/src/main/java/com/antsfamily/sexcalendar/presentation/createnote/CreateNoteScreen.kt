@@ -40,9 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.createnote.model.LoadingButton
-import com.antsfamily.sexcalendar.presentation.createnote.model.SexType
 import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
 import com.antsfamily.sexcalendar.presentation.home.TopBar
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading

@@ -1,9 +1,9 @@
 package com.antsfamily.sexcalendar.presentation.createnote
 
-import com.antsfamily.sexcalendar.presentation.createnote.model.SexType
+import com.antsfamily.domain.model.SexType
 
 sealed class CreateNoteUiState {
-    data object Loading: CreateNoteUiState()
+    data object Loading : CreateNoteUiState()
     data class Content(
         val type: SexType,
         val isProtected: Boolean,
@@ -12,9 +12,9 @@ sealed class CreateNoteUiState {
         val note: String,
         val isSaveButtonEnabled: Boolean,
         val isSaveButtonLoadingVisible: Boolean
-    ): CreateNoteUiState() {
+    ) : CreateNoteUiState() {
 
-        companion object{
+        companion object {
             val Default = Content(
                 type = SexType.UNKNOWN,
                 isProtected = false,
@@ -25,5 +25,10 @@ sealed class CreateNoteUiState {
                 isSaveButtonLoadingVisible = false
             )
         }
+
+        val isValid: Boolean
+            get() {
+                return this.rate > 0 && this.type != SexType.UNKNOWN
+            }
     }
 }

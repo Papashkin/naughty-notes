@@ -1,5 +1,6 @@
 package com.antsfamily.sexcalendar.presentation.home
 
+import com.antsfamily.domain.model.NoteModel
 import java.time.YearMonth
 
 sealed class HomeUiState {
@@ -7,6 +8,7 @@ sealed class HomeUiState {
     data class Content(
         val yearMonth: YearMonth,
         val isNavigationBackVisible: Boolean,
-        val isNavigationForwardVisible: Boolean
+        val isNavigationForwardVisible: Boolean,
+        val notes: List<NoteModel>
     ): HomeUiState()
 }

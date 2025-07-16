@@ -44,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":data"))
 
     coreLibraryDesugaring(libs.desugar.jdk.libs)
