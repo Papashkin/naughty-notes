@@ -11,4 +11,4 @@ data object Splash: Route()
 data object Home: Route()
 
 @Serializable
-data object CreateNote: Route()
+data class CreateNote(val dateEpoch: Long): Route()

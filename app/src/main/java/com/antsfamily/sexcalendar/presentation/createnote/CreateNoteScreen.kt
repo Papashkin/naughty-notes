@@ -49,7 +49,10 @@ import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 
 @Composable
 fun CreateNoteScreen(
-    viewModel: CreateNoteViewModel = hiltViewModel(),
+    dateEpoch: Long,
+    viewModel: CreateNoteViewModel = hiltViewModel<CreateNoteViewModel, CreateNoteViewModel.Factory> {
+        it.create(dateEpoch)
+    },
     onNavigateBack: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
@@ -93,7 +96,6 @@ fun CreateNoteContent(
             .fillMaxSize()
             .imePadding()
             .statusBarsPadding()
-//            .verticalScroll(rememberScrollState())
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
 
@@ -114,6 +116,14 @@ fun CreateNoteContent(
             )
 
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp),
+                    text = "for ${state.date.formatToString()}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
                 Box(
                     modifier = Modifier
                         .padding(top = 32.dp, bottom = 8.dp)

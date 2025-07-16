@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.Month
 import java.time.Year
 import java.time.YearMonth
@@ -32,8 +33,8 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeUiState>
         get() = _state
 
-    private val _navigateToCreateNoteEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val navigateToCreateNoteEvent: SharedFlow<Unit>
+    private val _navigateToCreateNoteEvent: MutableSharedFlow<Long> = MutableSharedFlow()
+    val navigateToCreateNoteEvent: SharedFlow<Long>
         get() = _navigateToCreateNoteEvent
 
     private val yearMonthNow: YearMonth = YearMonth.now()
@@ -81,7 +82,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onCreateNoteClick() = viewModelScope.launch {
-        _navigateToCreateNoteEvent.emit(Unit)
+        val currentDate = LocalDate.now()
+        _navigateToCreateNoteEvent.emit(currentDate.toEpochDay())
+    }
+
+    fun onCreateNoteClick(date: LocalDate) = viewModelScope.launch {
+        _navigateToCreateNoteEvent.emit(date.toEpochDay())
     }
 
     private fun getNotes() = viewModelScope.launch {

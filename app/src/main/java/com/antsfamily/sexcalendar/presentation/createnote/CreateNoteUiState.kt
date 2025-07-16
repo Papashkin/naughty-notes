@@ -1,10 +1,13 @@
 package com.antsfamily.sexcalendar.presentation.createnote
 
 import com.antsfamily.domain.model.SexType
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 sealed class CreateNoteUiState {
     data object Loading : CreateNoteUiState()
     data class Content(
+        val date: LocalDate,
         val type: SexType,
         val isProtected: Boolean,
         val rate: Int,
@@ -16,6 +19,7 @@ sealed class CreateNoteUiState {
 
         companion object {
             val Default = Content(
+                date = LocalDate.now(),
                 type = SexType.UNKNOWN,
                 isProtected = false,
                 rate = 0,
@@ -32,3 +36,5 @@ sealed class CreateNoteUiState {
             }
     }
 }
+
+fun LocalDate.formatToString(): String = this.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
