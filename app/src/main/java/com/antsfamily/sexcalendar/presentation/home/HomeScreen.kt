@@ -88,7 +88,7 @@ fun HomeContent(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Psst! Want to add a naughty note? Just click on a date. \uD83D\uDE09",
+            "Psst! Want to add a naughty note? Just click on a date \uD83D\uDE09.",
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -104,7 +104,7 @@ fun HomeContent(
             onDayClick = { onDayClick(it) }
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(16.dp))
 
         NotesListView(notes = notes, onCreateNoteClick = onCreateNoteClick)
     }
