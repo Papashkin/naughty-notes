@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.SexRecordRepository
 import com.antsfamily.domain.model.NoteModel
+import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        private val LAST_AVAILABLE_YEAR = Year.now().value.minus(2)
+        private val LAST_AVAILABLE_YEAR = Year.now().value.minus(1)
     }
 
     private val _state: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
@@ -37,6 +38,7 @@ class HomeViewModel @Inject constructor(
     val navigateToCreateNoteEvent: SharedFlow<Long>
         get() = _navigateToCreateNoteEvent
 
+    private var notes: List<NoteModel> = mutableListOf()
     private val yearMonthNow: YearMonth = YearMonth.now()
 
     init {
@@ -54,6 +56,7 @@ class HomeViewModel @Inject constructor(
             when (it) {
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
+                    notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
                     isNavigationBackVisible = !isNavigationBackInvisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
@@ -73,6 +76,7 @@ class HomeViewModel @Inject constructor(
             when (it) {
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
+                    notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
                     isNavigationBackVisible = isNavigationBackVisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
@@ -93,16 +97,19 @@ class HomeViewModel @Inject constructor(
     private fun getNotes() = viewModelScope.launch {
         repository.notes
             .onStart { /* no-op */ }
-            .onCompletion { Log.e("WorkoutsRepo", "!!!! COMPLETE !!!!") }
-            .collect { handleNotes(it) }
+            .onCompletion { Log.e(this@HomeViewModel::class.simpleName, "=== Notes fetching COMPLETE ===") }
+            .collect {
+                notes = it
+                handleNotes()
+            }
     }
 
-    private fun handleNotes(notes: List<NoteModel>) {
+    private fun handleNotes() {
         _state.value = HomeUiState.Content(
             yearMonth = yearMonthNow,
             isNavigationBackVisible = true,
             isNavigationForwardVisible = false,
-            notes = notes
+            notes = notes.filter { it.date.yearMonth == yearMonthNow }
         )
     }
 }
