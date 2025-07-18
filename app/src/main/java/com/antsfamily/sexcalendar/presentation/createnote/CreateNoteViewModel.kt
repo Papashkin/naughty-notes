@@ -61,7 +61,7 @@ class CreateNoteViewModel @AssistedInject constructor(
     }
 
     fun setNote(note: String) {
-        if (note.length > 60) return
+        if (note.length > CREATE_NOTE_NOTE_LENGTH_MAX) return
 
         _state.update {
             when (it) {

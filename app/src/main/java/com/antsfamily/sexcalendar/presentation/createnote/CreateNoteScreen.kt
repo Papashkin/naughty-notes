@@ -1,27 +1,20 @@
 package com.antsfamily.sexcalendar.presentation.createnote
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.outlined.ArrowDropDown
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -29,23 +22,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.createnote.model.LoadingButton
-import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
+import com.antsfamily.sexcalendar.presentation.createnote.view.RatingBar
+import com.antsfamily.sexcalendar.presentation.createnote.view.SexTypeDropdown
 import com.antsfamily.sexcalendar.presentation.home.TopBar
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
+import com.antsfamily.sexcalendar.ui.theme.Padding
+
+const val CREATE_NOTE_NOTE_LENGTH_MAX = 60
 
 @Composable
 fun CreateNoteScreen(
@@ -89,14 +83,11 @@ fun CreateNoteContent(
     onSaveButtonClicked: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    val (isSexTypeExpanded, setIsSexTypeExpanded) = rememberSaveable { mutableStateOf(false) }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
             .statusBarsPadding()
-            .background(color = MaterialTheme.colorScheme.surface)
     ) {
 
         Column(
@@ -107,77 +98,50 @@ fun CreateNoteContent(
         ) {
             TopBar(
                 modifier = Modifier
-                    .padding(start = 2.dp)
+                    .padding(start = Padding.tiny)
                     .fillMaxWidth(),
-                title = "Create a Note",
+                title = stringResource(R.string.note_screen_title),
                 onNavigationBack = {
                     onNavigateBack()
                 }
             )
 
-            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            Column(modifier = Modifier.padding(horizontal = Padding.large)) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 32.dp),
-                    text = "for ${state.date.formatToString()}",
+                        .padding(start = Padding.xx_large),
+                    text = stringResource(
+                        R.string.note_screen_subtitle,
+                        state.date.formatToString()
+                    ),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                Box(
-                    modifier = Modifier
-                        .padding(top = 32.dp, bottom = 8.dp)
-                        .fillMaxWidth()
+                SexTypeDropdown(
+                    modifier = Modifier.padding(top = Padding.large, bottom = Padding.small),
+                    selected = state.type
                 ) {
-                    OutlinedTextField(
-                        readOnly = true,
-                        label = { Text("Type of sex") },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.ArrowDropDown,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .clickable { setIsSexTypeExpanded(!isSexTypeExpanded) }
-                            )
-                        },
-                        value = stringResource(state.type.toStringId()),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                setIsSexTypeExpanded(!isSexTypeExpanded)
-                            },
-                        onValueChange = {
-                            setIsSexTypeExpanded(!isSexTypeExpanded)
-                        }
-                    )
-                    DropdownMenu(
-                        modifier = Modifier.fillMaxWidth(),
-                        expanded = isSexTypeExpanded,
-                        onDismissRequest = { setIsSexTypeExpanded(false) }
-                    ) {
-                        SexType.entries.forEach {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(text = stringResource(it.toStringId()))
-                                },
-                                modifier = Modifier.fillMaxSize(),
-                                onClick = {
-                                    setSexType(it)
-                                    setIsSexTypeExpanded(false)
-                                }
-                            )
-                        }
-                    }
+                    setSexType(it)
                 }
 
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
                         .fillMaxWidth()
+                        .padding(vertical = Padding.small)
+                        .background(
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            shape = RoundedCornerShape(Padding.regular)
+                        ),
                 ) {
-                    Text("Was it protected sex?", modifier = Modifier.padding(vertical = 4.dp))
+                    Text(
+                        text = stringResource(R.string.note_screen_protection_switch_label),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Padding.small)
+                    )
                     Switch(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
                         checked = state.isProtected,
                         onCheckedChange = { setIsProtected(it) }
                     )
@@ -185,46 +149,64 @@ fun CreateNoteContent(
 
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
                         .fillMaxWidth()
+                        .padding(vertical = Padding.small)
+                        .background(
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            shape = RoundedCornerShape(Padding.regular)
+                        )
                 ) {
-                    Text("Was it painful?", modifier = Modifier.padding(vertical = 4.dp))
+                    Text(
+                        text = stringResource(R.string.note_screen_rate_bar_pain_label),
+                        modifier = Modifier.padding(Padding.small)
+                    )
                     RatingBar(
                         rating = state.painRate,
                         selectedIcon = ImageVector.vectorResource(R.drawable.ic_pain),
                         defaultIcon = ImageVector.vectorResource(R.drawable.ic_pain_outlined),
+                        scaleMinLabel = R.string.note_screen_pain_rate_min_label,
+                        scaleMaxLabel = R.string.note_screen_pain_rate_max_label,
                         onRatingChanged = { setPainRate(it) }
                     )
                 }
 
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
                         .fillMaxWidth()
+                        .padding(vertical = Padding.small)
+                        .background(
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            shape = RoundedCornerShape(Padding.regular)
+                        )
                 ) {
-                    Text("Rate your pleasure", modifier = Modifier.padding(vertical = 4.dp))
+                    Text(
+                        text = stringResource(R.string.note_screen_rate_bar_pleasure_label),
+                        modifier = Modifier.padding(Padding.small)
+                    )
                     RatingBar(
                         rating = state.rate,
                         selectedIcon = Icons.Default.Favorite,
                         defaultIcon = Icons.Default.FavoriteBorder,
+                        scaleMinLabel = R.string.note_screen_pleasure_rate_min_label,
+                        scaleMaxLabel = R.string.note_screen_pleasure_rate_max_label,
                         onRatingChanged = { setPleasureRate(it) }
                     )
                 }
 
                 OutlinedTextField(
                     label = {
-                        Text("Note (optional)")
+                        Text(text = stringResource(R.string.note_screen_note_text_field_label))
                     },
                     value = state.note,
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
+                        .padding(top = Padding.tiny, bottom = Padding.medium)
                         .fillMaxWidth(),
                     onValueChange = {
                         setNote(it)
                     },
                     minLines = 4,
                     supportingText = {
-                        Text("${state.note.length}/60")
+                        Text(text = "${state.note.length}/$CREATE_NOTE_NOTE_LENGTH_MAX")
                     }
                 )
             }
@@ -244,32 +226,8 @@ fun CreateNoteContent(
                 loading = state.isSaveButtonLoadingVisible,
                 enabled = state.isSaveButtonEnabled,
             ) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.note_screen_button_save))
             }
-        }
-    }
-}
-
-@Composable
-fun RatingBar(
-    modifier: Modifier = Modifier,
-    starCount: Int = 5,
-    spacing: Dp = 8.dp,
-    rating: Int,
-    selectedIcon: ImageVector,
-    defaultIcon: ImageVector,
-    onRatingChanged: (Int) -> Unit,
-) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(spacing)) {
-        for (i in 1..starCount) {
-            Icon(
-                imageVector = if (i <= rating) selectedIcon else defaultIcon,
-                contentDescription = "Star $i",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clickable { onRatingChanged(i) }
-            )
         }
     }
 }
@@ -281,24 +239,4 @@ private fun CreateNoteContentPreview(onNavigateBack: () -> Unit) {
         state = CreateNoteUiState.Content.Default,
         {}, {}, {}, {}, {}, {}, {}
     )
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun RatingBarPreview() {
-    Column {
-
-        RatingBar(
-            rating = 0,
-            selectedIcon = Icons.Default.Favorite,
-            defaultIcon = Icons.Default.FavoriteBorder,
-            onRatingChanged = {}
-        )
-        RatingBar(
-            rating = 0,
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_pain),
-            defaultIcon = ImageVector.vectorResource(R.drawable.ic_pain_outlined),
-            onRatingChanged = {}
-        )
-    }
 }

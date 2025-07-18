@@ -22,10 +22,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
+import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
+import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -36,7 +37,11 @@ fun NotesListView(
     onCreateNoteClick: () -> Unit
 ) {
     Column(modifier = modifier) {
-        Text("Notes", style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = "Notes",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = Padding.small)
+        )
         if (notes.isNotEmpty()) {
             NotesListWithContent(notes)
         } else {
@@ -62,16 +67,16 @@ fun NotesListEmpty(onCreateNoteClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = Padding.regular)
         ) {
             Text(
-                text = "Don't have a note recorded?",
+                text = stringResource(R.string.home_screen_empty_content_label),
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 modifier = Modifier.clickable { onCreateNoteClick() },
                 text = AnnotatedString(
-                    text = "Create a note",
+                    text = stringResource(R.string.home_screen_empty_content_button_create_note),
                     spanStyle = SpanStyle(color = MaterialTheme.colorScheme.primary)
                 ),
                 style = MaterialTheme.typography.bodyLarge,
