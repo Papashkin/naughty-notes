@@ -119,7 +119,7 @@ fun CreateNoteContent(
                 )
 
                 SexTypeDropdown(
-                    modifier = Modifier.padding(top = Padding.large, bottom = Padding.small),
+                    modifier = Modifier.padding(top = Padding.xx_large, bottom = Padding.small),
                     selected = state.type
                 ) {
                     setSexType(it)
@@ -131,14 +131,15 @@ fun CreateNoteContent(
                         .padding(vertical = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
-                            shape = RoundedCornerShape(Padding.regular)
+                            shape = RoundedCornerShape(Padding.small)
                         ),
                 ) {
                     Text(
                         text = stringResource(R.string.note_screen_protection_switch_label),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(Padding.small)
+                            .padding(Padding.small),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Switch(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -153,12 +154,13 @@ fun CreateNoteContent(
                         .padding(vertical = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
-                            shape = RoundedCornerShape(Padding.regular)
+                            shape = RoundedCornerShape(Padding.x_small)
                         )
                 ) {
                     Text(
                         text = stringResource(R.string.note_screen_rate_bar_pain_label),
-                        modifier = Modifier.padding(Padding.small)
+                        modifier = Modifier.padding(Padding.small),
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     RatingBar(
                         rating = state.painRate,
@@ -176,12 +178,13 @@ fun CreateNoteContent(
                         .padding(vertical = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
-                            shape = RoundedCornerShape(Padding.regular)
+                            shape = RoundedCornerShape(Padding.x_small)
                         )
                 ) {
                     Text(
                         text = stringResource(R.string.note_screen_rate_bar_pleasure_label),
-                        modifier = Modifier.padding(Padding.small)
+                        modifier = Modifier.padding(Padding.small),
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     RatingBar(
                         rating = state.rate,
@@ -195,8 +198,12 @@ fun CreateNoteContent(
 
                 OutlinedTextField(
                     label = {
-                        Text(text = stringResource(R.string.note_screen_note_text_field_label))
+                        Text(
+                            text = stringResource(R.string.note_screen_note_text_field_label),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     },
+                    textStyle = MaterialTheme.typography.bodyMedium,
                     value = state.note,
                     modifier = Modifier
                         .padding(top = Padding.tiny, bottom = Padding.medium)

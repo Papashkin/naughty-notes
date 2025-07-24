@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -22,19 +25,22 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
+import java.time.Month
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun NotesListView(
     modifier: Modifier = Modifier,
     notes: List<NoteModel>,
-    onCreateNoteClick: () -> Unit
+    onCreateNoteClick: () -> Unit,
+    onShowAllClick: () -> Unit
 ) {
     Column(modifier = modifier) {
         Text(
@@ -42,10 +48,39 @@ fun NotesListView(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = Padding.small)
         )
-        if (notes.isNotEmpty()) {
-            NotesListWithContent(notes)
-        } else {
-            NotesListEmpty(onCreateNoteClick)
+        when {
+            notes.size in 1..2 -> NotesListWithContent(notes)
+            notes.size > 2 -> NotesListWithContentAndButton(notes.take(2)) {
+                onShowAllClick()
+            }
+
+            else -> NotesListEmpty(onCreateNoteClick)
+        }
+    }
+}
+
+@Composable
+fun NotesListWithContentAndButton(
+    notes: List<NoteModel>,
+    onShowAllClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyColumn {
+            items(notes) {
+                NoteCard(it)
+            }
+        }
+        FilledIconButton(
+            enabled = true,
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Padding.medium),
+            onClick = { onShowAllClick() }
+        ) {
+            Text("Show all")
         }
     }
 }
@@ -110,7 +145,7 @@ private fun NotesListViewPreview1() {
     NotesListView(
         notes = listOf(
             NoteModel(
-                LocalDate.now(),
+                LocalDate.of(2025, Month.JULY, 12),
                 SexType.ANAL,
                 isProtected = true,
                 painRate = 2,
@@ -118,19 +153,31 @@ private fun NotesListViewPreview1() {
                 personalNote = ""
             ),
             NoteModel(
-                LocalDate.now(),
+                LocalDate.of(2025, Month.JULY, 22),
+                SexType.VAGINAL,
+                isProtected = true,
+                painRate = 2,
+                rate = 4,
+                personalNote = "That was something crazy"
+            ),
+            NoteModel(
+                LocalDate.of(2025, Month.JULY, 15),
+                SexType.ANAL,
+                isProtected = true,
+                painRate = 2,
+                rate = 4,
+                personalNote = ""
+            ),
+            NoteModel(
+                LocalDate.of(2025, Month.JULY, 20),
                 SexType.VAGINAL,
                 isProtected = true,
                 painRate = 2,
                 rate = 4,
                 personalNote = "That was something crazy"
             )
-        )
-    ) {}
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun NotesListViewPreview2() {
-    NotesListView(notes = listOf()) {}
+        ),
+        onCreateNoteClick = {},
+        onShowAllClick = {}
+    )
 }

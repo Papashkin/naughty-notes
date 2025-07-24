@@ -38,6 +38,10 @@ class HomeViewModel @Inject constructor(
     val navigateToCreateNoteEvent: SharedFlow<Long>
         get() = _navigateToCreateNoteEvent
 
+    private val _navigateToAllNotesEvent: MutableSharedFlow<Month> = MutableSharedFlow()
+    val navigateToAllNotesEvent: SharedFlow<Month>
+        get() = _navigateToAllNotesEvent
+
     private var notes: List<NoteModel> = mutableListOf()
     private val yearMonthNow: YearMonth = YearMonth.now()
 
@@ -90,8 +94,17 @@ class HomeViewModel @Inject constructor(
         _navigateToCreateNoteEvent.emit(currentDate.toEpochDay())
     }
 
-    fun onCreateNoteClick(date: LocalDate) = viewModelScope.launch {
-        _navigateToCreateNoteEvent.emit(date.toEpochDay())
+    fun onShowAllClick() = viewModelScope.launch {
+        _navigateToAllNotesEvent.emit(yearMonthNow.month)
+    }
+
+    fun onDayClick(date: LocalDate) = viewModelScope.launch {
+        val currentDate =  LocalDate.now()
+        val isDayValid = date.dayOfMonth <= currentDate.dayOfMonth
+        val isCurrentMonth = date.monthValue == currentDate.monthValue
+        if (isDayValid && isCurrentMonth) {
+            _navigateToCreateNoteEvent.emit(date.toEpochDay())
+        }
     }
 
     private fun getNotes() = viewModelScope.launch {
@@ -109,7 +122,7 @@ class HomeViewModel @Inject constructor(
             yearMonth = yearMonthNow,
             isNavigationBackVisible = true,
             isNavigationForwardVisible = false,
-            notes = notes.filter { it.date.yearMonth == yearMonthNow }
+            notes = notes.filter { it.date.yearMonth == yearMonthNow }.sortedBy { it.date }
         )
     }
 }

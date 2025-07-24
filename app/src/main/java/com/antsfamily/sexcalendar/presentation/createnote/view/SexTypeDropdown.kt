@@ -5,6 +5,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ fun SexTypeDropdown(
     ) {
         OutlinedTextField(
             value = stringResource(selected.toStringId()),
+            textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = {},
             readOnly = true,
             label = { Text(stringResource(R.string.note_screen_sex_type_dropdown_label)) },

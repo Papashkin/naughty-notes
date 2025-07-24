@@ -26,17 +26,24 @@ import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
+import java.time.Month
 import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToCreateNote: (Long) -> Unit
+    navigateToCreateNote: (Long) -> Unit,
+    navigateToAllNotes: (Month) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
         viewModel.navigateToCreateNoteEvent.collect {
             navigateToCreateNote(it)
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.navigateToAllNotesEvent.collect {
+            navigateToAllNotes(it)
         }
     }
 
@@ -52,7 +59,8 @@ fun HomeScreen(
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
             onNextMonthClick = { viewModel.onNextMonthClick() },
             onCreateNoteClick = { viewModel.onCreateNoteClick() },
-            onDayClick = { viewModel.onCreateNoteClick(it) }
+            onShowAllClick = { viewModel.onShowAllClick() },
+            onDayClick = { viewModel.onDayClick(it) }
         )
     }
 }
@@ -66,6 +74,7 @@ fun HomeContent(
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
     onCreateNoteClick: () -> Unit,
+    onShowAllClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Column(
@@ -108,12 +117,26 @@ fun HomeContent(
 
         Spacer(Modifier.height(Padding.medium))
 
-        NotesListView(notes = notes, onCreateNoteClick = onCreateNoteClick)
+        NotesListView(
+            notes = notes,
+            onCreateNoteClick = onCreateNoteClick,
+            onShowAllClick = onShowAllClick
+        )
     }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(YearMonth.now(), listOf(), true, false, {}, {}, {}, {})
+    HomeContent(
+        YearMonth.now(),
+        listOf(),
+        isNavigationBackVisible = true,
+        isNavigationForwardVisible = false,
+        {},
+        {},
+        {},
+        {},
+        {}
+    )
 }
