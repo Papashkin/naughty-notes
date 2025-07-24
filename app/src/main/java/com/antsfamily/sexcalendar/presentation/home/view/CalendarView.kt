@@ -40,6 +40,7 @@ import com.antsfamily.sexcalendar.ui.theme.Padding
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,12 +63,14 @@ fun CalendarView(
     onDayClick: (LocalDate) -> Unit,
 ) {
     val daysOfWeek = remember { daysOfWeek() }
+    val currentDay = remember { LocalDate.now().dayOfMonth }
 
     val state = rememberCalendarState(
         startMonth = yearMonth,
         endMonth = yearMonth,
         firstVisibleMonth = yearMonth,
-        firstDayOfWeek = daysOfWeek.first()
+        firstDayOfWeek = daysOfWeek.first(),
+        outDateStyle = OutDateStyle.EndOfGrid
     )
 
     Card(
@@ -180,19 +183,24 @@ fun Day(
                 interactionSource = remember { MutableInteractionSource() }
             ) {
                 onDayClick(day.date)
-            }
-        ,
+            },
         contentAlignment = Alignment.Center
     ) {
         if (recordsAmount == 0) {
             if (day.date.month.value == currentMonthIndex) {
                 Text(
                     text = day.date.dayOfMonth.toString(),
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            } else {
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
-        }
-        else {
+        } else {
             Card(
                 modifier = Modifier
                     .fillMaxSize()

@@ -39,7 +39,10 @@ fun Navigator() {
                         //no-op
                     }
                     HomeScreen(
-                        navigateToCreateNote = { navController.navigate(CreateNote(it)) }
+                        navigateToCreateNote = { navController.navigate(CreateNote(it)) },
+                        navigateToAllNotes = { navController.navigate(AllNotes(it))
+
+                        }
                     )
                 }
                 composable<CreateNote> { entry ->
@@ -50,6 +53,10 @@ fun Navigator() {
                     CreateNoteScreen(dateEpoch = data.dateEpoch) {
                         navController.popBackStack()
                     }
+                }
+                composable<AllNotes> { entry ->
+                    val data = entry.toRoute<AllNotes>()
+                    //TODO implement new screen, where user can filter, modify or delete notes.
                 }
             }
         }
