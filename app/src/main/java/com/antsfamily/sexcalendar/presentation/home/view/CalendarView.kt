@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
+import com.antsfamily.sexcalendar.ui.theme.Padding
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -71,7 +72,7 @@ fun CalendarView(
 
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(Padding.regular),
     ) {
         Column(verticalArrangement = Arrangement.Bottom) {
 
@@ -85,7 +86,7 @@ fun CalendarView(
 
             VerticalCalendar(
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = Padding.regular)
                     .background(MaterialTheme.colorScheme.surfaceContainerHighest),
                 state = state,
                 dayContent = { day ->
@@ -195,9 +196,9 @@ fun Day(
             Card(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(4.dp),
-                shape = RoundedCornerShape(8.dp),
-                elevation = CardDefaults.cardElevation(4.dp)
+                    .padding(Padding.x_small),
+                shape = RoundedCornerShape(Padding.small),
+                elevation = CardDefaults.cardElevation(Padding.x_small)
             ) {
                 Box(
                     modifier = Modifier

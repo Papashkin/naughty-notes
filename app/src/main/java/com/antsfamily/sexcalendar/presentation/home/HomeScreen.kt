@@ -15,14 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.home.view.CalendarView
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
+import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -68,7 +70,7 @@ fun HomeContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = Padding.large)
             .navigationBarsPadding()
     ) {
         Row(
@@ -78,21 +80,21 @@ fun HomeContent(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                "Journal",
+                text = stringResource(R.string.home_screen_title),
                 maxLines = 1,
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Start
             )
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(Padding.medium))
 
         Text(
-            "Psst! Want to add a naughty note? Just click on a date \uD83D\uDE09.",
+            text = stringResource(R.string.home_screen_subtitle),
             style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(Padding.medium))
 
         CalendarView(
             yearMonth = yearMonth,
@@ -104,7 +106,7 @@ fun HomeContent(
             onDayClick = { onDayClick(it) }
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(Padding.medium))
 
         NotesListView(notes = notes, onCreateNoteClick = onCreateNoteClick)
     }

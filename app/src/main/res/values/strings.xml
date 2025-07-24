@@ -7,4 +7,22 @@
     <string name="sex_type_masturbation">Masturbation</string>
     <string name="sex_type_tribadism">Tribadism</string>
     <string name="sex_type_unknown">Not selected</string>
+
+    <string name="note_screen_pain_rate_min_label">no pain</string>
+    <string name="note_screen_pain_rate_max_label">too painful</string>
+    <string name="note_screen_pleasure_rate_min_label">Bad!</string>
+    <string name="note_screen_pleasure_rate_max_label">Super!</string>
+    <string name="note_screen_sex_type_dropdown_label">Type of sex</string>
+    <string name="note_screen_rate_bar_pain_label">Was it painful?</string>
+    <string name="note_screen_rate_bar_pleasure_label">Rate your pleasure</string>
+    <string name="note_screen_note_text_field_label">Note (optional)</string>
+    <string name="note_screen_title">Create a Note</string>
+    <string name="note_screen_subtitle">for %1$s</string>
+    <string name="note_screen_protection_switch_label">Was it protected sex?</string>
+    <string name="note_screen_button_save">Save</string>
+    <string name="home_screen_title">Journal</string>
+    <string name="home_screen_subtitle">Psst! Want to add a naughty note? Just click on a date 😉.</string>
+    <string name="home_screen_empty_content_label">Don\'t have a note recorded?</string>
+    <string name="home_screen_empty_content_button_create_note">Create a note</string>
+
 </resources>
