@@ -7,6 +7,7 @@ sealed class HomeUiState {
     data object Loading: HomeUiState()
     data class Content(
         val yearMonth: YearMonth,
+        val isCurrentMonth: Boolean,
         val isNavigationBackVisible: Boolean,
         val isNavigationForwardVisible: Boolean,
         val notes: List<NoteModel>

@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -39,6 +41,7 @@ import java.time.format.DateTimeFormatter
 fun NotesListView(
     modifier: Modifier = Modifier,
     notes: List<NoteModel>,
+    isCurrentMonth: Boolean,
     onCreateNoteClick: () -> Unit,
     onShowAllClick: () -> Unit
 ) {
@@ -53,8 +56,8 @@ fun NotesListView(
             notes.size > 2 -> NotesListWithContentAndButton(notes.take(2)) {
                 onShowAllClick()
             }
-
-            else -> NotesListEmpty(onCreateNoteClick)
+            isCurrentMonth -> NotesListEmptyWithCreateNoteButton(onCreateNoteClick)
+            else -> NotesListEmpty()
         }
     }
 }
@@ -95,7 +98,7 @@ fun NotesListWithContent(notes: List<NoteModel>) {
 }
 
 @Composable
-fun NotesListEmpty(onCreateNoteClick: () -> Unit) {
+fun NotesListEmptyWithCreateNoteButton(onCreateNoteClick: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -116,6 +119,30 @@ fun NotesListEmpty(onCreateNoteClick: () -> Unit) {
                 ),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Composable
+fun NotesListEmpty() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = Padding.regular)
+        ) {
+            Icon(
+                modifier = Modifier.size(64.dp).padding(Padding.small),
+                imageVector = Icons.Outlined.Search,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = stringResource(R.string.home_screen_empty_content_label_2),
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -177,6 +204,7 @@ private fun NotesListViewPreview1() {
                 personalNote = "That was something crazy"
             )
         ),
+        isCurrentMonth = false,
         onCreateNoteClick = {},
         onShowAllClick = {}
     )

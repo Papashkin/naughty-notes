@@ -52,10 +52,7 @@ fun HomeScreen(
     when (val uiState = state.value) {
         is HomeUiState.Loading -> FullScreenLoading()
         is HomeUiState.Content -> HomeContent(
-            yearMonth = uiState.yearMonth,
-            notes = uiState.notes,
-            isNavigationBackVisible = uiState.isNavigationBackVisible,
-            isNavigationForwardVisible = uiState.isNavigationForwardVisible,
+            state = uiState,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
             onNextMonthClick = { viewModel.onNextMonthClick() },
             onCreateNoteClick = { viewModel.onCreateNoteClick() },
@@ -67,10 +64,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
-    yearMonth: YearMonth,
-    notes: List<NoteModel>,
-    isNavigationBackVisible: Boolean,
-    isNavigationForwardVisible: Boolean,
+    state: HomeUiState.Content,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
     onCreateNoteClick: () -> Unit,
@@ -106,10 +100,10 @@ fun HomeContent(
         Spacer(Modifier.height(Padding.medium))
 
         CalendarView(
-            yearMonth = yearMonth,
-            notes = notes,
-            isNavigationBackVisible = isNavigationBackVisible,
-            isNavigationForwardVisible = isNavigationForwardVisible,
+            yearMonth = state.yearMonth,
+            notes = state.notes,
+            isNavigationBackVisible = state.isNavigationBackVisible,
+            isNavigationForwardVisible = state.isNavigationForwardVisible,
             onPreviousMonthClick = { onPreviousMonthClick() },
             onNextMonthClick = { onNextMonthClick() },
             onDayClick = { onDayClick(it) }
@@ -118,7 +112,8 @@ fun HomeContent(
         Spacer(Modifier.height(Padding.medium))
 
         NotesListView(
-            notes = notes,
+            notes = state.notes,
+            isCurrentMonth = state.isCurrentMonth,
             onCreateNoteClick = onCreateNoteClick,
             onShowAllClick = onShowAllClick
         )
@@ -128,15 +123,12 @@ fun HomeContent(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    HomeContent(
+    val state = HomeUiState.Content(
         YearMonth.now(),
-        listOf(),
+        isCurrentMonth = true,
         isNavigationBackVisible = true,
         isNavigationForwardVisible = false,
-        {},
-        {},
-        {},
-        {},
-        {}
+        listOf(),
     )
+    HomeContent(state, {}, {}, {}, {}, {})
 }
