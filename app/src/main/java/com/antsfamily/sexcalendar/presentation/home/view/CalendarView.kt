@@ -88,9 +88,7 @@ fun CalendarView(
             )
 
             VerticalCalendar(
-                modifier = Modifier
-                    .padding(top = Padding.regular)
-                    .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHighest),
                 state = state,
                 dayContent = { day ->
                     Day(
@@ -182,7 +180,9 @@ fun Day(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                onDayClick(day.date)
+                if (day.date.month.value == currentMonthIndex) {
+                    onDayClick(day.date)
+                }
             },
         contentAlignment = Alignment.Center
     ) {

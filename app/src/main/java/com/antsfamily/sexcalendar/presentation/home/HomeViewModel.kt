@@ -60,6 +60,7 @@ class HomeViewModel @Inject constructor(
             when (it) {
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
+                    isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
                     notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
                     isNavigationBackVisible = !isNavigationBackInvisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
@@ -80,6 +81,7 @@ class HomeViewModel @Inject constructor(
             when (it) {
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
+                    isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
                     notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
                     isNavigationBackVisible = isNavigationBackVisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
@@ -99,10 +101,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onDayClick(date: LocalDate) = viewModelScope.launch {
-        val currentDate =  LocalDate.now()
-        val isDayValid = date.dayOfMonth <= currentDate.dayOfMonth
-        val isCurrentMonth = date.monthValue == currentDate.monthValue
-        if (isDayValid && isCurrentMonth) {
+        val currentDate = LocalDate.now()
+        if (date.isBefore(currentDate) || date == currentDate) {
             _navigateToCreateNoteEvent.emit(date.toEpochDay())
         }
     }
@@ -120,6 +120,7 @@ class HomeViewModel @Inject constructor(
     private fun handleNotes() {
         _state.value = HomeUiState.Content(
             yearMonth = yearMonthNow,
+            isCurrentMonth = true,
             isNavigationBackVisible = true,
             isNavigationForwardVisible = false,
             notes = notes.filter { it.date.yearMonth == yearMonthNow }.sortedBy { it.date }
