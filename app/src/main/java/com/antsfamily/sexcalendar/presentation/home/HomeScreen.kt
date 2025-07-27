@@ -33,7 +33,7 @@ import java.time.YearMonth
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToCreateNote: (Long) -> Unit,
-    navigateToAllNotes: (Month) -> Unit
+    navigateToAllNotes: (Month, Int) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -42,8 +42,8 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.navigateToAllNotesEvent.collect {
-            navigateToAllNotes(it)
+        viewModel.navigateToAllNotesEvent.collect { (month, year) ->
+            navigateToAllNotes(month, year)
         }
     }
 

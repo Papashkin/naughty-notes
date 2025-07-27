@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.antsfamily.sexcalendar.presentation.allnotes.AllNotesScreen
 import com.antsfamily.sexcalendar.presentation.createnote.CreateNoteScreen
 import com.antsfamily.sexcalendar.presentation.home.HomeScreen
 import com.antsfamily.sexcalendar.presentation.splash.SplashScreen
@@ -40,8 +41,8 @@ fun Navigator() {
                     }
                     HomeScreen(
                         navigateToCreateNote = { navController.navigate(CreateNote(it)) },
-                        navigateToAllNotes = { navController.navigate(AllNotes(it))
-
+                        navigateToAllNotes = { month, year ->
+                            navController.navigate(AllNotes(month, year))
                         }
                     )
                 }
@@ -56,7 +57,9 @@ fun Navigator() {
                 }
                 composable<AllNotes> { entry ->
                     val data = entry.toRoute<AllNotes>()
-                    //TODO implement new screen, where user can filter, modify or delete notes.
+                    AllNotesScreen(data.month, data.year) {
+                        navController.popBackStack()
+                    }
                 }
             }
         }

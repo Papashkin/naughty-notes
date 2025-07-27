@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface SexRecordRepository {
     val notes: Flow<List<NoteModel>>
-    suspend fun getData(): List<NoteModel>
+    suspend fun getAllNotes(): List<NoteModel>
+    suspend fun getNotesByMonthAndYear(month: Int, year: Int): List<NoteModel>
     suspend fun updateData()
     suspend fun saveData(note: NoteModel)
 }
