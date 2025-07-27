@@ -38,8 +38,8 @@ class HomeViewModel @Inject constructor(
     val navigateToCreateNoteEvent: SharedFlow<Long>
         get() = _navigateToCreateNoteEvent
 
-    private val _navigateToAllNotesEvent: MutableSharedFlow<Month> = MutableSharedFlow()
-    val navigateToAllNotesEvent: SharedFlow<Month>
+    private val _navigateToAllNotesEvent: MutableSharedFlow<Pair<Month, Int>> = MutableSharedFlow()
+    val navigateToAllNotesEvent: SharedFlow<Pair<Month, Int>>
         get() = _navigateToAllNotesEvent
 
     private var notes: List<NoteModel> = mutableListOf()
@@ -97,7 +97,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onShowAllClick() = viewModelScope.launch {
-        _navigateToAllNotesEvent.emit(yearMonthNow.month)
+        _navigateToAllNotesEvent.emit(yearMonthNow.month to yearMonthNow.year)
     }
 
     fun onDayClick(date: LocalDate) = viewModelScope.launch {

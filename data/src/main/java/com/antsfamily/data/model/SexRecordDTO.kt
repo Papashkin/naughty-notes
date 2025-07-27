@@ -14,7 +14,7 @@ data class SexRecordDTO(
     val isProtected: Boolean,
     val pleasureRate: Int,
     val painRate: Int,
-    val note: String,
+    val note: String?,
 )
 
 fun NoteModel.toDTO(): SexRecordDTO = SexRecordDTO(

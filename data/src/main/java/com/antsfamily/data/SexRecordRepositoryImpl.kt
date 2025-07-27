@@ -12,6 +12,7 @@ import javax.inject.Inject
 class SexRecordRepositoryImpl @Inject constructor(
     private val dao: SexRecordDao
 ) : SexRecordRepository {
+
     override val notes: Flow<List<NoteModel>>
         get() = dao.allRecordsFlow().map { record ->
             record.map {
@@ -21,13 +22,38 @@ class SexRecordRepositoryImpl @Inject constructor(
                     isProtected = it.isProtected,
                     rate = it.pleasureRate,
                     painRate = it.painRate,
-                    personalNote = it.note
+                    personalNote = it.note.orEmpty()
                 )
             }
         }
 
-    override suspend fun getData(): List<NoteModel> {
-        TODO("Not yet implemented")
+    override suspend fun getAllNotes(): List<NoteModel> {
+        val data = dao.getAllRecords()
+        return data.map {
+            NoteModel(
+                date = it.date,
+                type = SexType.valueOf(it.type),
+                isProtected = it.isProtected,
+                rate = it.pleasureRate,
+                painRate = it.painRate,
+                personalNote = it.note.orEmpty()
+            )
+        }
+    }
+
+    override suspend fun getNotesByMonthAndYear(month: Int, year: Int): List<NoteModel> {
+        val data = dao.getAllRecords()
+            .filter { it.date.year == year && it.date.monthValue == month }
+        return data.map {
+            NoteModel(
+                date = it.date,
+                type = SexType.valueOf(it.type),
+                isProtected = it.isProtected,
+                rate = it.pleasureRate,
+                painRate = it.painRate,
+                personalNote = it.note.orEmpty()
+            )
+        }
     }
 
     override suspend fun updateData() {
