@@ -85,11 +85,11 @@ fun CreateNoteContent(
 ) {
     Box(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
             .fillMaxSize()
             .imePadding()
             .statusBarsPadding()
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()

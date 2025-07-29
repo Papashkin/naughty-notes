@@ -1,5 +1,6 @@
 package com.antsfamily.sexcalendar.presentation.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,8 +60,6 @@ fun HomeScreen(
             state = uiState,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
             onNextMonthClick = { viewModel.onNextMonthClick() },
-//            onCreateNoteClick = { viewModel.onCreateNoteClick() },
-//            onShowAllClick = { viewModel.onShowAllClick() },
             onDayClick = { viewModel.onDayClick(it) }
         )
     }
@@ -71,97 +70,101 @@ fun HomeContent(
     state: HomeUiState.Content,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
-//    onCreateNoteClick: () -> Unit,
-//    onShowAllClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = Padding.large)
+            .background(color = MaterialTheme.colorScheme.surface)
             .navigationBarsPadding()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding(),
-            horizontalArrangement = Arrangement.Center
+        Column(
+            modifier = Modifier.padding(horizontal = Padding.large)
         ) {
-            Text(
-                text = stringResource(R.string.home_screen_title),
-                maxLines = 1,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Start
-            )
-        }
 
-        Spacer(Modifier.height(Padding.medium))
-
-        Text(
-            text = stringResource(R.string.home_screen_subtitle),
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(Modifier.height(Padding.medium))
-
-        CalendarView(
-            yearMonth = state.yearMonth,
-            datesWithNotes = state.datesWithNotes,
-            isNavigationBackVisible = state.isNavigationBackVisible,
-            isNavigationForwardVisible = state.isNavigationForwardVisible,
-            onPreviousMonthClick = { onPreviousMonthClick() },
-            onNextMonthClick = { onNextMonthClick() },
-            onDayClick = { onDayClick(it) }
-        )
-
-        Spacer(Modifier.height(Padding.medium))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
-        ) {
-            Card(
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(Padding.medium),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                )
-            ) {
-                Box(Modifier.fillMaxSize()) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = state.datesWithNotes.size.toString(),
-                        style = MaterialTheme.typography.displayLarge,
-                    )
-                    Text(
-                        modifier = Modifier.align(Alignment.BottomCenter).padding(Padding.regular),
-                        text = "Total notes this month"
-                    )
-                }
-            }
-            Card(
+            Row(
                 modifier = Modifier
-                    .height(200.dp)
-                    .weight(1f),
-                shape = RoundedCornerShape(Padding.medium),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
+                    .fillMaxWidth()
+                    .statusBarsPadding(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Box(Modifier.fillMaxSize()) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = state.daysSinceLastNote.toString(),
-                        style = MaterialTheme.typography.displayLarge,
+                Text(
+                    text = stringResource(R.string.home_screen_title),
+                    maxLines = 1,
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Start
+                )
+            }
+
+            Spacer(Modifier.height(Padding.medium))
+
+            Text(
+                text = stringResource(R.string.home_screen_subtitle),
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(Modifier.height(Padding.medium))
+
+            CalendarView(
+                yearMonth = state.yearMonth,
+                datesWithNotes = state.datesWithNotes,
+                isNavigationBackVisible = state.isNavigationBackVisible,
+                isNavigationForwardVisible = state.isNavigationForwardVisible,
+                onPreviousMonthClick = { onPreviousMonthClick() },
+                onNextMonthClick = { onNextMonthClick() },
+                onDayClick = { onDayClick(it) }
+            )
+
+            Spacer(Modifier.height(Padding.medium))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+            ) {
+                Card(
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(Padding.medium),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
-                    Text(
-                        modifier = Modifier.align(Alignment.BottomCenter).padding(Padding.regular),
-                        text = "Days since last note"
+                ) {
+                    Box(Modifier.fillMaxSize()) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = state.datesWithNotes.size.toString(),
+                            style = MaterialTheme.typography.displayLarge,
+                        )
+                        Text(
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                                .padding(Padding.regular),
+                            text = "Total notes this month"
+                        )
+                    }
+                }
+                Card(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .weight(1f),
+                    shape = RoundedCornerShape(Padding.medium),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
                     )
+                ) {
+                    Box(Modifier.fillMaxSize()) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = state.daysSinceLastNote.toString(),
+                            style = MaterialTheme.typography.displayLarge,
+                        )
+                        Text(
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                                .padding(Padding.regular),
+                            text = "Days since last note"
+                        )
+                    }
                 }
             }
-        }
 
 //        NotesListView(
 //            notes = state.notes,
@@ -169,6 +172,7 @@ fun HomeContent(
 //            onCreateNoteClick = onCreateNoteClick,
 //            onShowAllClick = onShowAllClick
 //        )
+        }
     }
 }
 

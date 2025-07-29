@@ -17,10 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -118,14 +119,16 @@ fun CalendarHeader(
     Row(
         Modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(48.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+        ,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
             onClick = { if (isNavigationBackVisible) onPreviousMonthClick.invoke() }
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                 modifier = Modifier.size(32.dp),
                 contentDescription = null,
                 tint = if (isNavigationBackVisible) {
@@ -152,7 +155,7 @@ fun CalendarHeader(
             onClick = { if (isNavigationForwardVisible) onNextMonthClick.invoke() }
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 modifier = Modifier.size(32.dp),
                 contentDescription = null,
                 tint = if (isNavigationForwardVisible) {
@@ -196,7 +199,7 @@ fun Day(
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceContainer
-                        }
+                        },
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -206,7 +209,7 @@ fun Day(
                     color = when {
                         (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
                         (day.date.monthValue == currentMonthIndex) -> MaterialTheme.colorScheme.onSurface
-                        else -> MaterialTheme.colorScheme.outlineVariant
+                        else -> MaterialTheme.colorScheme.surface
                     }
                 )
                 if (isWithRecords) {
