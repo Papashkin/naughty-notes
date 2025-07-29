@@ -95,15 +95,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-//    fun onCreateNoteClick() = viewModelScope.launch {
-//        val currentDate = LocalDate.now()
-//        _navigateToCreateNoteEvent.emit(currentDate.toEpochDay())
-//    }
-
-//    fun onShowAllClick() = viewModelScope.launch {
-//        _navigateToAllNotesEvent.emit(yearMonthNow.month to yearMonthNow.year)
-//    }
-
     fun onDayClick(date: LocalDate) = viewModelScope.launch {
         val currentDate = LocalDate.now()
         if (date.isAfter(currentDate)) return@launch

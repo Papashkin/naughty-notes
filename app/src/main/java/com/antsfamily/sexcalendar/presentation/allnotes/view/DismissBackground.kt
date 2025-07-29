@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
-        SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.error
+        SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.inversePrimary
         SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.tertiaryContainer
         SwipeToDismissBoxValue.Settled -> Color.Transparent
     }
