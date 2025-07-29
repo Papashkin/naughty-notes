@@ -15,4 +15,4 @@ data object Home: Route()
 data class CreateNote(val dateEpoch: Long): Route()
 
 @Serializable
-data class AllNotes(val month: Month, val year: Int): Route()
+data class AllNotes(val dateEpoch: Long): Route()

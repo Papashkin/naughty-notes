@@ -28,6 +28,6 @@
     <string name="home_screen_empty_content_button_create_note">Create a note</string>
 
     <string name="all_notes_screen_title">All notes</string>
-    <string name="all_notes_screen_subtitle">for %1$s %2$s</string>
+    <string name="all_notes_screen_subtitle">for %1$s</string>
 
 </resources>

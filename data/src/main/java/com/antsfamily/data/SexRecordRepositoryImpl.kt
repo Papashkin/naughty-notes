@@ -7,6 +7,7 @@ import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 
 class SexRecordRepositoryImpl @Inject constructor(
@@ -44,6 +45,20 @@ class SexRecordRepositoryImpl @Inject constructor(
     override suspend fun getNotesByMonthAndYear(month: Int, year: Int): List<NoteModel> {
         val data = dao.getAllRecords()
             .filter { it.date.year == year && it.date.monthValue == month }
+        return data.map {
+            NoteModel(
+                date = it.date,
+                type = SexType.valueOf(it.type),
+                isProtected = it.isProtected,
+                rate = it.pleasureRate,
+                painRate = it.painRate,
+                personalNote = it.note.orEmpty()
+            )
+        }
+    }
+
+    override suspend fun getNotesByDate(date: LocalDate): List<NoteModel> {
+        val data = dao.getAllRecords().filter { it.date == date }
         return data.map {
             NoteModel(
                 date = it.date,

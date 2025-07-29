@@ -15,22 +15,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.Locale
+import java.time.LocalDate
 
 @HiltViewModel(assistedFactory = AllNotesViewModel.Factory::class)
 class AllNotesViewModel @AssistedInject constructor(
     private val repository: SexRecordRepository,
-    @Assisted("month") private val month: Month,
-    @Assisted("year") private val year: Int
+    @Assisted("epoch") private val epoch: Long,
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("month") month: Month,
-            @Assisted("year") year: Int
+            @Assisted("epoch") epoch: Long,
         ): AllNotesViewModel
     }
 
@@ -46,11 +42,10 @@ class AllNotesViewModel @AssistedInject constructor(
 
     private fun getNotes() = viewModelScope.launch {
         try {
+            val date = LocalDate.ofEpochDay(epoch)
+            val notes = repository.getNotesByDate(date)
             delay(200)
-            val notes = repository.getNotesByMonthAndYear(month = month.value, year = year)
-                .sortedBy { it.date }
-            val monthName = month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
-            _state.value = AllNotesUiState.Content(year, monthName, notes)
+            _state.value = AllNotesUiState.Content(date, notes)
         } catch (e: Exception) {
             //TODO fix it later with error Type and it's handler
             _state.value = AllNotesUiState.Error(e.message.orEmpty())

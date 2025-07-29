@@ -22,17 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.allnotes.view.NoteExtendedItem
+import com.antsfamily.sexcalendar.presentation.createnote.formatToString
 import com.antsfamily.sexcalendar.presentation.home.TopBar
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
 import com.antsfamily.sexcalendar.ui.theme.Padding
-import java.time.Month
+import java.time.LocalDate
 
 @Composable
 fun AllNotesScreen(
-    month: Month,
-    year: Int,
+    epoch: Long,
     viewModel: AllNotesViewModel = hiltViewModel<AllNotesViewModel, AllNotesViewModel.Factory>() {
-        it.create(month, year)
+        it.create(epoch)
     },
     navigateBack: () -> Unit,
 ) {
@@ -82,7 +82,7 @@ fun ContentView(
                     top = Padding.small,
                     bottom = Padding.regular
                 ),
-                text = stringResource(R.string.all_notes_screen_subtitle, state.month, state.year)
+                text = stringResource(R.string.all_notes_screen_subtitle, state.date.formatToString())
             )
 
             LazyColumn {
@@ -106,5 +106,5 @@ fun ContentView(
 @Preview(showBackground = true)
 @Composable
 private fun AllNotesWithIconPreview() {
-    AllNotesScreen(year = 2025, month = Month.JULY) {}
+    AllNotesScreen(epoch = LocalDate.now().toEpochDay()) {}
 }
