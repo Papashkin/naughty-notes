@@ -9,18 +9,21 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.sexcalendar.R
+import com.antsfamily.sexcalendar.presentation.allnotes.view.NoteExtendedItem
 import com.antsfamily.sexcalendar.presentation.home.TopBar
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
-import com.antsfamily.sexcalendar.presentation.home.view.NoteCard
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.Month
 
@@ -37,7 +40,7 @@ fun AllNotesScreen(
 
     when (val uiState = state.value) {
         is AllNotesUiState.Loading -> FullScreenLoading()
-        is AllNotesUiState.Content -> ContentView(notes = uiState.notes) {
+        is AllNotesUiState.Content -> ContentView(state = uiState) {
             navigateBack()
         }
 
@@ -54,7 +57,7 @@ fun AllNotesScreen(
 @Composable
 fun ContentView(
     modifier: Modifier = Modifier,
-    notes: List<NoteModel>,
+    state: AllNotesUiState.Content,
     onNavigateBack: () -> Unit
 ) {
     Box(
@@ -69,15 +72,31 @@ fun ContentView(
                 modifier = Modifier
                     .padding(start = Padding.tiny)
                     .fillMaxWidth(),
-                title = "All notes",
-                onNavigationBack = {
-                    onNavigateBack()
-                }
+                title = stringResource(R.string.all_notes_screen_title),
+                onNavigationBack = { onNavigateBack() }
             )
 
-            LazyColumn(modifier = Modifier.padding(Padding.large)) {
-                items(notes) {
-                    NoteCard(it)
+            Text(
+                modifier = Modifier.padding(
+                    start = 48.dp,
+                    top = Padding.small,
+                    bottom = Padding.regular
+                ),
+                text = stringResource(R.string.all_notes_screen_subtitle, state.month, state.year)
+            )
+
+            LazyColumn {
+                itemsIndexed(state.notes) { index, note ->
+                    NoteExtendedItem(
+                        index = index,
+                        note = note,
+                        onEdit = {
+                            //TODO implement edit
+                        },
+                        onDelete = {
+                            //TODO implement note deletion (with undo action)
+                        }
+                    )
                 }
             }
         }

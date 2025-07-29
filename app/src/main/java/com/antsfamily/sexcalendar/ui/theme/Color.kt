@@ -4,14 +4,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
 val lightScheme = lightColorScheme(
     primary = Color(0xFF830012),
     onPrimary = Color(0xFFffffff),
@@ -36,13 +28,13 @@ val lightScheme = lightColorScheme(
     errorContainer = Color(0xFFffdad6),
     onErrorContainer = Color(0xFF93000a),
     outline = Color(0xFF906f6d),
-    outlineVariant = Color(0xFFe4bdba),
+    outlineVariant = Color(0xFFE4BDBA),
     scrim = Color(0xFF000000),
     surfaceBright = Color(0xFFfff8f7),
     surfaceContainer = Color(0xFFffe9e7),
-    surfaceContainerHigh = Color(0xFFffe1df),
+    surfaceContainerHigh = Color(0xFFffE1DF),
     surfaceContainerHighest = Color(0xFFfadcd9),
-    surfaceContainerLow = Color(0xFFfff0ef),
+    surfaceContainerLow = Color(0xFFFFF0EF),
     surfaceContainerLowest = Color(0xFFffffff),
     surfaceDim = Color(0xFFf1d3d1)
 )
