@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.Month
+import java.time.format.TextStyle
+import java.util.Locale
 
 @HiltViewModel(assistedFactory = AllNotesViewModel.Factory::class)
 class AllNotesViewModel @AssistedInject constructor(
@@ -46,7 +48,9 @@ class AllNotesViewModel @AssistedInject constructor(
         try {
             delay(200)
             val notes = repository.getNotesByMonthAndYear(month = month.value, year = year)
-            _state.value = AllNotesUiState.Content(notes)
+                .sortedBy { it.date }
+            val monthName = month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
+            _state.value = AllNotesUiState.Content(year, monthName, notes)
         } catch (e: Exception) {
             //TODO fix it later with error Type and it's handler
             _state.value = AllNotesUiState.Error(e.message.orEmpty())
