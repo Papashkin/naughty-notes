@@ -21,8 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -44,6 +42,7 @@ import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -55,7 +54,7 @@ private val CALENDAR_DATE_FORMAT = DateTimeFormatter.ofPattern("MMMM yyyy")
 fun CalendarView(
     modifier: Modifier = Modifier,
     yearMonth: YearMonth,
-    notes: List<NoteModel>,
+    datesWithNotes: List<LocalDate>,
     isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
@@ -63,7 +62,7 @@ fun CalendarView(
     onDayClick: (LocalDate) -> Unit,
 ) {
     val daysOfWeek = remember { daysOfWeek() }
-    val currentDay = remember { LocalDate.now().dayOfMonth }
+    val currentDay = remember { LocalDate.now() }
 
     val state = rememberCalendarState(
         startMonth = yearMonth,
@@ -88,13 +87,14 @@ fun CalendarView(
             )
 
             VerticalCalendar(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerHighest),
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
                 state = state,
                 dayContent = { day ->
                     Day(
                         day,
+                        currentDay,
                         yearMonth.monthValue,
-                        notes.filter { note -> note.date == day.date }.size
+                        day.date in datesWithNotes
                     ) {
                         onDayClick(it)
                     }
@@ -129,7 +129,7 @@ fun CalendarHeader(
                 modifier = Modifier.size(32.dp),
                 contentDescription = null,
                 tint = if (isNavigationBackVisible) {
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.outlineVariant
                 }
@@ -156,7 +156,7 @@ fun CalendarHeader(
                 modifier = Modifier.size(32.dp),
                 contentDescription = null,
                 tint = if (isNavigationForwardVisible) {
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.outlineVariant
                 }
@@ -168,8 +168,9 @@ fun CalendarHeader(
 @Composable
 fun Day(
     day: CalendarDay,
+    currentDay: LocalDate,
     currentMonthIndex: Int,
-    recordsAmount: Int,
+    isWithRecords: Boolean,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Box(
@@ -180,47 +181,48 @@ fun Day(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                if (day.date.month.value == currentMonthIndex) {
+                if (day.date.monthValue == currentMonthIndex) {
                     onDayClick(day.date)
                 }
             },
         contentAlignment = Alignment.Center
     ) {
-        if (recordsAmount == 0) {
-            if (day.date.month.value == currentMonthIndex) {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            } else {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-        } else {
-            Card(
+        Card(modifier = Modifier.padding(Padding.x_small)) {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(Padding.x_small),
-                shape = RoundedCornerShape(Padding.small),
-                elevation = CardDefaults.cardElevation(Padding.x_small)
+                    .background(
+                        color = if (day.date == currentDay) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceContainer
+                        }
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (day.date.month.value == currentMonthIndex) {
-                        Text(
-                            text = day.date.dayOfMonth.toString(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = when {
+                        (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
+                        (day.date.monthValue == currentMonthIndex) -> MaterialTheme.colorScheme.onSurface
+                        else -> MaterialTheme.colorScheme.outlineVariant
                     }
+                )
+                if (isWithRecords) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        tint = if (day.date == currentDay) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        },
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(Padding.tiny)
+                            .size(12.dp)
+                            .align(Alignment.BottomCenter)
+                    )
                 }
             }
         }
@@ -232,7 +234,7 @@ fun WeekDayHeader(daysOfWeek: List<DayOfWeek>) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
@@ -253,16 +255,12 @@ fun WeekDayHeader(daysOfWeek: List<DayOfWeek>) {
 @Composable
 private fun CalendarViewPreview() {
     CalendarView(
-        yearMonth = YearMonth.now(),
-        notes = listOf(
-            NoteModel(
+        yearMonth = YearMonth.of(2025, Month.JULY),
+        datesWithNotes = listOf(
+                LocalDate.of(2025, Month.JULY, 19),
+                LocalDate.of(2025, Month.JULY, 21),
+                LocalDate.of(2025, Month.JULY, 25),
                 LocalDate.now(),
-                SexType.VAGINAL,
-                isProtected = true,
-                painRate = 2,
-                rate = 4,
-                personalNote = "That was something crazy"
-            )
         ),
         isNavigationBackVisible = true,
         isNavigationForwardVisible = true,

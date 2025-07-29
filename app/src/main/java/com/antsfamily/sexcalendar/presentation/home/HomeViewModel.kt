@@ -38,8 +38,8 @@ class HomeViewModel @Inject constructor(
     val navigateToCreateNoteEvent: SharedFlow<Long>
         get() = _navigateToCreateNoteEvent
 
-    private val _navigateToAllNotesEvent: MutableSharedFlow<Pair<Month, Int>> = MutableSharedFlow()
-    val navigateToAllNotesEvent: SharedFlow<Pair<Month, Int>>
+    private val _navigateToAllNotesEvent: MutableSharedFlow<Long> = MutableSharedFlow()
+    val navigateToAllNotesEvent: SharedFlow<Long>
         get() = _navigateToAllNotesEvent
 
     private var notes: List<NoteModel> = mutableListOf()
@@ -61,10 +61,12 @@ class HomeViewModel @Inject constructor(
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
                     isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
-                    notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
+                    datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
+                        .map { note -> note.date },
                     isNavigationBackVisible = !isNavigationBackInvisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
+
                 else -> it
             }
         }
@@ -82,35 +84,47 @@ class HomeViewModel @Inject constructor(
                 is HomeUiState.Content -> it.copy(
                     yearMonth = selectedYearMonth,
                     isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
-                    notes = notes.filter { note -> note.date.yearMonth == selectedYearMonth },
+                    datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
+                        .map { note -> note.date },
                     isNavigationBackVisible = isNavigationBackVisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
+
                 else -> it
             }
         }
     }
 
-    fun onCreateNoteClick() = viewModelScope.launch {
-        val currentDate = LocalDate.now()
-        _navigateToCreateNoteEvent.emit(currentDate.toEpochDay())
-    }
+//    fun onCreateNoteClick() = viewModelScope.launch {
+//        val currentDate = LocalDate.now()
+//        _navigateToCreateNoteEvent.emit(currentDate.toEpochDay())
+//    }
 
-    fun onShowAllClick() = viewModelScope.launch {
-        _navigateToAllNotesEvent.emit(yearMonthNow.month to yearMonthNow.year)
-    }
+//    fun onShowAllClick() = viewModelScope.launch {
+//        _navigateToAllNotesEvent.emit(yearMonthNow.month to yearMonthNow.year)
+//    }
 
     fun onDayClick(date: LocalDate) = viewModelScope.launch {
         val currentDate = LocalDate.now()
-        if (date.isBefore(currentDate) || date == currentDate) {
+        if (date.isAfter(currentDate)) return@launch
+
+        val notesForDate = notes.filter { it.date == date }
+        if (notesForDate.isEmpty()) {
             _navigateToCreateNoteEvent.emit(date.toEpochDay())
+        } else {
+            _navigateToAllNotesEvent.emit(date.toEpochDay())
         }
     }
 
     private fun getNotes() = viewModelScope.launch {
         repository.notes
             .onStart { /* no-op */ }
-            .onCompletion { Log.e(this@HomeViewModel::class.simpleName, "=== Notes fetching COMPLETE ===") }
+            .onCompletion {
+                Log.e(
+                    this@HomeViewModel::class.simpleName,
+                    "=== Notes fetching COMPLETE ==="
+                )
+            }
             .collect {
                 notes = it
                 handleNotes()
@@ -118,12 +132,15 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleNotes() {
+        val today = LocalDate.now().dayOfMonth
+        val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
         _state.value = HomeUiState.Content(
             yearMonth = yearMonthNow,
             isCurrentMonth = true,
             isNavigationBackVisible = true,
             isNavigationForwardVisible = false,
-            notes = notes.filter { it.date.yearMonth == yearMonthNow }.sortedBy { it.date }
+            datesWithNotes = notes.filter { it.date.yearMonth == yearMonthNow }.map { it.date },
+            daysSinceLastNote = today - lastNoteDate
         )
     }
 }

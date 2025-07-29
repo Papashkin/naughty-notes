@@ -41,8 +41,8 @@ fun Navigator() {
                     }
                     HomeScreen(
                         navigateToCreateNote = { navController.navigate(CreateNote(it)) },
-                        navigateToAllNotes = { month, year ->
-                            navController.navigate(AllNotes(month, year))
+                        navigateToAllNotes = {
+                            navController.navigate(AllNotes(it))
                         }
                     )
                 }
@@ -57,7 +57,7 @@ fun Navigator() {
                 }
                 composable<AllNotes> { entry ->
                     val data = entry.toRoute<AllNotes>()
-                    AllNotesScreen(data.month, data.year) {
+                    AllNotesScreen(data.dateEpoch) {
                         navController.popBackStack()
                     }
                 }

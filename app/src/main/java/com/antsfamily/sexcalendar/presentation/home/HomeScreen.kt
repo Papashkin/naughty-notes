@@ -1,39 +1,43 @@
 package com.antsfamily.sexcalendar.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.home.view.CalendarView
 import com.antsfamily.sexcalendar.presentation.home.view.FullScreenLoading
-import com.antsfamily.sexcalendar.presentation.home.view.NotesListView
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
-import java.time.Month
 import java.time.YearMonth
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToCreateNote: (Long) -> Unit,
-    navigateToAllNotes: (Month, Int) -> Unit
+    navigateToAllNotes: (Long) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -42,8 +46,8 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.navigateToAllNotesEvent.collect { (month, year) ->
-            navigateToAllNotes(month, year)
+        viewModel.navigateToAllNotesEvent.collect { dateEpoch ->
+            navigateToAllNotes(dateEpoch)
         }
     }
 
@@ -55,8 +59,8 @@ fun HomeScreen(
             state = uiState,
             onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
             onNextMonthClick = { viewModel.onNextMonthClick() },
-            onCreateNoteClick = { viewModel.onCreateNoteClick() },
-            onShowAllClick = { viewModel.onShowAllClick() },
+//            onCreateNoteClick = { viewModel.onCreateNoteClick() },
+//            onShowAllClick = { viewModel.onShowAllClick() },
             onDayClick = { viewModel.onDayClick(it) }
         )
     }
@@ -67,8 +71,8 @@ fun HomeContent(
     state: HomeUiState.Content,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
-    onCreateNoteClick: () -> Unit,
-    onShowAllClick: () -> Unit,
+//    onCreateNoteClick: () -> Unit,
+//    onShowAllClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Column(
@@ -101,7 +105,7 @@ fun HomeContent(
 
         CalendarView(
             yearMonth = state.yearMonth,
-            notes = state.notes,
+            datesWithNotes = state.datesWithNotes,
             isNavigationBackVisible = state.isNavigationBackVisible,
             isNavigationForwardVisible = state.isNavigationForwardVisible,
             onPreviousMonthClick = { onPreviousMonthClick() },
@@ -111,12 +115,60 @@ fun HomeContent(
 
         Spacer(Modifier.height(Padding.medium))
 
-        NotesListView(
-            notes = state.notes,
-            isCurrentMonth = state.isCurrentMonth,
-            onCreateNoteClick = onCreateNoteClick,
-            onShowAllClick = onShowAllClick
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+        ) {
+            Card(
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(Padding.medium),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = state.datesWithNotes.size.toString(),
+                        style = MaterialTheme.typography.displayLarge,
+                    )
+                    Text(
+                        modifier = Modifier.align(Alignment.BottomCenter).padding(Padding.regular),
+                        text = "Total notes this month"
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .height(200.dp)
+                    .weight(1f),
+                shape = RoundedCornerShape(Padding.medium),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = state.daysSinceLastNote.toString(),
+                        style = MaterialTheme.typography.displayLarge,
+                    )
+                    Text(
+                        modifier = Modifier.align(Alignment.BottomCenter).padding(Padding.regular),
+                        text = "Days since last note"
+                    )
+                }
+            }
+        }
+
+//        NotesListView(
+//            notes = state.notes,
+//            isCurrentMonth = state.isCurrentMonth,
+//            onCreateNoteClick = onCreateNoteClick,
+//            onShowAllClick = onShowAllClick
+//        )
     }
 }
 
@@ -129,6 +181,7 @@ private fun HomeContentPreview() {
         isNavigationBackVisible = true,
         isNavigationForwardVisible = false,
         listOf(),
+        5
     )
-    HomeContent(state, {}, {}, {}, {}, {})
+    HomeContent(state, {}, {}, {})
 }
