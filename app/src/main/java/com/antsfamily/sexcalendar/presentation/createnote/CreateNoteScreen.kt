@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +45,7 @@ const val CREATE_NOTE_NOTE_LENGTH_MAX = 60
 
 @Composable
 fun CreateNoteScreen(
+    snackbarHostState: SnackbarHostState,
     dateEpoch: Long,
     viewModel: CreateNoteViewModel = hiltViewModel<CreateNoteViewModel, CreateNoteViewModel.Factory> {
         it.create(dateEpoch)
@@ -52,6 +55,15 @@ fun CreateNoteScreen(
     LaunchedEffect(Unit) {
         viewModel.navigateBackEvent.collect {
             onNavigateBack()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.noteSaveSnackBarEvent.collect {
+            snackbarHostState
+                .showSnackbar(
+                    message = "New note of ${it.name} was successfully saved",
+                    duration = SnackbarDuration.Short
+                )
         }
     }
 

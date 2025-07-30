@@ -12,5 +12,5 @@ interface SexRecordRepository {
     suspend fun getNotesByDate(date: LocalDate): List<NoteModel>
     suspend fun updateData()
     suspend fun deleteNote(note: NoteModel)
-    suspend fun saveData(note: NoteModel)
+    suspend fun addNote(note: NoteModel)
 }

@@ -70,7 +70,7 @@ class AllNotesViewModel @AssistedInject constructor(
 
     fun onDeleteNoteReverted() = viewModelScope.launch {
         noteToDelete?.let { note ->
-            repository.saveData(note)
+            repository.addNote(note)
             _state.update { state ->
                 when (state) {
                     is AllNotesUiState.Content -> state.copy(

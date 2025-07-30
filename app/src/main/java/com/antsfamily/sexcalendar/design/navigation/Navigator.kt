@@ -51,9 +51,11 @@ fun Navigator() {
                     BackHandler(true) {
                         //no-op
                     }
-                    CreateNoteScreen(dateEpoch = data.dateEpoch) {
-                        navController.popBackStack()
-                    }
+                    CreateNoteScreen(
+                        snackbarHostState = snackbarHostState,
+                        dateEpoch = data.dateEpoch,
+                        onNavigateBack = { navController.popBackStack() }
+                    )
                 }
                 composable<AllNotes> { entry ->
                     val data = entry.toRoute<AllNotes>()
