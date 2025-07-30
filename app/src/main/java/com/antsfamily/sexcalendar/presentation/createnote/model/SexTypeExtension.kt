@@ -12,6 +12,7 @@ fun SexType.toStringId(): Int {
         SexType.VAGINAL -> R.string.sex_type_vaginal
         SexType.MASTURBATION -> R.string.sex_type_masturbation
         SexType.TRIBADISM -> R.string.sex_type_tribadism
+        SexType.BDSM -> R.string.sex_type_bdsm
         SexType.UNKNOWN -> R.string.sex_type_unknown
     }
 }
@@ -24,6 +25,7 @@ fun SexType.toDescriptionStringId(): Int {
         SexType.VAGINAL -> R.string.sex_type_description_vaginal
         SexType.MASTURBATION -> R.string.sex_type_description_masturbation
         SexType.TRIBADISM -> R.string.sex_type_description_tribadism
+        SexType.BDSM -> R.string.sex_type_description_bdsm
         SexType.UNKNOWN -> R.string.sex_type_description_unknown
     }
 }
