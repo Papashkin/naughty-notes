@@ -29,6 +29,21 @@ class SexRecordRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun subscribeToNotesOnDate(date: LocalDate): Flow<List<NoteModel>> =
+        dao.allRecordsOnDateFlow(date).map { record ->
+            record.map {
+                NoteModel(
+                    id = it.id,
+                    date = it.date,
+                    type = SexType.valueOf(it.type),
+                    isProtected = it.isProtected,
+                    rate = it.pleasureRate,
+                    painRate = it.painRate,
+                    personalNote = it.note.orEmpty()
+                )
+            }
+        }
+
     override suspend fun getAllNotes(): List<NoteModel> {
         val data = dao.getAllRecords()
         return data.map {

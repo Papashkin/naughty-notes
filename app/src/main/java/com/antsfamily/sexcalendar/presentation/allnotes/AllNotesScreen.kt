@@ -10,6 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -41,6 +46,7 @@ fun AllNotesScreen(
         it.create(epoch)
     },
     navigateBack: () -> Unit,
+    navigateToCreateNote: () -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -50,7 +56,8 @@ fun AllNotesScreen(
             state = uiState,
             onNavigateBack = { navigateBack() },
             onEdit = { viewModel.onEditSwipe(it) },
-            onDelete = { viewModel.onDeleteSwipe(it) }
+            onDelete = { viewModel.onDeleteSwipe(it) },
+            onAddNoteClick = { viewModel.onAddNoteClick() }
         )
 
         is AllNotesUiState.Error -> TODO()
@@ -59,6 +66,11 @@ fun AllNotesScreen(
     LaunchedEffect(Unit) {
         viewModel.navigationBackFlow.collect {
             navigateBack()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.navigationToCreateNoteFlow.collect {
+            navigateToCreateNote()
         }
     }
     LaunchedEffect(Unit) {
@@ -83,6 +95,7 @@ fun ContentView(
     state: AllNotesUiState.Content,
     onEdit: (NoteModel) -> Unit,
     onDelete: (NoteModel) -> Unit,
+    onAddNoteClick: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     Box(
@@ -94,11 +107,22 @@ fun ContentView(
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             TopBar(
-                modifier = Modifier
-                    .padding(start = Padding.tiny)
-                    .fillMaxWidth(),
                 title = stringResource(R.string.all_notes_screen_title),
-                onNavigationBack = { onNavigateBack() }
+                onNavigationBack = { onNavigateBack() },
+                actions = {
+                    IconButton(
+                        modifier = Modifier.background(
+                            color = MaterialTheme.colorScheme.surfaceContainer,
+                            shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp)
+                        ),
+                        onClick = { onAddNoteClick() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = null
+                        )
+                    }
+                }
             )
 
             Text(
@@ -164,6 +188,7 @@ private fun AllNotesWithIconPreview() {
         ),
         onNavigateBack = {},
         onEdit = {},
-        onDelete = {}
+        onDelete = {},
+        onAddNoteClick = {}
     )
 }

@@ -1,5 +1,6 @@
 package com.antsfamily.sexcalendar.presentation.allnotes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.SexRecordRepository
@@ -8,13 +9,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -37,6 +39,9 @@ class AllNotesViewModel @AssistedInject constructor(
 
     private val _navigationBackFlow = MutableSharedFlow<Unit>()
     val navigationBackFlow: SharedFlow<Unit> = _navigationBackFlow.asSharedFlow()
+
+    private val _navigationToCreateNoteFlow = MutableSharedFlow<Unit>()
+    val navigationToCreateNoteFlow: SharedFlow<Unit> = _navigationToCreateNoteFlow.asSharedFlow()
 
     private val _deleteNoteFlow = MutableSharedFlow<NoteModel>()
     val deleteNoteFlow: SharedFlow<NoteModel> = _deleteNoteFlow.asSharedFlow()
@@ -70,6 +75,7 @@ class AllNotesViewModel @AssistedInject constructor(
                 when (state) {
                     is AllNotesUiState.Content -> state.copy(
                         notes = state.notes.plus(note).sortedBy { it.date })
+
                     else -> state
                 }
             }
@@ -81,16 +87,41 @@ class AllNotesViewModel @AssistedInject constructor(
         noteToDelete = null
     }
 
+    fun onAddNoteClick() = viewModelScope.launch {
+        _navigationToCreateNoteFlow.emit(Unit)
+    }
+
     private fun getNotes() = viewModelScope.launch {
+        val date = LocalDate.ofEpochDay(epoch)
         try {
-            val date = LocalDate.ofEpochDay(epoch)
             val notes = repository.getNotesByDate(date)
-            delay(200)
             _state.value = AllNotesUiState.Content(date, notes)
         } catch (e: Exception) {
             //TODO fix it later with error Type and it's handler
             _state.value = AllNotesUiState.Error(e.message.orEmpty())
+        } finally {
+            subscribeToNotes(date)
         }
+    }
 
+    private suspend fun subscribeToNotes(date: LocalDate) {
+        repository.subscribeToNotesOnDate(date)
+            .onStart { /* no-op */ }
+            .onCompletion {
+                Log.e(
+                    this@AllNotesViewModel::class.simpleName, "=== Notes fetching COMPLETE ==="
+                )
+            }
+            .collect {
+                onNewNotesReceived(it)
+            }
+    }
+
+    private fun onNewNotesReceived(notes: List<NoteModel>) {
+        _state.update {
+            if (it !is AllNotesUiState.Content) return@update it
+
+            if (it.notes == notes) it else it.copy(notes = notes)
+        }
     }
 }

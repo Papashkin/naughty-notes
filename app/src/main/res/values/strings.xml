@@ -36,5 +36,8 @@
 
     <string name="all_notes_screen_title">All notes</string>
     <string name="all_notes_screen_subtitle">for %1$s</string>
+    <string name="all_notes_screen_menu_edit">Edit</string>
+    <string name="all_notes_screen_menu_delete">Delete</string>
+    <string name="all_notes_screen_button_add_note">Add another note</string>
 
 </resources>
