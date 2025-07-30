@@ -176,8 +176,8 @@ fun CreateNoteContent(
                     )
                     RatingBar(
                         rating = state.painRate,
-                        selectedIcon = ImageVector.vectorResource(R.drawable.ic_pain),
-                        defaultIcon = ImageVector.vectorResource(R.drawable.ic_pain_outlined),
+                        selectedIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_filled),
+                        defaultIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
                         scaleMinLabel = R.string.note_screen_pain_rate_min_label,
                         scaleMaxLabel = R.string.note_screen_pain_rate_max_label,
                         onRatingChanged = { setPainRate(it) }
@@ -200,8 +200,8 @@ fun CreateNoteContent(
                     )
                     RatingBar(
                         rating = state.rate,
-                        selectedIcon = Icons.Default.Favorite,
-                        defaultIcon = Icons.Default.FavoriteBorder,
+                        selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
+                        defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
                         scaleMinLabel = R.string.note_screen_pleasure_rate_min_label,
                         scaleMaxLabel = R.string.note_screen_pleasure_rate_max_label,
                         onRatingChanged = { setPleasureRate(it) }

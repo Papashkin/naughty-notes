@@ -88,17 +88,17 @@ private fun RatingBarPreview() {
     Column {
 
         RatingBar(
-            rating = 0,
-            selectedIcon = Icons.Default.Favorite,
-            defaultIcon = Icons.Default.FavoriteBorder,
+            rating = 4,
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
+            defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
             scaleMinLabel = R.string.note_screen_pain_rate_min_label,
             scaleMaxLabel = R.string.note_screen_pain_rate_max_label,
             onRatingChanged = {}
         )
         RatingBar(
-            rating = 0,
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_pain),
-            defaultIcon = ImageVector.vectorResource(R.drawable.ic_pain_outlined),
+            rating = 2,
+            selectedIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_filled),
+            defaultIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
             scaleMinLabel = R.string.note_screen_pleasure_rate_min_label,
             scaleMaxLabel = R.string.note_screen_pleasure_rate_max_label,
             onRatingChanged = {}

@@ -7,5 +7,9 @@ enum class SexType {
     ANAL,
     MASTURBATION,
     TRIBADISM,
+    BDSM,
     ;
+
+    val isProtectionNeeded: Boolean
+        get() = this != MASTURBATION
 }

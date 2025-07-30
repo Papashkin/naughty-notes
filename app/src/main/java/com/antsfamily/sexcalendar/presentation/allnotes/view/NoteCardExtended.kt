@@ -57,11 +57,25 @@ fun NoteCardExtended(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
             ),
             headlineContent = {
-                Text(
-                    modifier = Modifier.padding(vertical = Padding.small),
-                    text = stringResource(note.type.toStringId()),
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    modifier = Modifier.weight(0.5f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.padding(vertical = Padding.small),
+                        text = stringResource(note.type.toStringId()),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    if (note.isProtected && note.type.isProtectionNeeded) {
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = Padding.x_small)
+                                .size(14.dp),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_protection_shield),
+                            contentDescription = null
+                        )
+                    }
+                }
             },
             trailingContent = {
                 Icon(
@@ -110,9 +124,10 @@ fun NoteCardExtended(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                modifier = Modifier.size(16.dp),
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_pain),
-                                contentDescription = null
+                                modifier = Modifier.size(18.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
                             )
                             Text(
                                 text = "${note.painRate}",
@@ -126,9 +141,10 @@ fun NoteCardExtended(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                modifier = Modifier.size(16.dp),
-                                imageVector = Icons.Default.Favorite,
-                                contentDescription = null
+                                modifier = Modifier.size(18.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
                             )
                             Text(
                                 text = "${note.rate}",
