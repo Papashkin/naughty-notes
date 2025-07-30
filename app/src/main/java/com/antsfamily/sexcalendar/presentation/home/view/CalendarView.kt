@@ -32,9 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -214,7 +217,7 @@ fun Day(
                 )
                 if (isWithRecords) {
                     Icon(
-                        imageVector = Icons.Default.Favorite,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_heart_filled),
                         tint = if (day.date == currentDay) {
                             MaterialTheme.colorScheme.onPrimary
                         } else {
