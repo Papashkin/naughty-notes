@@ -15,3 +15,15 @@ fun SexType.toStringId(): Int {
         SexType.UNKNOWN -> R.string.sex_type_unknown
     }
 }
+
+@StringRes
+fun SexType.toDescriptionStringId(): Int {
+    return when (this) {
+        SexType.ANAL -> R.string.sex_type_description_anal
+        SexType.ORAL -> R.string.sex_type_description_oral
+        SexType.VAGINAL -> R.string.sex_type_description_vaginal
+        SexType.MASTURBATION -> R.string.sex_type_description_masturbation
+        SexType.TRIBADISM -> R.string.sex_type_description_tribadism
+        SexType.UNKNOWN -> R.string.sex_type_description_unknown
+    }
+}

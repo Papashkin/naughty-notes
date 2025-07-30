@@ -57,9 +57,11 @@ fun Navigator() {
                 }
                 composable<AllNotes> { entry ->
                     val data = entry.toRoute<AllNotes>()
-                    AllNotesScreen(data.dateEpoch) {
-                        navController.popBackStack()
-                    }
+                    AllNotesScreen(
+                        snackbarHostState = snackbarHostState,
+                        epoch = data.dateEpoch,
+                        navigateBack = { navController.popBackStack() },
+                    )
                 }
             }
         }

@@ -18,6 +18,7 @@ class SexRecordRepositoryImpl @Inject constructor(
         get() = dao.allRecordsFlow().map { record ->
             record.map {
                 NoteModel(
+                    id = it.id,
                     date = it.date,
                     type = SexType.valueOf(it.type),
                     isProtected = it.isProtected,
@@ -32,6 +33,7 @@ class SexRecordRepositoryImpl @Inject constructor(
         val data = dao.getAllRecords()
         return data.map {
             NoteModel(
+                id = it.id,
                 date = it.date,
                 type = SexType.valueOf(it.type),
                 isProtected = it.isProtected,
@@ -47,6 +49,7 @@ class SexRecordRepositoryImpl @Inject constructor(
             .filter { it.date.year == year && it.date.monthValue == month }
         return data.map {
             NoteModel(
+                id = it.id,
                 date = it.date,
                 type = SexType.valueOf(it.type),
                 isProtected = it.isProtected,
@@ -61,6 +64,7 @@ class SexRecordRepositoryImpl @Inject constructor(
         val data = dao.getAllRecords().filter { it.date == date }
         return data.map {
             NoteModel(
+                id = it.id,
                 date = it.date,
                 type = SexType.valueOf(it.type),
                 isProtected = it.isProtected,
@@ -73,6 +77,11 @@ class SexRecordRepositoryImpl @Inject constructor(
 
     override suspend fun updateData() {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteNote(note: NoteModel) {
+        val record = note.toDTO()
+        dao.deleteRecord(record)
     }
 
     override suspend fun saveData(note: NoteModel) {

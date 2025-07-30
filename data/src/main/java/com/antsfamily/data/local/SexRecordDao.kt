@@ -1,6 +1,7 @@
 package com.antsfamily.data.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -21,6 +22,9 @@ abstract class SexRecordDao {
 
     @Insert
     abstract suspend fun addRecord(profile: SexRecordDTO)
+
+    @Delete
+    abstract suspend fun deleteRecord(profile: SexRecordDTO)
 
     @Update
     abstract suspend fun updateRecord(profile: SexRecordDTO)

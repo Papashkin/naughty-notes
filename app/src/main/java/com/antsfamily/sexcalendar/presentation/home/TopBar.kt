@@ -38,7 +38,7 @@ fun TopBar(
     Row(
         modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
