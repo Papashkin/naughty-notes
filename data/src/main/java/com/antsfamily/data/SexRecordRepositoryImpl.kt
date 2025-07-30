@@ -99,7 +99,7 @@ class SexRecordRepositoryImpl @Inject constructor(
         dao.deleteRecord(record)
     }
 
-    override suspend fun saveData(note: NoteModel) {
+    override suspend fun addNote(note: NoteModel) {
         val record = note.toDTO()
         dao.addRecord(record)
     }

@@ -36,6 +36,9 @@ class CreateNoteViewModel @AssistedInject constructor(
     private val _navigateBackEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     val navigateBackEvent: SharedFlow<Unit> = _navigateBackEvent
 
+    private val _noteSaveSnackBarEvent: MutableSharedFlow<SexType> = MutableSharedFlow()
+    val noteSaveSnackBarEvent: SharedFlow<SexType> = _noteSaveSnackBarEvent
+
     init {
         val date = LocalDate.ofEpochDay(dateEpoch)
         _state.value = CreateNoteUiState.Content.Default.copy(date = date)
@@ -107,9 +110,9 @@ class CreateNoteViewModel @AssistedInject constructor(
                 personalNote = it.note
             )
 
-            repository.saveData(note)
-
-            _state.value = CreateNoteUiState.Content.Default
+            repository.addNote(note)
+            _noteSaveSnackBarEvent.emit(note.type)
+            setDefaultState()
         }
     }
 
@@ -120,5 +123,10 @@ class CreateNoteViewModel @AssistedInject constructor(
                 else -> it
             }
         }
+    }
+
+    private fun setDefaultState() {
+        val date = LocalDate.ofEpochDay(dateEpoch)
+        _state.value = CreateNoteUiState.Content.Default.copy(date = date)
     }
 }
