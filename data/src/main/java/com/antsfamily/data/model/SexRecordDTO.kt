@@ -4,11 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.antsfamily.domain.model.NoteModel
 import java.time.LocalDate
-import kotlin.random.Random
 
 @Entity
 data class SexRecordDTO(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey val id: Int,
     val date: LocalDate,
     val type: String,
     val isProtected: Boolean,
@@ -18,11 +17,11 @@ data class SexRecordDTO(
 )
 
 fun NoteModel.toDTO(): SexRecordDTO = SexRecordDTO(
-        id = Random.nextInt(),
-        date = this.date,
-        type = this.type.name,
-        isProtected = this.isProtected,
-        pleasureRate = this.rate,
-        painRate = this.painRate,
-        note = this.personalNote
-    )
+    id = this.id,
+    date = this.date,
+    type = this.type.name,
+    isProtected = this.isProtected,
+    pleasureRate = this.rate,
+    painRate = this.painRate,
+    note = this.personalNote
+)

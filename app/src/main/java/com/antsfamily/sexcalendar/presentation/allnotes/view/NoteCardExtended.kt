@@ -1,6 +1,6 @@
 package com.antsfamily.sexcalendar.presentation.allnotes.view
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,146 +8,162 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
 import com.antsfamily.sexcalendar.presentation.createnote.formatToString
+import com.antsfamily.sexcalendar.presentation.createnote.model.toDescriptionStringId
 import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
 import com.antsfamily.sexcalendar.ui.theme.Padding
 import java.time.LocalDate
 
 @Composable
-fun NoteCardExtended(note: NoteModel, index: Int) {
-    ListItem(
-        modifier = Modifier.fillMaxWidth(),
-        colors = ListItemDefaults.colors(
-            containerColor = if (index % 2 == 0) {
-                MaterialTheme.colorScheme.surfaceContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceContainerLow
-            }
-        ),
-        overlineContent = {
-            Text(
-                modifier = Modifier.padding(vertical = Padding.x_small),
-                text = note.date.formatToString()
-            )
-        },
-        headlineContent = {
-            Text(
-                modifier = Modifier.padding(vertical = Padding.x_small),
-                text = stringResource(note.type.toStringId())
-            )
-        },
-        supportingContent = {
-            Column(
-                modifier = Modifier.padding(top = Padding.x_small),
-                verticalArrangement = Arrangement.spacedBy(Padding.regular)
-            ) {
-                Row {
-                    Row(modifier = Modifier.weight(0.5f)) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_pain),
-                            contentDescription = null
-                        )
+fun NoteCardExtended(
+    note: NoteModel,
+    onEditClick: (NoteModel) -> Unit,
+    onDeleteClick: (NoteModel) -> Unit
+) {
+    val (menuExpanded, setMenuExpanded) = remember { mutableStateOf(false) }
 
-                        Text(
-                            "${note.painRate}/5",
-                            modifier = Modifier.padding(horizontal = Padding.small)
-                        )
-                    }
-
-                    Row(modifier = Modifier.weight(1f)) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = null
-                        )
-
-                        Text(
-                            "${note.rate}/5",
-                            modifier = Modifier.padding(horizontal = Padding.small)
-                        )
-                    }
+    Card(
+        modifier = Modifier.padding(vertical = Padding.small),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        ListItem(
+            modifier = Modifier.fillMaxWidth(),
+            colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            ),
+            overlineContent = {
+                Text(
+                    modifier = Modifier.padding(vertical = Padding.tiny),
+                    text = note.date.formatToString(),
+                    style = MaterialTheme.typography.labelSmall
+                )
+            },
+            headlineContent = {
+                Text(
+                    modifier = Modifier.padding(vertical = Padding.small),
+                    text = stringResource(note.type.toStringId()),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            },
+            trailingContent = {
+                Icon(
+                    modifier = Modifier.clickable { setMenuExpanded(true) },
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = null
+                )
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { setMenuExpanded(false) }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Edit") },
+                        onClick = {
+                            setMenuExpanded(false)
+                            onEditClick(note)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Delete") },
+                        onClick = {
+                            setMenuExpanded(false)
+                            onDeleteClick(note)
+                        }
+                    )
                 }
+            },
+            supportingContent = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(Padding.x_small)
+                ) {
+                    Box {
+                        Text(
+                            text = note.personalNote.ifBlank { stringResource(note.type.toDescriptionStringId()) },
+                            minLines = 2,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
 
-                if (note.personalNote.isNotBlank()) {
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                                shape = RoundedCornerShape(8.dp)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            modifier = Modifier.weight(0.5f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_pain),
+                                contentDescription = null
                             )
-                            .padding(Padding.x_small)
-                    ) {
-                        Text(text = note.personalNote, minLines = 2)
+                            Text(
+                                text = "${note.painRate}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(horizontal = Padding.x_small)
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.weight(0.5f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = null
+                            )
+                            Text(
+                                text = "${note.rate}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(horizontal = Padding.x_small)
+                            )
+                        }
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }
 
 
 @Preview
 @Composable
 private fun NoteCardExtendedPreview() {
-    val notes = listOf(
+    val note =
         NoteModel(
+            15315,
             LocalDate.now(),
             SexType.TRIBADISM,
             true,
             1,
-            "something really-really long has written here just to see how it looks",
+            "",
             5
-        ),
-        NoteModel(
-            LocalDate.now(),
-            SexType.VAGINAL,
-            true,
-            1,
-            "something really-really long has written here just to see how it looks",
-            5
-        ),
-        NoteModel(
-            LocalDate.now(),
-            SexType.MASTURBATION,
-            true,
-            1,
-            "something really-really long has written here just to see how it looks",
-            5
-        ),
-    )
-    LazyColumn {
-        itemsIndexed(notes) { index, note ->
-            NoteExtendedItem(
-                index = index,
-                note = note,
-                onEdit = {
-                    //TODO implement edit
-                },
-                onDelete = {
-                    //TODO implement note deletion (with undo action)
-                }
-            )
-        }
-    }
+        )
+    NoteCardExtended(note, {}, {})
 }

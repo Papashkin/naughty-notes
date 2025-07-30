@@ -37,4 +37,4 @@ sealed class CreateNoteUiState {
     }
 }
 
-fun LocalDate.formatToString(): String = this.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+fun LocalDate.formatToString(): String = this.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))

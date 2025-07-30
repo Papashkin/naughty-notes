@@ -8,6 +8,13 @@
     <string name="sex_type_tribadism">Tribadism</string>
     <string name="sex_type_unknown">Not selected</string>
 
+    <string name="sex_type_description_anal">Tried something naughty back there 😈</string>
+    <string name="sex_type_description_oral">Left nothing to say… just oral fun 😋</string>
+    <string name="sex_type_description_vaginal">Classic connection, always a thrill 💕</string>
+    <string name="sex_type_description_masturbation">Solo time well spent 😌</string>
+    <string name="sex_type_description_tribadism">Close and intimate — just how we like it 💞</string>
+    <string name="sex_type_description_unknown">There is nothing to say 😏</string>
+
     <string name="note_screen_pain_rate_min_label">no pain</string>
     <string name="note_screen_pain_rate_max_label">too painful</string>
     <string name="note_screen_pleasure_rate_min_label">Bad!</string>

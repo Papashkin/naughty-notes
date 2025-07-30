@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import kotlin.random.Random
 
 @HiltViewModel(assistedFactory = CreateNoteViewModel.Factory::class)
 class CreateNoteViewModel @AssistedInject constructor(
@@ -97,6 +98,7 @@ class CreateNoteViewModel @AssistedInject constructor(
             _state.value = it.copy(isSaveButtonLoadingVisible = true)
 
             val note = NoteModel(
+                id = Random.nextInt(),
                 date = it.date,
                 type = it.type,
                 isProtected = it.isProtected,

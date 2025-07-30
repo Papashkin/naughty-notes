@@ -172,6 +172,7 @@ private fun NotesListViewPreview1() {
     NotesListView(
         notes = listOf(
             NoteModel(
+                3643,
                 LocalDate.of(2025, Month.JULY, 12),
                 SexType.ANAL,
                 isProtected = true,
@@ -180,6 +181,7 @@ private fun NotesListViewPreview1() {
                 personalNote = ""
             ),
             NoteModel(
+                2452,
                 LocalDate.of(2025, Month.JULY, 22),
                 SexType.VAGINAL,
                 isProtected = true,
@@ -188,6 +190,7 @@ private fun NotesListViewPreview1() {
                 personalNote = "That was something crazy"
             ),
             NoteModel(
+                1231,
                 LocalDate.of(2025, Month.JULY, 15),
                 SexType.ANAL,
                 isProtected = true,
@@ -196,6 +199,7 @@ private fun NotesListViewPreview1() {
                 personalNote = ""
             ),
             NoteModel(
+                75765,
                 LocalDate.of(2025, Month.JULY, 20),
                 SexType.VAGINAL,
                 isProtected = true,
