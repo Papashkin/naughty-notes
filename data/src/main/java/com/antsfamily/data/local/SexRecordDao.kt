@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.antsfamily.data.model.SexRecordDTO
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 abstract class SexRecordDao {
@@ -19,6 +20,9 @@ abstract class SexRecordDao {
 
     @Query("Select * from sexrecorddto where id = :id")
     abstract suspend fun getRecordById(id: Int): SexRecordDTO?
+
+    @Query("SELECT * from sexrecorddto where date = :date")
+    abstract fun allRecordsOnDateFlow(date: LocalDate): Flow<List<SexRecordDTO>>
 
     @Insert
     abstract suspend fun addRecord(profile: SexRecordDTO)

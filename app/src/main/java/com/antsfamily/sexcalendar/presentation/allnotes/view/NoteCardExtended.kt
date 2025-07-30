@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.sexcalendar.R
-import com.antsfamily.sexcalendar.presentation.createnote.formatToString
 import com.antsfamily.sexcalendar.presentation.createnote.model.toDescriptionStringId
 import com.antsfamily.sexcalendar.presentation.createnote.model.toStringId
 import com.antsfamily.sexcalendar.ui.theme.Padding
@@ -57,13 +56,6 @@ fun NoteCardExtended(
             colors = ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
             ),
-            overlineContent = {
-                Text(
-                    modifier = Modifier.padding(vertical = Padding.tiny),
-                    text = note.date.formatToString(),
-                    style = MaterialTheme.typography.labelSmall
-                )
-            },
             headlineContent = {
                 Text(
                     modifier = Modifier.padding(vertical = Padding.small),
@@ -82,14 +74,14 @@ fun NoteCardExtended(
                     onDismissRequest = { setMenuExpanded(false) }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Edit") },
+                        text = { Text(stringResource(R.string.all_notes_screen_menu_edit)) },
                         onClick = {
                             setMenuExpanded(false)
                             onEditClick(note)
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Delete") },
+                        text = { Text(stringResource(R.string.all_notes_screen_menu_delete)) },
                         onClick = {
                             setMenuExpanded(false)
                             onDeleteClick(note)

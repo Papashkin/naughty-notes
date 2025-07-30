@@ -61,6 +61,7 @@ fun Navigator() {
                         snackbarHostState = snackbarHostState,
                         epoch = data.dateEpoch,
                         navigateBack = { navController.popBackStack() },
+                        navigateToCreateNote = { navController.navigate(CreateNote(data.dateEpoch)) }
                     )
                 }
             }
