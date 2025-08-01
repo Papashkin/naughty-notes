@@ -57,7 +57,6 @@ fun CalendarView(
     modifier: Modifier = Modifier,
     yearMonth: YearMonth,
     datesWithNotes: List<LocalDate>,
-    isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
@@ -82,7 +81,6 @@ fun CalendarView(
 
             CalendarHeader(
                 yearMonth = yearMonth,
-                isNavigationBackVisible = isNavigationBackVisible,
                 isNavigationForwardVisible = isNavigationForwardVisible,
                 onPreviousMonthClick = onPreviousMonthClick,
                 onNextMonthClick = onNextMonthClick
@@ -112,7 +110,6 @@ fun CalendarView(
 @Composable
 fun CalendarHeader(
     yearMonth: YearMonth,
-    isNavigationBackVisible: Boolean,
     isNavigationForwardVisible: Boolean,
     onPreviousMonthClick: () -> Unit,
     onNextMonthClick: () -> Unit,
@@ -121,22 +118,17 @@ fun CalendarHeader(
         Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-        ,
+            .background(MaterialTheme.colorScheme.surfaceContainer),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            onClick = { if (isNavigationBackVisible) onPreviousMonthClick.invoke() }
+            onClick = { onPreviousMonthClick.invoke() }
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                 modifier = Modifier.size(32.dp),
                 contentDescription = null,
-                tint = if (isNavigationBackVisible) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.outlineVariant
-                }
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -196,7 +188,7 @@ fun Day(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = if (day.date == currentDay) {
+                        color = if (day.date == currentDay && day.date.monthValue == currentMonthIndex) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceContainer
@@ -204,29 +196,31 @@ fun Day(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = when {
-                        (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
-                        (day.date.monthValue == currentMonthIndex) -> MaterialTheme.colorScheme.onSurface
-                        else -> MaterialTheme.colorScheme.surface
-                    }
-                )
-                if (isWithRecords) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_heart_filled),
-                        tint = if (day.date == currentDay) {
-                            MaterialTheme.colorScheme.onPrimary
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        },
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(Padding.tiny)
-                            .size(12.dp)
-                            .align(Alignment.BottomCenter)
+                if (day.date.monthValue == currentMonthIndex) {
+                    Text(
+                        text = day.date.dayOfMonth.toString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = when {
+                            (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
+                            (day.date.monthValue == currentMonthIndex) -> MaterialTheme.colorScheme.onSurface
+                            else -> MaterialTheme.colorScheme.surface
+                        }
                     )
+                    if (isWithRecords) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_heart_filled),
+                            tint = if (day.date == currentDay) {
+                                MaterialTheme.colorScheme.onPrimary
+                            } else {
+                                MaterialTheme.colorScheme.primary
+                            },
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(Padding.tiny)
+                                .size(12.dp)
+                                .align(Alignment.BottomCenter)
+                        )
+                    }
                 }
             }
         }
@@ -259,14 +253,13 @@ fun WeekDayHeader(daysOfWeek: List<DayOfWeek>) {
 @Composable
 private fun CalendarViewPreview() {
     CalendarView(
-        yearMonth = YearMonth.of(2025, Month.JULY),
+        yearMonth = YearMonth.of(2025, Month.FEBRUARY),
         datesWithNotes = listOf(
-                LocalDate.of(2025, Month.JULY, 19),
-                LocalDate.of(2025, Month.JULY, 21),
-                LocalDate.of(2025, Month.JULY, 25),
-                LocalDate.now(),
+            LocalDate.of(2025, Month.JULY, 19),
+            LocalDate.of(2025, Month.JULY, 21),
+            LocalDate.of(2025, Month.JULY, 25),
+            LocalDate.now(),
         ),
-        isNavigationBackVisible = true,
         isNavigationForwardVisible = true,
         onNextMonthClick = {},
         onPreviousMonthClick = {},

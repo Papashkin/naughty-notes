@@ -107,7 +107,6 @@ fun HomeContent(
             CalendarView(
                 yearMonth = state.yearMonth,
                 datesWithNotes = state.datesWithNotes,
-                isNavigationBackVisible = state.isNavigationBackVisible,
                 isNavigationForwardVisible = state.isNavigationForwardVisible,
                 onPreviousMonthClick = { onPreviousMonthClick() },
                 onNextMonthClick = { onNextMonthClick() },
@@ -165,13 +164,6 @@ fun HomeContent(
                     }
                 }
             }
-
-//        NotesListView(
-//            notes = state.notes,
-//            isCurrentMonth = state.isCurrentMonth,
-//            onCreateNoteClick = onCreateNoteClick,
-//            onShowAllClick = onShowAllClick
-//        )
         }
     }
 }
@@ -182,7 +174,6 @@ private fun HomeContentPreview() {
     val state = HomeUiState.Content(
         YearMonth.now(),
         isCurrentMonth = true,
-        isNavigationBackVisible = true,
         isNavigationForwardVisible = false,
         listOf(),
         5
