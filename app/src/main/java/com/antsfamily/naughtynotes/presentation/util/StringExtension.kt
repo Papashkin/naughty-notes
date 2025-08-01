@@ -1,8 +1,9 @@
-package com.antsfamily.naughtynotes.presentation.createnote.model
+package com.antsfamily.naughtynotes.presentation.util
 
 import androidx.annotation.StringRes
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 
 @StringRes
 fun SexType.toStringId(): Int {
@@ -28,4 +29,10 @@ fun SexType.toDescriptionStringId(): Int {
         SexType.BDSM -> R.string.sex_type_description_bdsm
         SexType.UNKNOWN -> R.string.sex_type_description_unknown
     }
+}
+
+@StringRes
+fun NoteFormType.toStringId(): Int = when (this) {
+    NoteFormType.CREATE -> R.string.note_form_type_create
+    NoteFormType.EDIT -> R.string.note_form_type_edit
 }

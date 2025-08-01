@@ -1,4 +1,4 @@
-package com.antsfamily.naughtynotes.presentation.createnote.view
+package com.antsfamily.naughtynotes.presentation.noteform.view
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.createnote.model.toStringId
+import com.antsfamily.naughtynotes.presentation.util.toStringId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +39,7 @@ fun SexTypeDropdown(
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = {},
             readOnly = true,
-            label = { Text(stringResource(R.string.note_screen_sex_type_dropdown_label)) },
+            label = { Text(stringResource(R.string.note_form_screen_sex_type_dropdown_label)) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
             },

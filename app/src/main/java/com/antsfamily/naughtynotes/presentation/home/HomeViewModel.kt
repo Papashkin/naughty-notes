@@ -34,9 +34,9 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeUiState>
         get() = _state
 
-    private val _navigateToCreateNoteEvent: MutableSharedFlow<Long> = MutableSharedFlow()
-    val navigateToCreateNoteEvent: SharedFlow<Long>
-        get() = _navigateToCreateNoteEvent
+    private val _navigateToNoteFormEvent: MutableSharedFlow<Long> = MutableSharedFlow()
+    val navigateToNoteFormEvent: SharedFlow<Long>
+        get() = _navigateToNoteFormEvent
 
     private val _navigateToAllNotesEvent: MutableSharedFlow<Long> = MutableSharedFlow()
     val navigateToAllNotesEvent: SharedFlow<Long>
@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
 
         val notesForDate = notes.filter { it.date == date }
         if (notesForDate.isEmpty()) {
-            _navigateToCreateNoteEvent.emit(date.toEpochDay())
+            _navigateToNoteFormEvent.emit(date.toEpochDay())
         } else {
             _navigateToAllNotesEvent.emit(date.toEpochDay())
         }

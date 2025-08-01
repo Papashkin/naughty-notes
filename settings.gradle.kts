@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "sex-calendar"
+rootProject.name = "naughty-notes"
 include(":app")
 include(":data")
 include(":domain")

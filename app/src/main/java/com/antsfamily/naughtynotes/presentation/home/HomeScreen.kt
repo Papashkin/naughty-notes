@@ -37,13 +37,13 @@ import java.time.YearMonth
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToCreateNote: (Long) -> Unit,
+    navigateToNoteForm: (Long) -> Unit,
     navigateToAllNotes: (Long) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
-        viewModel.navigateToCreateNoteEvent.collect {
-            navigateToCreateNote(it)
+        viewModel.navigateToNoteFormEvent.collect {
+            navigateToNoteForm(it)
         }
     }
     LaunchedEffect(Unit) {
