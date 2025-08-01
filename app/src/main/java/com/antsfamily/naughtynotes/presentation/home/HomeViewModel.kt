@@ -53,9 +53,6 @@ class HomeViewModel @Inject constructor(
         val currentYearMonth = (_state.value as HomeUiState.Content).yearMonth
         val selectedYearMonth = currentYearMonth.minusMonths(1)
 
-        val isNavigationBackInvisible =
-            selectedYearMonth.year == LAST_AVAILABLE_YEAR && selectedYearMonth.month == Month.JANUARY
-
         _state.update {
             when (it) {
                 is HomeUiState.Content -> it.copy(
@@ -63,7 +60,6 @@ class HomeViewModel @Inject constructor(
                     isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
                     datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
                         .map { note -> note.date },
-                    isNavigationBackVisible = !isNavigationBackInvisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
 
@@ -76,9 +72,6 @@ class HomeViewModel @Inject constructor(
         val currentYearMonth = (_state.value as HomeUiState.Content).yearMonth
         val selectedYearMonth = currentYearMonth.plusMonths(1)
 
-        val isNavigationBackVisible =
-            selectedYearMonth.year != LAST_AVAILABLE_YEAR && selectedYearMonth.month != Month.JANUARY
-
         _state.update {
             when (it) {
                 is HomeUiState.Content -> it.copy(
@@ -86,7 +79,6 @@ class HomeViewModel @Inject constructor(
                     isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
                     datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
                         .map { note -> note.date },
-                    isNavigationBackVisible = isNavigationBackVisible,
                     isNavigationForwardVisible = selectedYearMonth != yearMonthNow
                 )
 
@@ -128,7 +120,6 @@ class HomeViewModel @Inject constructor(
         _state.value = HomeUiState.Content(
             yearMonth = yearMonthNow,
             isCurrentMonth = true,
-            isNavigationBackVisible = true,
             isNavigationForwardVisible = false,
             datesWithNotes = notes.filter { it.date.yearMonth == yearMonthNow }.map { it.date },
             daysSinceLastNote = today - lastNoteDate
