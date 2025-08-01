@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.antsfamily.sexcalendar"
+    namespace = "com.antsfamily.naughtynotes"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.antsfamily.sexcalendar"
+        applicationId = "com.antsfamily.naughtynotes"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
