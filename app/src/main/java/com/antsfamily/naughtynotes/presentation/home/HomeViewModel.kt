@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.SexRecordRepository
 import com.antsfamily.domain.model.NoteModel
-import com.kizitonwose.calendar.core.yearMonth
+import com.antsfamily.naughtynotes.presentation.util.getDatesForMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.Month
-import java.time.Year
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -25,10 +23,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repository: SexRecordRepository
 ) : ViewModel() {
-
-    companion object {
-        private val LAST_AVAILABLE_YEAR = Year.now().value.minus(1)
-    }
 
     private val _state: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
     val state: StateFlow<HomeUiState>
@@ -43,24 +37,21 @@ class HomeViewModel @Inject constructor(
         get() = _navigateToAllNotesEvent
 
     private var notes: List<NoteModel> = mutableListOf()
-    private val yearMonthNow: YearMonth = YearMonth.now()
+    private val currentMonth: YearMonth = YearMonth.now()
 
     init {
         getNotes()
     }
 
-    fun onPreviousMonthClick() {
-        val currentYearMonth = (_state.value as HomeUiState.Content).yearMonth
-        val selectedYearMonth = currentYearMonth.minusMonths(1)
+    fun onMonthChanged(month: YearMonth) {
+        if (month == (_state.value as? HomeUiState.Content)?.yearMonth) return
 
         _state.update {
             when (it) {
                 is HomeUiState.Content -> it.copy(
-                    yearMonth = selectedYearMonth,
-                    isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
-                    datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
-                        .map { note -> note.date },
-                    isNavigationForwardVisible = selectedYearMonth != yearMonthNow
+                    yearMonth = month,
+                    datesWithNotes = notes.getDatesForMonth(month),
+                    isCurrentMonth = month == currentMonth
                 )
 
                 else -> it
@@ -68,18 +59,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onNextMonthClick() {
-        val currentYearMonth = (_state.value as HomeUiState.Content).yearMonth
-        val selectedYearMonth = currentYearMonth.plusMonths(1)
-
+    fun onTodayButtonClick() {
         _state.update {
             when (it) {
                 is HomeUiState.Content -> it.copy(
-                    yearMonth = selectedYearMonth,
-                    isCurrentMonth = selectedYearMonth.monthValue == yearMonthNow.monthValue,
-                    datesWithNotes = notes.filter { note -> note.date.yearMonth == selectedYearMonth }
-                        .map { note -> note.date },
-                    isNavigationForwardVisible = selectedYearMonth != yearMonthNow
+                    yearMonth = currentMonth,
+                    datesWithNotes = notes.getDatesForMonth(currentMonth),
+                    isCurrentMonth = true
                 )
 
                 else -> it
@@ -118,10 +104,9 @@ class HomeViewModel @Inject constructor(
         val today = LocalDate.now().dayOfMonth
         val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
         _state.value = HomeUiState.Content(
-            yearMonth = yearMonthNow,
+            yearMonth = currentMonth,
             isCurrentMonth = true,
-            isNavigationForwardVisible = false,
-            datesWithNotes = notes.filter { it.date.yearMonth == yearMonthNow }.map { it.date },
+            datesWithNotes = notes.getDatesForMonth(currentMonth),
             daysSinceLastNote = today - lastNoteDate
         )
     }

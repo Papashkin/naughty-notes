@@ -35,10 +35,12 @@
     <string name="note_form_screen_edit_snackbar_success">Existed note was successfully updated</string>
 
     <string name="home_screen_title">Journal</string>
-    <string name="home_screen_subtitle">Psst! Want to add a naughty note? Just click on a date 😉.</string>
-    <string name="home_screen_empty_content_label_2">There is no notes for selected period.</string>
+    <string name="home_screen_subtitle">Psst! Want to add a naughty note?\nJust click on a date 😉.</string>
     <string name="home_screen_empty_content_label">Don\'t have a note recorded?</string>
+    <string name="home_screen_empty_content_label_2">There is no notes for selected period.</string>
     <string name="home_screen_empty_content_button_create_note">Create a note</string>
+    <string name="home_screen_button_today">Today</string>
+    <string name="home_screen_banner_total_notes_of_month">Total notes this month</string>
 
     <string name="all_notes_screen_title">All notes</string>
     <string name="all_notes_screen_subtitle">for %1$s</string>
