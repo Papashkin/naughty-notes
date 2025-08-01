@@ -8,7 +8,6 @@ sealed class HomeUiState {
     data class Content(
         val yearMonth: YearMonth,
         val isCurrentMonth: Boolean,
-        val isNavigationForwardVisible: Boolean,
         val datesWithNotes: List<LocalDate>,
         val daysSinceLastNote: Int,
     ): HomeUiState()

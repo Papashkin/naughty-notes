@@ -17,12 +17,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,8 +60,8 @@ fun HomeScreen(
         is HomeUiState.Loading -> FullScreenLoading()
         is HomeUiState.Content -> HomeContent(
             state = uiState,
-            onPreviousMonthClick = { viewModel.onPreviousMonthClick() },
-            onNextMonthClick = { viewModel.onNextMonthClick() },
+            onMonthChanged = { viewModel.onMonthChanged(it) },
+            onTodayButtonClick = { viewModel.onTodayButtonClick() },
             onDayClick = { viewModel.onDayClick(it) }
         )
     }
@@ -68,8 +70,8 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     state: HomeUiState.Content,
-    onPreviousMonthClick: () -> Unit,
-    onNextMonthClick: () -> Unit,
+    onMonthChanged: (YearMonth) -> Unit,
+    onTodayButtonClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Column(
@@ -97,19 +99,33 @@ fun HomeContent(
 
             Spacer(Modifier.height(Padding.medium))
 
-            Text(
-                text = stringResource(R.string.home_screen_subtitle),
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.home_screen_subtitle),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                if (!state.isCurrentMonth) {
+                    TextButton(onClick = { onTodayButtonClick() }) {
+                        Text(
+                            text = stringResource(R.string.home_screen_button_today),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
 
             Spacer(Modifier.height(Padding.medium))
 
             CalendarView(
                 yearMonth = state.yearMonth,
                 datesWithNotes = state.datesWithNotes,
-                isNavigationForwardVisible = state.isNavigationForwardVisible,
-                onPreviousMonthClick = { onPreviousMonthClick() },
-                onNextMonthClick = { onNextMonthClick() },
+                onMonthChanged = { onMonthChanged(it) },
                 onDayClick = { onDayClick(it) }
             )
 
@@ -134,9 +150,10 @@ fun HomeContent(
                             style = MaterialTheme.typography.displayLarge,
                         )
                         Text(
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
                                 .padding(Padding.regular),
-                            text = "Total notes this month"
+                            text = stringResource(R.string.home_screen_banner_total_notes_of_month)
                         )
                     }
                 }
@@ -157,7 +174,8 @@ fun HomeContent(
                             style = MaterialTheme.typography.displayLarge,
                         )
                         Text(
-                            modifier = Modifier.align(Alignment.BottomCenter)
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
                                 .padding(Padding.regular),
                             text = "Days since last note"
                         )
@@ -172,11 +190,10 @@ fun HomeContent(
 @Composable
 private fun HomeContentPreview() {
     val state = HomeUiState.Content(
-        YearMonth.now(),
-        isCurrentMonth = true,
-        isNavigationForwardVisible = false,
-        listOf(),
-        5
+        yearMonth = YearMonth.now(),
+        isCurrentMonth = false,
+        datesWithNotes = listOf(),
+        daysSinceLastNote = 5
     )
     HomeContent(state, {}, {}, {})
 }
