@@ -90,8 +90,18 @@ class SexRecordRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateData() {
-        TODO("Not yet implemented")
+    override suspend fun getNoteById(id: Int): NoteModel? {
+        return dao.getRecordById(id)?.let {
+            NoteModel(
+                id = it.id,
+                date = it.date,
+                type = SexType.valueOf(it.type),
+                isProtected = it.isProtected,
+                rate = it.pleasureRate,
+                painRate = it.painRate,
+                personalNote = it.note.orEmpty()
+            )
+        }
     }
 
     override suspend fun deleteNote(note: NoteModel) {
@@ -102,5 +112,10 @@ class SexRecordRepositoryImpl @Inject constructor(
     override suspend fun addNote(note: NoteModel) {
         val record = note.toDTO()
         dao.addRecord(record)
+    }
+
+    override suspend fun updateNote(note: NoteModel) {
+        val record = note.toDTO()
+        dao.updateRecord(record)
     }
 }

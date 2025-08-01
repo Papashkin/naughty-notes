@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
-import com.antsfamily.naughtynotes.presentation.createnote.CreateNoteScreen
+import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 
@@ -40,20 +40,19 @@ fun Navigator() {
                         //no-op
                     }
                     HomeScreen(
-                        navigateToCreateNote = { navController.navigate(CreateNote(it)) },
-                        navigateToAllNotes = {
-                            navController.navigate(AllNotes(it))
-                        }
+                        navigateToNoteForm = { navController.navigate(NoteForm(it, null)) },
+                        navigateToAllNotes = { navController.navigate(AllNotes(it)) }
                     )
                 }
-                composable<CreateNote> { entry ->
-                    val data = entry.toRoute<CreateNote>()
+                composable<NoteForm> { entry ->
+                    val data = entry.toRoute<NoteForm>()
                     BackHandler(true) {
                         //no-op
                     }
-                    CreateNoteScreen(
+                    NoteFormScreen(
                         snackbarHostState = snackbarHostState,
                         dateEpoch = data.dateEpoch,
+                        noteId = data.noteId,
                         onNavigateBack = { navController.popBackStack() }
                     )
                 }
@@ -63,7 +62,9 @@ fun Navigator() {
                         snackbarHostState = snackbarHostState,
                         epoch = data.dateEpoch,
                         navigateBack = { navController.popBackStack() },
-                        navigateToCreateNote = { navController.navigate(CreateNote(data.dateEpoch)) }
+                        navigateToNoteForm = {
+                            navController.navigate(NoteForm(data.dateEpoch, it))
+                        }
                     )
                 }
             }

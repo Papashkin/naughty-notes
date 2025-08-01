@@ -1,4 +1,4 @@
-package com.antsfamily.naughtynotes.presentation.createnote.view
+package com.antsfamily.naughtynotes.presentation.noteform.view
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -88,16 +88,16 @@ private fun RatingBarPreview() {
             rating = 4,
             selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
             defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
-            scaleMinLabel = R.string.note_screen_pain_rate_min_label,
-            scaleMaxLabel = R.string.note_screen_pain_rate_max_label,
+            scaleMinLabel = R.string.note_form_screen_pain_rate_min_label,
+            scaleMaxLabel = R.string.note_form_screen_pain_rate_max_label,
             onRatingChanged = {}
         )
         RatingBar(
             rating = 2,
             selectedIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_filled),
             defaultIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
-            scaleMinLabel = R.string.note_screen_pleasure_rate_min_label,
-            scaleMaxLabel = R.string.note_screen_pleasure_rate_max_label,
+            scaleMinLabel = R.string.note_form_screen_pleasure_rate_min_label,
+            scaleMaxLabel = R.string.note_form_screen_pleasure_rate_max_label,
             onRatingChanged = {}
         )
     }

@@ -1,4 +1,4 @@
-package com.antsfamily.naughtynotes.presentation.createnote.model
+package com.antsfamily.naughtynotes.presentation.noteform.model
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

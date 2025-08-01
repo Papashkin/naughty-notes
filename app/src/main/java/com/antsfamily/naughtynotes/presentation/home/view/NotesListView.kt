@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.createnote.model.toStringId
+import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate
 import java.time.Month

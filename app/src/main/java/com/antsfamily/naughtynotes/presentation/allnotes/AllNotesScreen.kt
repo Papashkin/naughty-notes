@@ -32,7 +32,7 @@ import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCardExtended
-import com.antsfamily.naughtynotes.presentation.createnote.formatToString
+import com.antsfamily.naughtynotes.presentation.noteform.formatToString
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.ui.theme.Padding
@@ -42,11 +42,11 @@ import java.time.LocalDate
 fun AllNotesScreen(
     snackbarHostState: SnackbarHostState,
     epoch: Long,
-    viewModel: AllNotesViewModel = hiltViewModel<AllNotesViewModel, AllNotesViewModel.Factory>() {
+    viewModel: AllNotesViewModel = hiltViewModel<AllNotesViewModel, AllNotesViewModel.Factory> {
         it.create(epoch)
     },
     navigateBack: () -> Unit,
-    navigateToCreateNote: () -> Unit,
+    navigateToNoteForm: (Int?) -> Unit,
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -55,8 +55,8 @@ fun AllNotesScreen(
         is AllNotesUiState.Content -> ContentView(
             state = uiState,
             onNavigateBack = { navigateBack() },
-            onEdit = { viewModel.onEditSwipe(it) },
-            onDelete = { viewModel.onDeleteSwipe(it) },
+            onEdit = { viewModel.onEditClick(it) },
+            onDelete = { viewModel.onDeleteClick(it) },
             onAddNoteClick = { viewModel.onAddNoteClick() }
         )
 
@@ -69,8 +69,8 @@ fun AllNotesScreen(
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.navigationToCreateNoteFlow.collect {
-            navigateToCreateNote()
+        viewModel.navigationToNoteFormFlow.collect {
+            navigateToNoteForm(it)
         }
     }
     LaunchedEffect(Unit) {
@@ -79,7 +79,7 @@ fun AllNotesScreen(
                 .showSnackbar(
                     message = "Note deleted",
                     actionLabel = "Undo",
-                    duration = SnackbarDuration.Long
+                    duration = SnackbarDuration.Short
                 )
             when (snackbarResult) {
                 SnackbarResult.Dismissed -> viewModel.onDeleteNoteSuccess()

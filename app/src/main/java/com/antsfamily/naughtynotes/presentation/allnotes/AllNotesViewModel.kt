@@ -40,8 +40,8 @@ class AllNotesViewModel @AssistedInject constructor(
     private val _navigationBackFlow = MutableSharedFlow<Unit>()
     val navigationBackFlow: SharedFlow<Unit> = _navigationBackFlow.asSharedFlow()
 
-    private val _navigationToCreateNoteFlow = MutableSharedFlow<Unit>()
-    val navigationToCreateNoteFlow: SharedFlow<Unit> = _navigationToCreateNoteFlow.asSharedFlow()
+    private val _navigationToNoteFormFlow = MutableSharedFlow<Int?>()
+    val navigationToNoteFormFlow: SharedFlow<Int?> = _navigationToNoteFormFlow.asSharedFlow()
 
     private val _deleteNoteFlow = MutableSharedFlow<NoteModel>()
     val deleteNoteFlow: SharedFlow<NoteModel> = _deleteNoteFlow.asSharedFlow()
@@ -52,11 +52,11 @@ class AllNotesViewModel @AssistedInject constructor(
         getNotes()
     }
 
-    fun onEditSwipe(note: NoteModel) {
-        //TODO implement Edit Note screen
+    fun onEditClick(note: NoteModel) = viewModelScope.launch {
+        _navigationToNoteFormFlow.emit(note.id)
     }
 
-    fun onDeleteSwipe(note: NoteModel) = viewModelScope.launch {
+    fun onDeleteClick(note: NoteModel) = viewModelScope.launch {
         noteToDelete = note
         repository.deleteNote(note)
         _state.update {
@@ -88,7 +88,7 @@ class AllNotesViewModel @AssistedInject constructor(
     }
 
     fun onAddNoteClick() = viewModelScope.launch {
-        _navigationToCreateNoteFlow.emit(Unit)
+        _navigationToNoteFormFlow.emit(null)
     }
 
     private fun getNotes() = viewModelScope.launch {

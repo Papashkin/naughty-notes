@@ -1,12 +1,14 @@
-package com.antsfamily.naughtynotes.presentation.createnote
+package com.antsfamily.naughtynotes.presentation.noteform
 
 import com.antsfamily.domain.model.SexType
+import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-sealed class CreateNoteUiState {
-    data object Loading : CreateNoteUiState()
+sealed class NoteFormUiState {
+    data object Loading : NoteFormUiState()
     data class Content(
+        val formType: NoteFormType,
         val date: LocalDate,
         val type: SexType,
         val isProtected: Boolean,
@@ -15,10 +17,11 @@ sealed class CreateNoteUiState {
         val note: String,
         val isSaveButtonEnabled: Boolean,
         val isSaveButtonLoadingVisible: Boolean
-    ) : CreateNoteUiState() {
+    ) : NoteFormUiState() {
 
         companion object {
             val Default = Content(
+                formType = NoteFormType.CREATE,
                 date = LocalDate.now(),
                 type = SexType.UNKNOWN,
                 isProtected = false,
