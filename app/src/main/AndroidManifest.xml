@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.antsfamily.sexcalendar">
+    package="com.antsfamily.naughtynotes">
 
     <application
-        android:name=".SexCalendarApplication"
+        android:name="com.antsfamily.naughtynotes.NaughtyNotesApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,12 +12,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SexCalendar"
+        android:theme="@style/Theme.NaughtyNotes"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.antsfamily.naughtynotes.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SexCalendar">
+            android:theme="@style/Theme.NaughtyNotes">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
