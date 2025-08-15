@@ -8,6 +8,7 @@ enum class SexType {
     MASTURBATION,
     TRIBADISM,
     BDSM,
+    THREESOME,
     ;
 
     val isProtectionNeeded: Boolean

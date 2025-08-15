@@ -15,13 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -35,6 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.TopBar
@@ -49,13 +47,13 @@ const val CREATE_NOTE_NOTE_LENGTH_MAX = 60
 
 @Composable
 fun NoteFormScreen(
-    snackbarHostState: SnackbarHostState,
     dateEpoch: Long,
     noteId: Int?,
     viewModel: NoteFormViewModel = hiltViewModel<NoteFormViewModel, NoteFormViewModel.Factory> {
         it.create(dateEpoch, noteId)
     },
     onNavigateBack: () -> Unit,
+    onSnackbarShow: (String) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -73,12 +71,11 @@ fun NoteFormScreen(
     }
     LaunchedEffect(Unit) {
         viewModel.noteSaveSnackBarEvent.collect {
-            snackbarHostState
-                .showSnackbar(message = message, duration = SnackbarDuration.Short)
+            onSnackbarShow(message)
         }
     }
 
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
     when (val uiState = state.value) {
         is NoteFormUiState.Loading -> FullScreenLoading()
@@ -132,7 +129,6 @@ fun NoteFormContent(
                     .fillMaxWidth(),
                 title = stringResource(state.formType.toStringId()),
                 onNavigationBack = {
-//                    keyboardController?.hide()
                     onNavigateBackClick()
                 }
             )
@@ -153,7 +149,6 @@ fun NoteFormContent(
                     modifier = Modifier.padding(top = Padding.xx_large, bottom = Padding.small),
                     selected = state.type
                 ) {
-//                    keyboardController?.hide()
                     setSexType(it)
                 }
 
@@ -222,7 +217,7 @@ fun NoteFormContent(
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     RatingBar(
-                        rating = state.rate,
+                        rating = state.pleasureRate,
                         selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
                         defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
                         scaleMinLabel = R.string.note_form_screen_pleasure_rate_min_label,
@@ -277,7 +272,7 @@ fun NoteFormContent(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun CreateNoteContentPreview(onNavigateBack: () -> Unit) {
+private fun CreateNoteContentPreview() {
     NoteFormContent(
         state = NoteFormUiState.Content.Default,
         keyboardController = null,

@@ -1,10 +1,10 @@
-package com.antsfamily.domain
+package com.antsfamily.domain.repository
 
 import com.antsfamily.domain.model.NoteModel
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
-interface SexRecordRepository {
+interface NoteRepository {
     val notes: Flow<List<NoteModel>>
     suspend fun subscribeToNotesOnDate(date: LocalDate): Flow<List<NoteModel>>
     suspend fun getAllNotes(): List<NoteModel>

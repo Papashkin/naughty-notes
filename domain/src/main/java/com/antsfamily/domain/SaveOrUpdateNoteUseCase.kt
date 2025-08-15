@@ -1,0 +1,48 @@
+package com.antsfamily.domain
+
+import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.repository.NoteRepository
+import java.time.LocalDate
+import javax.inject.Inject
+import kotlin.random.Random
+
+class SaveOrUpdateNoteUseCase @Inject constructor(
+    private val repository: NoteRepository
+) {
+
+    suspend operator fun invoke(
+        id: Int?,
+        date: LocalDate,
+        type: SexType,
+        isProtected: Boolean,
+        painRate: Int,
+        pleasureRate: Int,
+        personalNote: String,
+    ) {
+
+        val note = NoteModel(
+            id = id ?: Random.nextInt(),
+            date = date,
+            type = type,
+            isProtected = isProtected,
+            rate = pleasureRate,
+            painRate = painRate,
+            personalNote = personalNote
+        )
+
+        id?.let {
+            updateNote(note)
+        } ?: run {
+            saveNote(note)
+        }
+    }
+
+    private suspend fun saveNote(note: NoteModel) {
+        repository.addNote(note)
+    }
+
+    private suspend fun updateNote(note: NoteModel) {
+        repository.updateNote(note)
+    }
+}

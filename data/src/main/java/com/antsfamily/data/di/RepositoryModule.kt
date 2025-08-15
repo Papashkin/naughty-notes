@@ -1,7 +1,7 @@
 package com.antsfamily.data.di
 
-import com.antsfamily.data.SexRecordRepositoryImpl
-import com.antsfamily.domain.SexRecordRepository
+import com.antsfamily.data.NoteRepositoryImpl
+import com.antsfamily.domain.repository.NoteRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindsSexRecordRepository(repositoryImpl: SexRecordRepositoryImpl): SexRecordRepository
+    abstract fun bindsNoteRepository(repositoryImpl: NoteRepositoryImpl): NoteRepository
 }

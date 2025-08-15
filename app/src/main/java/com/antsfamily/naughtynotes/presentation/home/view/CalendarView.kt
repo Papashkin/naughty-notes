@@ -150,17 +150,16 @@ private fun Day(
 ) {
     Box(
         modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .padding(6.dp)
+            .aspectRatio(1f)
+            .padding(Padding.x_small)
             .clip(RoundedCornerShape(Padding.small))
             .background(
-                color = if (isWithRecords && day.date == currentDay && day.position == DayPosition.MonthDate) {
+                color = if (day.position == DayPosition.MonthDate && day.date == currentDay) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     Color.Transparent
                 }
             )
-            // Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 indication = null,
@@ -175,11 +174,9 @@ private fun Day(
             color = when (day.position) {
                 DayPosition.MonthDate -> when {
                     (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
-                    isWithRecords -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.onSurface
                 }
-                DayPosition.InDate,
-                DayPosition.OutDate -> MaterialTheme.colorScheme.surfaceContainer
+                else -> MaterialTheme.colorScheme.surfaceContainer
             },
         )
 
@@ -296,7 +293,7 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 @Composable
 private fun CalendarViewPreview() {
     CalendarView(
-        yearMonth = YearMonth.of(2025, Month.JULY),
+        yearMonth = YearMonth.of(2025, Month.AUGUST),
         datesWithNotes = listOf(
             LocalDate.of(2025, Month.JULY, 19),
             LocalDate.of(2025, Month.JULY, 21),

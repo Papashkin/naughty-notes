@@ -2,10 +2,12 @@ package com.antsfamily.naughtynotes.design.navigation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
@@ -16,10 +18,12 @@ import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun Navigator() {
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -50,10 +54,15 @@ fun Navigator() {
                         //no-op
                     }
                     NoteFormScreen(
-                        snackbarHostState = snackbarHostState,
                         dateEpoch = data.dateEpoch,
                         noteId = data.noteId,
-                        onNavigateBack = { navController.popBackStack() }
+                        onNavigateBack = { navController.popBackStack() },
+                        onSnackbarShow = {
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(message = it, duration = SnackbarDuration.Short)
+                            }
+                        }
                     )
                 }
                 composable<AllNotes> { entry ->

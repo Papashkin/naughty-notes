@@ -12,7 +12,7 @@ sealed class NoteFormUiState {
         val date: LocalDate,
         val type: SexType,
         val isProtected: Boolean,
-        val rate: Int,
+        val pleasureRate: Int,
         val painRate: Int,
         val note: String,
         val isSaveButtonEnabled: Boolean,
@@ -25,7 +25,7 @@ sealed class NoteFormUiState {
                 date = LocalDate.now(),
                 type = SexType.UNKNOWN,
                 isProtected = false,
-                rate = 0,
+                pleasureRate = 0,
                 painRate = 0,
                 note = "",
                 isSaveButtonEnabled = false,
@@ -35,7 +35,7 @@ sealed class NoteFormUiState {
 
         val isValid: Boolean
             get() {
-                return this.rate > 0 && this.type != SexType.UNKNOWN
+                return this.pleasureRate > 0 && this.type != SexType.UNKNOWN
             }
     }
 }

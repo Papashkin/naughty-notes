@@ -2,15 +2,14 @@ package com.antsfamily.naughtynotes.presentation.noteform
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.SexRecordRepository
-import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.GetNoteByIdUseCase
+import com.antsfamily.domain.SaveOrUpdateNoteUseCase
 import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,11 +17,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import kotlin.random.Random
 
 @HiltViewModel(assistedFactory = NoteFormViewModel.Factory::class)
 class NoteFormViewModel @AssistedInject constructor(
-    private val repository: SexRecordRepository,
+    private val saveOrUpdateNoteUseCase: SaveOrUpdateNoteUseCase,
+    private val getNoteByIdUseCase: GetNoteByIdUseCase,
     @Assisted("dateEpoch") private val dateEpoch: Long,
     @Assisted("noteId") private val noteId: Int?,
 ) : ViewModel() {
@@ -58,7 +57,7 @@ class NoteFormViewModel @AssistedInject constructor(
     fun setPleasureRate(rate: Int) {
         _state.update {
             when (it) {
-                is NoteFormUiState.Content -> it.copy(rate = rate)
+                is NoteFormUiState.Content -> it.copy(pleasureRate = rate)
                 else -> it
             }
         }
@@ -108,39 +107,25 @@ class NoteFormViewModel @AssistedInject constructor(
     }
 
     fun onSaveButtonClick() = viewModelScope.launch {
-        (_state.value as? NoteFormUiState.Content)?.let {
-            _state.value = it.copy(isSaveButtonLoadingVisible = true)
+        (_state.value as? NoteFormUiState.Content)?.let { state ->
+            _state.value = state.copy(isSaveButtonLoadingVisible = true)
 
-            val note = NoteModel(
-                id = noteId ?: Random.nextInt(),
-                date = it.date,
-                type = it.type,
-                isProtected = it.isProtected,
-                rate = it.rate,
-                painRate = it.painRate,
-                personalNote = it.note
+            saveOrUpdateNoteUseCase.invoke(
+                id = noteId,
+                date = state.date,
+                type = state.type,
+                isProtected = state.isProtected,
+                pleasureRate = state.pleasureRate,
+                painRate = state.painRate,
+                personalNote = state.note
             )
 
-            noteId?.let {
-                updateExistedNote(note)
-            } ?: run {
-                saveNewNote(note)
+            _noteSaveSnackBarEvent.emit(state.type)
+
+            if (noteId == null) {
+                setCreateNoteDefaultState()
             }
         }
-    }
-
-    private suspend fun updateExistedNote(note: NoteModel) {
-        repository.updateNote(note)
-        delay(200) //TODO remove it later, it's just to see loading
-        _noteSaveSnackBarEvent.emit(note.type)
-        setEditNoteDefaultState(note)
-    }
-
-    private suspend fun saveNewNote(note: NoteModel) {
-        repository.addNote(note)
-        delay(200) //TODO remove it later, it's just to see loading
-        _noteSaveSnackBarEvent.emit(note.type)
-        setCreateNoteDefaultState()
     }
 
     private fun checkSaveButtonAvailability() {
@@ -156,33 +141,19 @@ class NoteFormViewModel @AssistedInject constructor(
         _state.value = NoteFormUiState.Content.Default.copy(date = selectedDate)
     }
 
-    private fun setEditNoteDefaultState(note: NoteModel) {
-        _state.value = NoteFormUiState.Content(
-            formType = NoteFormType.EDIT,
-            date = selectedDate,
-            type = note.type,
-            isProtected = note.isProtected,
-            rate = note.rate,
-            painRate = note.painRate,
-            note = note.personalNote,
-            isSaveButtonEnabled = true,
-            isSaveButtonLoadingVisible = false
-        )
-    }
-
     private fun setupCreateNoteContent() {
         _state.value = NoteFormUiState.Content.Default.copy(date = selectedDate)
     }
 
     private fun setupEditNoteContent(noteId: Int) = viewModelScope.launch {
-        val note = repository.getNoteById(noteId)
+        val note = getNoteByIdUseCase(noteId)
         note?.let {
             _state.value = NoteFormUiState.Content(
                 formType = NoteFormType.EDIT,
                 date = selectedDate,
                 type = it.type,
                 isProtected = it.isProtected,
-                rate = it.rate,
+                pleasureRate = it.rate,
                 painRate = it.painRate,
                 note = it.personalNote,
                 isSaveButtonEnabled = true,
