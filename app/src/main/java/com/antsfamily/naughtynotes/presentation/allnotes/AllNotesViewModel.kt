@@ -3,7 +3,7 @@ package com.antsfamily.naughtynotes.presentation.allnotes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.SexRecordRepository
+import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.domain.model.NoteModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 @HiltViewModel(assistedFactory = AllNotesViewModel.Factory::class)
 class AllNotesViewModel @AssistedInject constructor(
-    private val repository: SexRecordRepository,
+    private val repository: NoteRepository,
     @Assisted("epoch") private val epoch: Long,
 ) : ViewModel() {
 

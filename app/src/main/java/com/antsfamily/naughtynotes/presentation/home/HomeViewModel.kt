@@ -3,7 +3,7 @@ package com.antsfamily.naughtynotes.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.SexRecordRepository
+import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.presentation.util.getDatesForMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: SexRecordRepository
+    private val repository: NoteRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)

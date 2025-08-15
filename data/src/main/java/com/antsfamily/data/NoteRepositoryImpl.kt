@@ -1,8 +1,8 @@
 package com.antsfamily.data
 
-import com.antsfamily.data.local.SexRecordDao
+import com.antsfamily.data.local.NotesDao
 import com.antsfamily.data.model.toDTO
-import com.antsfamily.domain.SexRecordRepository
+import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.SexType
 import kotlinx.coroutines.flow.Flow
@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
 
-class SexRecordRepositoryImpl @Inject constructor(
-    private val dao: SexRecordDao
-) : SexRecordRepository {
+class NoteRepositoryImpl @Inject constructor(
+    private val dao: NotesDao
+) : NoteRepository {
 
     override val notes: Flow<List<NoteModel>>
         get() = dao.allRecordsFlow().map { record ->

@@ -7,6 +7,7 @@
     <string name="sex_type_masturbation">Masturbation</string>
     <string name="sex_type_tribadism">Tribadism</string>
     <string name="sex_type_bdsm">BDSM</string>
+    <string name="sex_type_threesome">Threesome</string>
     <string name="sex_type_unknown">Not selected</string>
 
     <string name="note_form_type_create">Create a Note</string>
@@ -18,6 +19,7 @@
     <string name="sex_type_description_masturbation">Solo time well spent 😌</string>
     <string name="sex_type_description_tribadism">Close and intimate — just how we like it 💞</string>
     <string name="sex_type_description_bdsm">Something very special and fun 💞</string>
+    <string name="sex_type_description_threesome">A naughty co-op game 😏</string>
     <string name="sex_type_description_unknown">There is nothing to say 😏</string>
 
     <string name="note_form_screen_pain_rate_min_label">no pain</string>

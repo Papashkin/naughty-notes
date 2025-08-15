@@ -6,7 +6,7 @@ import com.antsfamily.domain.model.NoteModel
 import java.time.LocalDate
 
 @Entity
-data class SexRecordDTO(
+data class NoteDTO(
     @PrimaryKey val id: Int,
     val date: LocalDate,
     val type: String,
@@ -16,7 +16,7 @@ data class SexRecordDTO(
     val note: String?,
 )
 
-fun NoteModel.toDTO(): SexRecordDTO = SexRecordDTO(
+fun NoteModel.toDTO(): NoteDTO = NoteDTO(
     id = this.id,
     date = this.date,
     type = this.type.name,
