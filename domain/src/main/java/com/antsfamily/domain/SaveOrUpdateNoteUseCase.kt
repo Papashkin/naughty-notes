@@ -1,7 +1,7 @@
 package com.antsfamily.domain
 
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.repository.NoteRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -14,8 +14,9 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
     suspend operator fun invoke(
         id: Int?,
         date: LocalDate,
-        type: SexType,
+        type: PracticeType,
         isProtected: Boolean,
+        hasOrgasm: Boolean,
         painRate: Int,
         pleasureRate: Int,
         personalNote: String,
@@ -26,6 +27,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
             date = date,
             type = type,
             isProtected = isProtected,
+            hasOrgasm = hasOrgasm,
             rate = pleasureRate,
             painRate = painRate,
             personalNote = personalNote

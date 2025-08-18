@@ -26,12 +26,13 @@
     <string name="note_form_screen_pain_rate_max_label">too painful</string>
     <string name="note_form_screen_pleasure_rate_min_label">Bad!</string>
     <string name="note_form_screen_pleasure_rate_max_label">Super!</string>
-    <string name="note_form_screen_sex_type_dropdown_label">Type of sex</string>
+    <string name="note_form_screen_sex_type_dropdown_label">Type of practice</string>
     <string name="note_form_screen_rate_bar_pain_label">Was it painful?</string>
     <string name="note_form_screen_rate_bar_pleasure_label">Rate your pleasure</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>
     <string name="note_form_screen_subtitle">for %1$s</string>
-    <string name="note_form_screen_protection_switch_label">Was it protected sex?</string>
+    <string name="note_form_screen_protection_switch_label">Protection?</string>
+    <string name="note_form_screen_orgasm_switch_label">Orgasm?</string>
     <string name="note_form_screen_button_save">Save</string>
     <string name="note_form_screen_create_snackbar_success">New note was successfully saved</string>
     <string name="note_form_screen_edit_snackbar_success">Existed note was successfully updated</string>
@@ -43,11 +44,13 @@
     <string name="home_screen_empty_content_button_create_note">Create a note</string>
     <string name="home_screen_button_today">Today</string>
     <string name="home_screen_banner_total_notes_of_month">Total notes this month</string>
+    <string name="home_screen_banner_days_since_last_note">Days since last note</string>
 
     <string name="all_notes_screen_title">All notes</string>
     <string name="all_notes_screen_subtitle">for %1$s</string>
     <string name="all_notes_screen_menu_edit">Edit</string>
     <string name="all_notes_screen_menu_delete">Delete</string>
     <string name="all_notes_screen_button_add_note">Add another note</string>
+    <string name="home_screen_banner_settings">Settings</string>
 
 </resources>

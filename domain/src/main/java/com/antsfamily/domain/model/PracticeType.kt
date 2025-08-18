@@ -1,6 +1,6 @@
 package com.antsfamily.domain.model
 
-enum class SexType {
+enum class PracticeType {
     UNKNOWN,
     VAGINAL,
     ORAL,

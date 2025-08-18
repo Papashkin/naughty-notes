@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.SexType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCardExtended
+import com.antsfamily.naughtynotes.presentation.allnotes.view.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.formatToString
@@ -155,36 +155,8 @@ fun ContentView(
 private fun AllNotesWithIconPreview() {
     ContentView(
         state = AllNotesUiState.Content(
-            date = LocalDate.of(2025, 2, 20),
-            notes = listOf(
-                NoteModel(
-                    356363,
-                    LocalDate.now(),
-                    SexType.TRIBADISM,
-                    true,
-                    1,
-                    "something really-really long has written here just to see how it looks",
-                    5
-                ),
-                NoteModel(
-                    58578,
-                    LocalDate.now(),
-                    SexType.VAGINAL,
-                    true,
-                    2,
-                    "something really-really long has written here just to see how it looks",
-                    4
-                ),
-                NoteModel(
-                    -1231,
-                    LocalDate.now(),
-                    SexType.MASTURBATION,
-                    true,
-                    2,
-                    "something really-really long has written here just to see how it looks",
-                    5
-                )
-            )
+            date = LocalDate.of(2025, 6, 20),
+            notes = PREVIEW_NOTES
         ),
         onNavigateBack = {},
         onEdit = {},

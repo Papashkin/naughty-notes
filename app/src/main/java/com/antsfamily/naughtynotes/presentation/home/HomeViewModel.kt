@@ -43,6 +43,32 @@ class HomeViewModel @Inject constructor(
         getNotes()
     }
 
+    private fun getNotes() = viewModelScope.launch {
+        repository.notes
+            .onStart { /* no-op */ }
+            .onCompletion {
+                Log.e(
+                    this@HomeViewModel::class.simpleName,
+                    "=== Notes fetching COMPLETE ==="
+                )
+            }
+            .collect {
+                notes = it
+                handleNotes()
+            }
+    }
+
+    private fun handleNotes() {
+        val today = LocalDate.now().dayOfMonth
+        val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
+        _state.value = HomeUiState.Content(
+            yearMonth = currentMonth,
+            isCurrentMonth = true,
+            datesWithNotes = notes.getDatesForMonth(currentMonth),
+            daysSinceLastNote = today - lastNoteDate
+        )
+    }
+
     fun onMonthChanged(month: YearMonth) {
         if (month == (_state.value as? HomeUiState.Content)?.yearMonth) return
 
@@ -85,29 +111,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getNotes() = viewModelScope.launch {
-        repository.notes
-            .onStart { /* no-op */ }
-            .onCompletion {
-                Log.e(
-                    this@HomeViewModel::class.simpleName,
-                    "=== Notes fetching COMPLETE ==="
-                )
-            }
-            .collect {
-                notes = it
-                handleNotes()
-            }
-    }
-
-    private fun handleNotes() {
-        val today = LocalDate.now().dayOfMonth
-        val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
-        _state.value = HomeUiState.Content(
-            yearMonth = currentMonth,
-            isCurrentMonth = true,
-            datesWithNotes = notes.getDatesForMonth(currentMonth),
-            daysSinceLastNote = today - lastNoteDate
-        )
+    fun onSettingsClick() {
+        //TODO implement Settings screen
     }
 }

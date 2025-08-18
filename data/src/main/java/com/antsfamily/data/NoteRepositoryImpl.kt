@@ -2,9 +2,9 @@ package com.antsfamily.data
 
 import com.antsfamily.data.local.NotesDao
 import com.antsfamily.data.model.toDTO
-import com.antsfamily.domain.repository.NoteRepository
+import com.antsfamily.data.model.toModel
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
@@ -16,92 +16,32 @@ class NoteRepositoryImpl @Inject constructor(
 
     override val notes: Flow<List<NoteModel>>
         get() = dao.allRecordsFlow().map { record ->
-            record.map {
-                NoteModel(
-                    id = it.id,
-                    date = it.date,
-                    type = SexType.valueOf(it.type),
-                    isProtected = it.isProtected,
-                    rate = it.pleasureRate,
-                    painRate = it.painRate,
-                    personalNote = it.note.orEmpty()
-                )
-            }
+            record.map { it.toModel() }
         }
 
     override suspend fun subscribeToNotesOnDate(date: LocalDate): Flow<List<NoteModel>> =
         dao.allRecordsOnDateFlow(date).map { record ->
-            record.map {
-                NoteModel(
-                    id = it.id,
-                    date = it.date,
-                    type = SexType.valueOf(it.type),
-                    isProtected = it.isProtected,
-                    rate = it.pleasureRate,
-                    painRate = it.painRate,
-                    personalNote = it.note.orEmpty()
-                )
-            }
+            record.map { it.toModel() }
         }
 
     override suspend fun getAllNotes(): List<NoteModel> {
         val data = dao.getAllRecords()
-        return data.map {
-            NoteModel(
-                id = it.id,
-                date = it.date,
-                type = SexType.valueOf(it.type),
-                isProtected = it.isProtected,
-                rate = it.pleasureRate,
-                painRate = it.painRate,
-                personalNote = it.note.orEmpty()
-            )
-        }
+        return data.map { it.toModel() }
     }
 
     override suspend fun getNotesByMonthAndYear(month: Int, year: Int): List<NoteModel> {
         val data = dao.getAllRecords()
             .filter { it.date.year == year && it.date.monthValue == month }
-        return data.map {
-            NoteModel(
-                id = it.id,
-                date = it.date,
-                type = SexType.valueOf(it.type),
-                isProtected = it.isProtected,
-                rate = it.pleasureRate,
-                painRate = it.painRate,
-                personalNote = it.note.orEmpty()
-            )
-        }
+        return data.map { it.toModel() }
     }
 
     override suspend fun getNotesByDate(date: LocalDate): List<NoteModel> {
         val data = dao.getAllRecords().filter { it.date == date }
-        return data.map {
-            NoteModel(
-                id = it.id,
-                date = it.date,
-                type = SexType.valueOf(it.type),
-                isProtected = it.isProtected,
-                rate = it.pleasureRate,
-                painRate = it.painRate,
-                personalNote = it.note.orEmpty()
-            )
-        }
+        return data.map { it.toModel() }
     }
 
     override suspend fun getNoteById(id: Int): NoteModel? {
-        return dao.getRecordById(id)?.let {
-            NoteModel(
-                id = it.id,
-                date = it.date,
-                type = SexType.valueOf(it.type),
-                isProtected = it.isProtected,
-                rate = it.pleasureRate,
-                painRate = it.painRate,
-                personalNote = it.note.orEmpty()
-            )
-        }
+        return dao.getRecordById(id)?.toModel()
     }
 
     override suspend fun deleteNote(note: NoteModel) {

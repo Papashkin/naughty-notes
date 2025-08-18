@@ -1,6 +1,7 @@
 package com.antsfamily.naughtynotes.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -58,21 +63,23 @@ fun HomeScreen(
 
     when (val uiState = state.value) {
         is HomeUiState.Loading -> FullScreenLoading()
-        is HomeUiState.Content -> HomeContent(
+        is HomeUiState.Content -> PortraitHomeContent(
             state = uiState,
             onMonthChanged = { viewModel.onMonthChanged(it) },
             onTodayButtonClick = { viewModel.onTodayButtonClick() },
-            onDayClick = { viewModel.onDayClick(it) }
+            onDayClick = { viewModel.onDayClick(it) },
+            onSettingsClick = { viewModel.onSettingsClick() }
         )
     }
 }
 
 @Composable
-fun HomeContent(
+fun PortraitHomeContent(
     state: HomeUiState.Content,
     onMonthChanged: (YearMonth) -> Unit,
     onTodayButtonClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -153,32 +160,65 @@ fun HomeContent(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .padding(Padding.regular),
+                            style = MaterialTheme.typography.labelLarge,
                             text = stringResource(R.string.home_screen_banner_total_notes_of_month)
                         )
                     }
                 }
-                Card(
-                    modifier = Modifier
-                        .height(200.dp)
-                        .weight(1f),
-                    shape = RoundedCornerShape(Padding.medium),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    )
+
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(Padding.regular)
                 ) {
-                    Box(Modifier.fillMaxSize()) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = state.daysSinceLastNote.toString(),
-                            style = MaterialTheme.typography.displayLarge,
+                    Card(
+                        modifier = Modifier.weight(0.6f),
+                        shape = RoundedCornerShape(Padding.medium),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary
                         )
-                        Text(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(Padding.regular),
-                            text = "Days since last note"
+                    ) {
+                        Box(Modifier.fillMaxSize()) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center),
+                                text = state.daysSinceLastNote.toString(),
+                                style = MaterialTheme.typography.displaySmall,
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(Padding.regular),
+                                style = MaterialTheme.typography.labelMedium,
+                                text = stringResource(R.string.home_screen_banner_days_since_last_note)
+                            )
+                        }
+                    }
+
+                    Card(
+                        modifier = Modifier
+                            .weight(0.4f)
+                            .clickable { onSettingsClick() },
+                        shape = RoundedCornerShape(Padding.medium),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         )
+                    ) {
+                        Column(
+                            Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(36.dp),
+                                imageVector = Icons.Rounded.Settings,
+                                contentDescription = null
+                            )
+                            Text(
+                                style = MaterialTheme.typography.labelMedium,
+                                text = stringResource(R.string.home_screen_banner_settings)
+                            )
+                        }
                     }
                 }
             }
@@ -195,5 +235,5 @@ private fun HomeContentPreview() {
         datesWithNotes = listOf(),
         daysSinceLastNote = 5
     )
-    HomeContent(state, {}, {}, {})
+    PortraitHomeContent(state, {}, {}, {}, {})
 }

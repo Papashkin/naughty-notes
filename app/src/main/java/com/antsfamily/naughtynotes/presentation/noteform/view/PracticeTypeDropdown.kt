@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 
@@ -24,8 +24,8 @@ import com.antsfamily.naughtynotes.presentation.util.toStringId
 @Composable
 fun SexTypeDropdown(
     modifier: Modifier = Modifier,
-    selected: SexType,
-    onSelect: (SexType) -> Unit
+    selected: PracticeType,
+    onSelect: (PracticeType) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -52,7 +52,7 @@ fun SexTypeDropdown(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false }
         ) {
-            SexType.entries.forEach { item ->
+            PracticeType.entries.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(stringResource(item.toStringId())) },
                     onClick = {
@@ -68,5 +68,5 @@ fun SexTypeDropdown(
 @Preview
 @Composable
 private fun SexTypeDropdownPreview() {
-    SexTypeDropdown(selected = SexType.MASTURBATION) {}
+    SexTypeDropdown(selected = PracticeType.MASTURBATION) {}
 }
