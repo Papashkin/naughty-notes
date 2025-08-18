@@ -17,4 +17,12 @@ class SettingsViewModel @Inject constructor(): ViewModel() {
     init {
         _state.value = SettingsUiState.Content(false, true)
     }
+
+    fun onPinClick(isSelected: Boolean) {
+        if (isSelected) {
+            //TODO implement mechanism that deletes PIN set
+        } else {
+            //TODO implement bottom dialog where you can setup PIN
+        }
+    }
 }
