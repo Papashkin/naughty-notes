@@ -17,6 +17,7 @@ import androidx.navigation.toRoute
 import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
+import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import kotlinx.coroutines.launch
 
@@ -45,7 +46,8 @@ fun Navigator() {
                     }
                     HomeScreen(
                         navigateToNoteForm = { navController.navigate(NoteForm(it, null)) },
-                        navigateToAllNotes = { navController.navigate(AllNotes(it)) }
+                        navigateToAllNotes = { navController.navigate(AllNotes(it)) },
+                        navigateToSettings = { navController.navigate(Settings) }
                     )
                 }
                 composable<NoteForm> { entry ->
@@ -75,6 +77,9 @@ fun Navigator() {
                             navController.navigate(NoteForm(data.dateEpoch, it))
                         }
                     )
+                }
+                composable<Settings> {
+                    SettingsScreen()
                 }
             }
         }

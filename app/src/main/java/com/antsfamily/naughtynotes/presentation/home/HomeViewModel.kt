@@ -36,8 +36,13 @@ class HomeViewModel @Inject constructor(
     val navigateToAllNotesEvent: SharedFlow<Long>
         get() = _navigateToAllNotesEvent
 
+    private val _navigateToSettingsEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val navigateToSettingsEvent: SharedFlow<Unit>
+        get() = _navigateToSettingsEvent
+
     private var notes: List<NoteModel> = mutableListOf()
     private val currentMonth: YearMonth = YearMonth.now()
+    private val today: LocalDate = LocalDate.now()
 
     init {
         getNotes()
@@ -47,10 +52,7 @@ class HomeViewModel @Inject constructor(
         repository.notes
             .onStart { /* no-op */ }
             .onCompletion {
-                Log.e(
-                    this@HomeViewModel::class.simpleName,
-                    "=== Notes fetching COMPLETE ==="
-                )
+                // no-op
             }
             .collect {
                 notes = it
@@ -59,13 +61,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleNotes() {
-        val today = LocalDate.now().dayOfMonth
         val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
         _state.value = HomeUiState.Content(
             yearMonth = currentMonth,
             isCurrentMonth = true,
             datesWithNotes = notes.getDatesForMonth(currentMonth),
-            daysSinceLastNote = today - lastNoteDate
+            daysSinceLastNote = today.dayOfMonth - lastNoteDate
         )
     }
 
@@ -100,8 +101,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onDayClick(date: LocalDate) = viewModelScope.launch {
-        val currentDate = LocalDate.now()
-        if (date.isAfter(currentDate)) return@launch
+        if (date.isAfter(today)) return@launch
 
         val notesForDate = notes.filter { it.date == date }
         if (notesForDate.isEmpty()) {
@@ -111,7 +111,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSettingsClick() {
-        //TODO implement Settings screen
+    fun onSettingsClick() = viewModelScope.launch {
+        _navigateToSettingsEvent.emit(Unit)
     }
 }
