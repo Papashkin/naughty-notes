@@ -1,6 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.noteform
 
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -10,8 +10,9 @@ sealed class NoteFormUiState {
     data class Content(
         val formType: NoteFormType,
         val date: LocalDate,
-        val type: SexType,
+        val type: PracticeType,
         val isProtected: Boolean,
+        val hasOrgasm: Boolean,
         val pleasureRate: Int,
         val painRate: Int,
         val note: String,
@@ -23,8 +24,9 @@ sealed class NoteFormUiState {
             val Default = Content(
                 formType = NoteFormType.CREATE,
                 date = LocalDate.now(),
-                type = SexType.UNKNOWN,
+                type = PracticeType.UNKNOWN,
                 isProtected = false,
+                hasOrgasm = false,
                 pleasureRate = 0,
                 painRate = 0,
                 note = "",
@@ -35,7 +37,7 @@ sealed class NoteFormUiState {
 
         val isValid: Boolean
             get() {
-                return this.pleasureRate > 0 && this.type != SexType.UNKNOWN
+                return this.pleasureRate > 0 && this.type != PracticeType.UNKNOWN
             }
     }
 }

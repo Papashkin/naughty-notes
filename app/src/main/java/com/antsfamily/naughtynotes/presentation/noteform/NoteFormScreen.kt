@@ -4,18 +4,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
@@ -83,8 +87,9 @@ fun NoteFormScreen(
             uiState,
             keyboardController = keyboardController,
             focusManager = focusManager,
-            setSexType = { viewModel.setSexType(it) },
+            setPractice = { viewModel.setPractice(it) },
             setIsProtected = { viewModel.setIsProtected(it) },
+            setHasOrgasm = { viewModel.setHasOrgasm(it) },
             setPainRate = { viewModel.setPainRate(it) },
             setPleasureRate = { viewModel.setPleasureRate(it) },
             setNote = { viewModel.setNote(it) },
@@ -99,8 +104,9 @@ fun NoteFormContent(
     state: NoteFormUiState.Content,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    setSexType: (SexType) -> Unit,
+    setPractice: (PracticeType) -> Unit,
     setIsProtected: (Boolean) -> Unit,
+    setHasOrgasm: (Boolean) -> Unit,
     setPainRate: (Int) -> Unit,
     setPleasureRate: (Int) -> Unit,
     setNote: (String) -> Unit,
@@ -146,34 +152,54 @@ fun NoteFormContent(
                 )
 
                 SexTypeDropdown(
-                    modifier = Modifier.padding(top = Padding.xx_large, bottom = Padding.small),
+                    modifier = Modifier.padding(top = Padding.large),
                     selected = state.type
                 ) {
-                    setSexType(it)
+                    setPractice(it)
                 }
 
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Padding.small)
+                        .padding(top = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
                             shape = RoundedCornerShape(Padding.small)
                         ),
                 ) {
-                    Text(
-                        text = stringResource(R.string.note_form_screen_protection_switch_label),
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(Padding.small),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            ImageVector.vectorResource(R.drawable.ic_protection),
+                            null
+                        )
+                        Text(
+                            text = stringResource(R.string.note_form_screen_protection_switch_label),
+                            modifier = Modifier.padding(start = Padding.x_small),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                     Switch(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         checked = state.isProtected,
                         onCheckedChange = {
                             keyboardController?.hide()
                             setIsProtected(it)
+                        },
+                        thumbContent = {
+                            Icon(
+                                imageVector = if (state.isProtected) {
+                                    ImageVector.vectorResource(R.drawable.ic_protection)
+                                } else {
+                                    ImageVector.vectorResource(R.drawable.ic_protection_negative)
+                                },
+                                contentDescription = null,
+                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                            )
                         }
                     )
                 }
@@ -181,7 +207,51 @@ fun NoteFormContent(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Padding.small)
+                        .padding(top = Padding.small)
+                        .background(
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                            shape = RoundedCornerShape(Padding.small)
+                        ),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Padding.small),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            ImageVector.vectorResource(R.drawable.ic_bolt),
+                            null
+                        )
+                        Text(
+                            text = stringResource(R.string.note_form_screen_orgasm_switch_label),
+                            modifier = Modifier.padding(start = Padding.x_small),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    Switch(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        checked = state.hasOrgasm,
+                        onCheckedChange = {
+                            keyboardController?.hide()
+                            setHasOrgasm(it)
+                        },
+                        thumbContent = {
+                            if (state.hasOrgasm) {
+                                Icon(
+                                    ImageVector.vectorResource(R.drawable.ic_bolt),
+                                    null,
+                                    modifier = Modifier.size(SwitchDefaults.IconSize),
+                                )
+                            }
+                        }
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
                             shape = RoundedCornerShape(Padding.x_small)
@@ -205,7 +275,7 @@ fun NoteFormContent(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = Padding.small)
+                        .padding(top = Padding.small)
                         .background(
                             color = MaterialTheme.colorScheme.inverseOnSurface,
                             shape = RoundedCornerShape(Padding.x_small)
@@ -236,7 +306,7 @@ fun NoteFormContent(
                     textStyle = MaterialTheme.typography.bodyMedium,
                     value = state.note,
                     modifier = Modifier
-                        .padding(top = Padding.tiny, bottom = Padding.medium)
+                        .padding(top = Padding.small, bottom = Padding.medium)
                         .fillMaxWidth(),
                     onValueChange = { setNote(it) },
                     minLines = 4,
@@ -274,11 +344,12 @@ fun NoteFormContent(
 @Composable
 private fun CreateNoteContentPreview() {
     NoteFormContent(
-        state = NoteFormUiState.Content.Default,
+        state = NoteFormUiState.Content.Default.copy(hasOrgasm = true),
         keyboardController = null,
         focusManager = LocalFocusManager.current,
-        setSexType = {},
+        setPractice = {},
         setIsProtected = {},
+        setHasOrgasm = {},
         setPainRate = {},
         setPleasureRate = {},
         setNote = {},

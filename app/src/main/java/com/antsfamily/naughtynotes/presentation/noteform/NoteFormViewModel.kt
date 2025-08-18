@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetNoteByIdUseCase
 import com.antsfamily.domain.SaveOrUpdateNoteUseCase
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -41,8 +41,8 @@ class NoteFormViewModel @AssistedInject constructor(
     private val _navigateBackEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     val navigateBackEvent: SharedFlow<Unit> = _navigateBackEvent
 
-    private val _noteSaveSnackBarEvent: MutableSharedFlow<SexType> = MutableSharedFlow()
-    val noteSaveSnackBarEvent: SharedFlow<SexType> = _noteSaveSnackBarEvent
+    private val _noteSaveSnackBarEvent: MutableSharedFlow<PracticeType> = MutableSharedFlow()
+    val noteSaveSnackBarEvent: SharedFlow<PracticeType> = _noteSaveSnackBarEvent
 
     private val selectedDate: LocalDate by lazy { LocalDate.ofEpochDay(dateEpoch) }
 
@@ -86,7 +86,7 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setSexType(type: SexType) {
+    fun setPractice(type: PracticeType) {
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(type = type)
@@ -106,6 +106,16 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
+    fun setHasOrgasm(hasOrgasm: Boolean) {
+        _state.update {
+            when (it) {
+                is NoteFormUiState.Content -> it.copy(hasOrgasm = hasOrgasm)
+                else -> it
+            }
+        }
+        checkSaveButtonAvailability()
+    }
+
     fun onSaveButtonClick() = viewModelScope.launch {
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
@@ -115,6 +125,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 date = state.date,
                 type = state.type,
                 isProtected = state.isProtected,
+                hasOrgasm = state.hasOrgasm,
                 pleasureRate = state.pleasureRate,
                 painRate = state.painRate,
                 personalNote = state.note
@@ -153,6 +164,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 date = selectedDate,
                 type = it.type,
                 isProtected = it.isProtected,
+                hasOrgasm = it.hasOrgasm,
                 pleasureRate = it.rate,
                 painRate = it.painRate,
                 note = it.personalNote,

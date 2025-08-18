@@ -31,12 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.SexType
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.util.toDescriptionStringId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate
+import java.time.Month
 
 @Composable
 fun NoteCardExtended(
@@ -65,12 +66,16 @@ fun NoteCardExtended(
                         text = stringResource(note.type.toStringId()),
                         style = MaterialTheme.typography.titleMedium,
                     )
-                    if (note.isProtected && note.type.isProtectionNeeded) {
+                    if (note.type.isProtectionNeeded) {
                         Icon(
                             modifier = Modifier
                                 .padding(start = Padding.x_small)
                                 .size(14.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_protection_shield),
+                            imageVector = if (note.isProtected) {
+                                ImageVector.vectorResource(R.drawable.ic_protection)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_protection_negative)
+                            },
                             contentDescription = null
                         )
                     }
@@ -119,7 +124,7 @@ fun NoteCardExtended(
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Row(
-                            modifier = Modifier.weight(0.5f),
+                            modifier = Modifier.weight(0.3f),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -136,7 +141,7 @@ fun NoteCardExtended(
                         }
 
                         Row(
-                            modifier = Modifier.weight(0.5f),
+                            modifier = Modifier.weight(0.3f),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -147,6 +152,23 @@ fun NoteCardExtended(
                             )
                             Text(
                                 text = "${note.rate}",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(horizontal = Padding.x_small)
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.weight(0.3f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_bolt),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = if (note.hasOrgasm) "Yes :)" else "No :(",
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(horizontal = Padding.x_small)
                             )
@@ -162,15 +184,49 @@ fun NoteCardExtended(
 @Preview
 @Composable
 private fun NoteCardExtendedPreview() {
-    val note =
-        NoteModel(
-            15315,
-            LocalDate.now(),
-            SexType.TRIBADISM,
-            true,
-            1,
-            "",
-            5
-        )
+    val note = PREVIEW_NOTES.first()
     NoteCardExtended(note, {}, {})
 }
+
+val PREVIEW_NOTES = listOf(
+    NoteModel(
+        3643,
+        LocalDate.of(2025, Month.JULY, 12),
+        PracticeType.ANAL,
+        isProtected = true,
+        hasOrgasm = false,
+        painRate = 2,
+        rate = 4,
+        personalNote = ""
+    ),
+    NoteModel(
+        2452,
+        LocalDate.of(2025, Month.JULY, 22),
+        PracticeType.VAGINAL,
+        isProtected = true,
+        hasOrgasm = false,
+        painRate = 2,
+        rate = 4,
+        personalNote = "That was something crazy"
+    ),
+    NoteModel(
+        1231,
+        LocalDate.of(2025, Month.JULY, 15),
+        PracticeType.ANAL,
+        isProtected = false,
+        hasOrgasm = false,
+        painRate = 2,
+        rate = 4,
+        personalNote = ""
+    ),
+    NoteModel(
+        75765,
+        LocalDate.of(2025, Month.JULY, 20),
+        PracticeType.VAGINAL,
+        isProtected = true,
+        hasOrgasm = true,
+        painRate = 2,
+        rate = 4,
+        personalNote = "That was something crazy"
+    )
+)
