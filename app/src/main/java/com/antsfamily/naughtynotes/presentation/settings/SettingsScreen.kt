@@ -1,37 +1,45 @@
 package com.antsfamily.naughtynotes.presentation.settings
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScreen
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
 
-    when (state.value) {
-        is SettingsUiState.Loading -> FullScreenLoading()
-        is SettingsUiState.Content -> Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Settings screen")
-            //TODO rework it to show real settings
+    Column(
+        modifier = Modifier
+            .statusBarsPadding()
+            .background(color = MaterialTheme.colorScheme.surface)
+    ) {
+        TopBar(
+            title = stringResource(R.string.compose_settings_title),
+            onNavigationBack = {
+                onNavigateBack()
+            }
+        )
+        when (val uiState = state.value) {
+            is SettingsUiState.Loading -> FullScreenLoading()
+            is SettingsUiState.Content -> SettingsContentScreen(
+                state = uiState,
+                onPinClick = { viewModel.onPinClick(it) },
+                onThemeChanged = {},
+            )
         }
     }
 }
@@ -39,5 +47,5 @@ fun SettingsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(onNavigateBack = {})
 }

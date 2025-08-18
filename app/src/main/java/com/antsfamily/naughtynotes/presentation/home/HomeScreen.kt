@@ -91,11 +91,9 @@ fun PortraitHomeContent(
         modifier = Modifier
             .background(color = MaterialTheme.colorScheme.surface)
             .navigationBarsPadding()
+            .statusBarsPadding()
+            .padding(horizontal = Padding.large)
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = Padding.large)
-        ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -228,7 +226,6 @@ fun PortraitHomeContent(
                     }
                 }
             }
-        }
     }
 }
 

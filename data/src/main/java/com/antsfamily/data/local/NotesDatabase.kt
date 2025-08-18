@@ -8,5 +8,5 @@ import com.antsfamily.data.model.NoteDTO
 @Database(entities = [NoteDTO::class], version = 1, exportSchema = false)
 @TypeConverters(LocalDateConverter::class)
 abstract class NotesDatabase : RoomDatabase() {
-    abstract fun sexRecordDao(): NotesDao
+    abstract fun NotesDao(): NotesDao
 }
