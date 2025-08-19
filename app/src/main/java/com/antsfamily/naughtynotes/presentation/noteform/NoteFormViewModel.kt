@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetNoteByIdUseCase
 import com.antsfamily.domain.SaveOrUpdateNoteUseCase
+import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import dagger.assisted.Assisted
@@ -86,10 +87,20 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setPractice(type: PracticeType) {
+    fun setPracticeType(type: PracticeType) {
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(type = type)
+                else -> it
+            }
+        }
+        checkSaveButtonAvailability()
+    }
+
+    fun setPracticeLocation(location: PracticeLocation) {
+        _state.update {
+            when (it) {
+                is NoteFormUiState.Content -> it.copy(location = location)
                 else -> it
             }
         }
@@ -124,6 +135,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 id = noteId,
                 date = state.date,
                 type = state.type,
+                location = state.location,
                 isProtected = state.isProtected,
                 hasOrgasm = state.hasOrgasm,
                 pleasureRate = state.pleasureRate,
@@ -163,6 +175,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 formType = NoteFormType.EDIT,
                 date = selectedDate,
                 type = it.type,
+                location = it.location,
                 isProtected = it.isProtected,
                 hasOrgasm = it.hasOrgasm,
                 pleasureRate = it.rate,

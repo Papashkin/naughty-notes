@@ -37,13 +37,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
+import com.antsfamily.naughtynotes.presentation.noteform.view.PracticeDropdown
 import com.antsfamily.naughtynotes.presentation.noteform.view.RatingBar
-import com.antsfamily.naughtynotes.presentation.noteform.view.SexTypeDropdown
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -87,7 +88,8 @@ fun NoteFormScreen(
             uiState,
             keyboardController = keyboardController,
             focusManager = focusManager,
-            setPractice = { viewModel.setPractice(it) },
+            setPracticeType = { viewModel.setPracticeType(it) },
+            setPracticeLocation = { viewModel.setPracticeLocation(it) },
             setIsProtected = { viewModel.setIsProtected(it) },
             setHasOrgasm = { viewModel.setHasOrgasm(it) },
             setPainRate = { viewModel.setPainRate(it) },
@@ -104,7 +106,8 @@ fun NoteFormContent(
     state: NoteFormUiState.Content,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    setPractice: (PracticeType) -> Unit,
+    setPracticeType: (PracticeType) -> Unit,
+    setPracticeLocation: (PracticeLocation) -> Unit,
     setIsProtected: (Boolean) -> Unit,
     setHasOrgasm: (Boolean) -> Unit,
     setPainRate: (Int) -> Unit,
@@ -151,11 +154,22 @@ fun NoteFormContent(
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                SexTypeDropdown(
+                PracticeDropdown<PracticeType>(
                     modifier = Modifier.padding(top = Padding.large),
+                    title = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
+                    entries = PracticeType.entries,
                     selected = state.type
                 ) {
-                    setPractice(it)
+                    setPracticeType(it)
+                }
+
+                PracticeDropdown<PracticeLocation>(
+                    modifier = Modifier.padding(top = Padding.small),
+                    title = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
+                    entries = PracticeLocation.entries,
+                    selected = state.location
+                ) {
+                    setPracticeLocation(it)
                 }
 
                 Column(
@@ -347,7 +361,8 @@ private fun CreateNoteContentPreview() {
         state = NoteFormUiState.Content.Default.copy(hasOrgasm = true),
         keyboardController = null,
         focusManager = LocalFocusManager.current,
-        setPractice = {},
+        setPracticeType = {},
+        setPracticeLocation = {},
         setIsProtected = {},
         setHasOrgasm = {},
         setPainRate = {},

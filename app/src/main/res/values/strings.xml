@@ -1,32 +1,55 @@
 <resources>
     <string name="app_name">Naughty Notes</string>
 
-    <string name="sex_type_anal">Anal</string>
-    <string name="sex_type_oral">Oral</string>
-    <string name="sex_type_vaginal">Vaginal</string>
-    <string name="sex_type_masturbation">Masturbation</string>
-    <string name="sex_type_tribadism">Tribadism</string>
-    <string name="sex_type_bdsm">BDSM</string>
-    <string name="sex_type_threesome">Threesome</string>
-    <string name="sex_type_unknown">Not selected</string>
+    <string name="practice_type_anal">Anal</string>
+    <string name="practice_type_oral">Oral</string>
+    <string name="practice_type_vaginal">Vaginal</string>
+    <string name="practice_type_masturbation">Masturbation</string>
+    <string name="practice_type_tribadism">Tribadism</string>
+    <string name="practice_type_bdsm">BDSM</string>
+    <string name="practice_type_threesome">Threesome</string>
+    <string name="practice_type_unknown">Not selected</string>
 
     <string name="note_form_type_create">Create a Note</string>
     <string name="note_form_type_edit">Edit Note</string>
 
-    <string name="sex_type_description_anal">Tried something naughty back there 😈</string>
-    <string name="sex_type_description_oral">Left nothing to say… just oral fun 😋</string>
-    <string name="sex_type_description_vaginal">Classic connection, always a thrill 💕</string>
-    <string name="sex_type_description_masturbation">Solo time well spent 😌</string>
-    <string name="sex_type_description_tribadism">Close and intimate — just how we like it 💞</string>
-    <string name="sex_type_description_bdsm">Something very special and fun 💞</string>
-    <string name="sex_type_description_threesome">A naughty co-op game 😏</string>
-    <string name="sex_type_description_unknown">There is nothing to say 😏</string>
+    <string name="practice_type_description_anal">Tried something naughty back there 😈</string>
+    <string name="practice_type_description_oral">Left nothing to say… just oral fun 😋</string>
+    <string name="practice_type_description_vaginal">Classic connection, always a thrill 💕</string>
+    <string name="practice_type_description_masturbation">Solo time well spent 😌</string>
+    <string name="practice_type_description_tribadism">Close and intimate — just how we like it 💞</string>
+    <string name="practice_type_description_bdsm">Something very special and fun 💞</string>
+    <string name="practice_type_description_threesome">A naughty co-op game 😏</string>
+    <string name="practice_type_description_unknown">There is nothing to say yet 😏</string>
+
+    <string name="practice_location_bedroom">Bedroom</string>
+    <string name="practice_location_living_room">Living room</string>
+    <string name="practice_location_shower">Shower / Bathtub</string>
+    <string name="practice_location_kitchen">Kitchen</string>
+    <string name="practice_location_floor">Floor</string>
+    <string name="practice_location_car">Car</string>
+    <string name="practice_location_hotel">Hotel</string>
+    <string name="practice_location_public_restroom">Public restroom</string>
+    <string name="practice_location_changing_room">Changing room</string>
+    <string name="practice_location_balcony">Balcony / Terrace</string>
+    <string name="practice_location_beach">Beach</string>
+    <string name="practice_location_forest">Forest / Park</string>
+    <string name="practice_location_tent">Tent / Camping</string>
+    <string name="practice_location_workspace">Office / Workplace</string>
+    <string name="practice_location_lift">Elevator</string>
+    <string name="practice_location_sauna">Sauna / Jacuzzi</string>
+    <string name="practice_location_rooftop">Rooftop</string>
+    <string name="practice_location_airplane">Airplane</string>
+    <string name="practice_location_train">Train</string>
+    <string name="practice_location_other">Other</string>
+    <string name="practice_location_unknown">Not selected</string>
 
     <string name="note_form_screen_pain_rate_min_label">no pain</string>
     <string name="note_form_screen_pain_rate_max_label">too painful</string>
     <string name="note_form_screen_pleasure_rate_min_label">Bad!</string>
     <string name="note_form_screen_pleasure_rate_max_label">Super!</string>
-    <string name="note_form_screen_sex_type_dropdown_label">Type of practice</string>
+    <string name="note_form_screen_practice_type_dropdown_label">Type of practice</string>
+    <string name="note_form_screen_practice_location_dropdown_label">Location</string>
     <string name="note_form_screen_rate_bar_pain_label">Was it painful?</string>
     <string name="note_form_screen_rate_bar_pleasure_label">Rate your pleasure</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>

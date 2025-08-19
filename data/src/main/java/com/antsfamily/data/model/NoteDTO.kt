@@ -3,6 +3,7 @@ package com.antsfamily.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import java.time.LocalDate
 
@@ -11,6 +12,7 @@ data class NoteDTO(
     @PrimaryKey val id: Int,
     val date: LocalDate,
     val type: String,
+    val location: String,
     val isProtected: Boolean,
     val hasOrgasm: Boolean,
     val pleasureRate: Int,
@@ -22,6 +24,7 @@ fun NoteModel.toDTO(): NoteDTO = NoteDTO(
     id = this.id,
     date = this.date,
     type = this.type.name,
+    location = this.location.name,
     isProtected = this.isProtected,
     hasOrgasm = this.hasOrgasm,
     pleasureRate = this.rate,
@@ -30,12 +33,13 @@ fun NoteModel.toDTO(): NoteDTO = NoteDTO(
 )
 
 fun NoteDTO.toModel(): NoteModel = NoteModel(
-        id = this.id,
-        date = this.date,
-        type = PracticeType.valueOf(this.type),
-        isProtected = this.isProtected,
-        hasOrgasm = this.hasOrgasm,
-        rate = this.pleasureRate,
-        painRate = this.painRate,
-        personalNote = this.note.orEmpty()
+    id = this.id,
+    date = this.date,
+    type = PracticeType.valueOf(this.type),
+    location = PracticeLocation.valueOf(this.location),
+    isProtected = this.isProtected,
+    hasOrgasm = this.hasOrgasm,
+    rate = this.pleasureRate,
+    painRate = this.painRate,
+    personalNote = this.note.orEmpty()
 )
