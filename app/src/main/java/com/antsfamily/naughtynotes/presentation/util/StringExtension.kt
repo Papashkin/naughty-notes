@@ -9,14 +9,14 @@ import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 @StringRes
 fun PracticeType.toStringId(): Int {
     return when (this) {
-        PracticeType.ANAL -> R.string.sex_type_anal
-        PracticeType.ORAL -> R.string.sex_type_oral
-        PracticeType.VAGINAL -> R.string.sex_type_vaginal
-        PracticeType.MASTURBATION -> R.string.sex_type_masturbation
-        PracticeType.TRIBADISM -> R.string.sex_type_tribadism
-        PracticeType.BDSM -> R.string.sex_type_bdsm
-        PracticeType.THREESOME -> R.string.sex_type_threesome
-        PracticeType.UNKNOWN -> R.string.sex_type_unknown
+        PracticeType.ANAL -> R.string.practice_type_anal
+        PracticeType.ORAL -> R.string.practice_type_oral
+        PracticeType.VAGINAL -> R.string.practice_type_vaginal
+        PracticeType.MASTURBATION -> R.string.practice_type_masturbation
+        PracticeType.TRIBADISM -> R.string.practice_type_tribadism
+        PracticeType.BDSM -> R.string.practice_type_bdsm
+        PracticeType.THREESOME -> R.string.practice_type_threesome
+        PracticeType.UNKNOWN -> R.string.practice_type_unknown
     }
 }
 

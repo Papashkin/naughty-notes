@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Naughty Notes</string>
 
-    <string name="sex_type_anal">Anal</string>
-    <string name="sex_type_oral">Oral</string>
-    <string name="sex_type_vaginal">Vaginal</string>
-    <string name="sex_type_masturbation">Masturbation</string>
-    <string name="sex_type_tribadism">Tribadism</string>
-    <string name="sex_type_bdsm">BDSM</string>
-    <string name="sex_type_threesome">Threesome</string>
-    <string name="sex_type_unknown">Not selected</string>
+    <string name="practice_type_anal">Anal</string>
+    <string name="practice_type_oral">Oral</string>
+    <string name="practice_type_vaginal">Vaginal</string>
+    <string name="practice_type_masturbation">Masturbation</string>
+    <string name="practice_type_tribadism">Tribadism</string>
+    <string name="practice_type_bdsm">BDSM</string>
+    <string name="practice_type_threesome">Threesome</string>
+    <string name="practice_type_unknown">Not selected</string>
 
     <string name="note_form_type_create">Create a Note</string>
     <string name="note_form_type_edit">Edit Note</string>
@@ -49,7 +49,7 @@
     <string name="note_form_screen_pleasure_rate_min_label">Bad!</string>
     <string name="note_form_screen_pleasure_rate_max_label">Super!</string>
     <string name="note_form_screen_practice_type_dropdown_label">Type of practice</string>
-    <string name="note_form_screen_practice_location_dropdown_label">Location of practice</string>
+    <string name="note_form_screen_practice_location_dropdown_label">Location</string>
     <string name="note_form_screen_rate_bar_pain_label">Was it painful?</string>
     <string name="note_form_screen_rate_bar_pleasure_label">Rate your pleasure</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>
