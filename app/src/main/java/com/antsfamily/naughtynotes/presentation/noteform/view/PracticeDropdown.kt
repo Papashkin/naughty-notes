@@ -16,17 +16,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.util.toStringId
+import kotlin.enums.EnumEntries
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SexTypeDropdown(
+inline fun <reified T> PracticeDropdown(
     modifier: Modifier = Modifier,
-    selected: PracticeType,
-    onSelect: (PracticeType) -> Unit
-) {
+    title: String,
+    entries: EnumEntries<T>,
+    selected: T,
+    noinline onSelect: (T) -> Unit
+) where T : Enum<T> {
+
     var isExpanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -35,11 +40,15 @@ fun SexTypeDropdown(
         onExpandedChange = { isExpanded = !isExpanded }
     ) {
         OutlinedTextField(
-            value = stringResource(selected.toStringId()),
+            value = when (selected) {
+                is PracticeType -> stringResource(selected.toStringId())
+                is PracticeLocation -> stringResource(selected.toStringId())
+                else -> throw IllegalStateException("wrong class")
+            },
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = {},
             readOnly = true,
-            label = { Text(stringResource(R.string.note_form_screen_sex_type_dropdown_label)) },
+            label = { Text(title) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
             },
@@ -52,9 +61,17 @@ fun SexTypeDropdown(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false }
         ) {
-            PracticeType.entries.forEach { item ->
+            entries.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(stringResource(item.toStringId())) },
+                    text = {
+                        Text(
+                            when (item) {
+                                is PracticeType -> stringResource(item.toStringId())
+                                is PracticeLocation -> stringResource(item.toStringId())
+                                else -> throw IllegalStateException("wrong class")
+                            }
+                        )
+                    },
                     onClick = {
                         onSelect(item)
                         isExpanded = false
@@ -65,8 +82,22 @@ fun SexTypeDropdown(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun SexTypeDropdownPreview() {
-    SexTypeDropdown(selected = PracticeType.MASTURBATION) {}
+private fun PracticeDropdown1Preview() {
+    PracticeDropdown(
+        title = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
+        entries = PracticeLocation.entries,
+        selected = PracticeLocation.TENT
+    ) {}
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PracticeDropdown2Preview() {
+    PracticeDropdown(
+        title = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
+        entries = PracticeType.entries,
+        selected = PracticeType.THREESOME
+    ) {}
 }

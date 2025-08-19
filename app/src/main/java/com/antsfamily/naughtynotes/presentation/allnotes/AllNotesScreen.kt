@@ -31,10 +31,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCardExtended
-import com.antsfamily.naughtynotes.presentation.allnotes.view.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.formatToString
+import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate
 

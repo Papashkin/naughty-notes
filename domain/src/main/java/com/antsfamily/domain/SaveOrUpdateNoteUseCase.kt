@@ -1,6 +1,7 @@
 package com.antsfamily.domain
 
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.repository.NoteRepository
 import java.time.LocalDate
@@ -15,6 +16,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
         id: Int?,
         date: LocalDate,
         type: PracticeType,
+        location: PracticeLocation,
         isProtected: Boolean,
         hasOrgasm: Boolean,
         painRate: Int,
@@ -26,6 +28,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
             id = id ?: Random.nextInt(),
             date = date,
             type = type,
+            location = location,
             isProtected = isProtected,
             hasOrgasm = hasOrgasm,
             rate = pleasureRate,

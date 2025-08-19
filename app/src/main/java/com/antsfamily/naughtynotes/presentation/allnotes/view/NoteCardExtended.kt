@@ -31,13 +31,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.presentation.util.toDescriptionStringId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
-import java.time.LocalDate
-import java.time.Month
 
 @Composable
 fun NoteCardExtended(
@@ -187,46 +185,3 @@ private fun NoteCardExtendedPreview() {
     val note = PREVIEW_NOTES.first()
     NoteCardExtended(note, {}, {})
 }
-
-val PREVIEW_NOTES = listOf(
-    NoteModel(
-        3643,
-        LocalDate.of(2025, Month.JULY, 12),
-        PracticeType.ANAL,
-        isProtected = true,
-        hasOrgasm = false,
-        painRate = 2,
-        rate = 4,
-        personalNote = ""
-    ),
-    NoteModel(
-        2452,
-        LocalDate.of(2025, Month.JULY, 22),
-        PracticeType.VAGINAL,
-        isProtected = true,
-        hasOrgasm = false,
-        painRate = 2,
-        rate = 4,
-        personalNote = "That was something crazy"
-    ),
-    NoteModel(
-        1231,
-        LocalDate.of(2025, Month.JULY, 15),
-        PracticeType.ANAL,
-        isProtected = false,
-        hasOrgasm = false,
-        painRate = 2,
-        rate = 4,
-        personalNote = ""
-    ),
-    NoteModel(
-        75765,
-        LocalDate.of(2025, Month.JULY, 20),
-        PracticeType.VAGINAL,
-        isProtected = true,
-        hasOrgasm = true,
-        painRate = 2,
-        rate = 4,
-        personalNote = "That was something crazy"
-    )
-)

@@ -6,6 +6,7 @@ data class NoteModel(
     val id: Int,
     val date: LocalDate,
     val type: PracticeType,
+    val location: PracticeLocation,
     val isProtected: Boolean,
     val hasOrgasm: Boolean,
     val painRate: Int,
