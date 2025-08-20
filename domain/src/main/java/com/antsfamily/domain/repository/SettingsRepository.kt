@@ -1,8 +1,10 @@
 package com.antsfamily.domain.repository
 
 interface SettingsRepository {
-    fun getPinCode(): Int?
-    fun setPinCode(code: Int)
+    fun setPinCode(code: String)
+    fun removePinCode()
+    fun isPinCodeSet(): Boolean
+    fun verifyPinCode(code: String): Boolean
     fun getIsDarkMode(): Boolean
     fun setIsDarkMode(isDarkMode: Boolean)
 }

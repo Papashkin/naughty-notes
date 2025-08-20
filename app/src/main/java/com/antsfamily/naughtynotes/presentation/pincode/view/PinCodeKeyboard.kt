@@ -69,9 +69,9 @@ fun PinCodeKeyboard(
 
                 NumpadSymbol.VISIBLE -> KeyButton(
                     symbol = if (isCodeVisible) {
-                        ImageVector.vectorResource(R.drawable.ic_eye)
-                    } else {
                         ImageVector.vectorResource(R.drawable.ic_eye_closed)
+                    } else {
+                        ImageVector.vectorResource(R.drawable.ic_eye)
                     }
                 ) { onShowCodeClick() }
 
@@ -91,7 +91,7 @@ fun KeyButton(
 ) {
     Box(
         modifier = Modifier
-            .size(80.dp)
+            .size(64.dp)
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = RoundedCornerShape(Padding.regular)
@@ -110,6 +110,7 @@ fun KeyButton(
         }
         symbol?.let {
             Icon(
+                modifier = Modifier.size(30.dp),
                 imageVector = it,
                 contentDescription = null,
             )

@@ -24,9 +24,9 @@ class SettingsViewModel @Inject constructor(
     val state: StateFlow<SettingsUiState>
         get() = _state
 
-    private val _navigateToPinCodeScreenEvent = MutableSharedFlow<Unit>()
-    val navigateToPinCodeScreenEvent: SharedFlow<Unit>
-        get() = _navigateToPinCodeScreenEvent.asSharedFlow()
+    private val _setPinCodeDialogVisibilityEvent = MutableSharedFlow<Boolean>()
+    val setPinCodeDialogVisibilityEvent: SharedFlow<Boolean> =
+        _setPinCodeDialogVisibilityEvent.asSharedFlow()
 
     init {
         getSettings()
@@ -35,11 +35,11 @@ class SettingsViewModel @Inject constructor(
     private fun getSettings() = viewModelScope.launch {
         try {
             val isDarkMode = repository.getIsDarkMode()
-            val pinCode = repository.getPinCode()
+            val isPinCodeSet = repository.isPinCodeSet()
 
             _state.value = SettingsUiState.Content(
                 isDarkMode = isDarkMode,
-                isAppProtected = pinCode != null,
+                isAppProtected = isPinCodeSet,
             )
         } catch (e: Exception) {
             //TODO implement error handling
@@ -59,15 +59,34 @@ class SettingsViewModel @Inject constructor(
 
     fun onPinClick(isEnabled: Boolean) = viewModelScope.launch {
         if (isEnabled) {
-            _navigateToPinCodeScreenEvent.emit(Unit)
+            _setPinCodeDialogVisibilityEvent.emit(true)
         } else {
-            //TODO implement mechanism that deletes PIN set
+            onPinCodeDisabled()
         }
+    }
+
+    fun onPinCodeSaved() = viewModelScope.launch {
         _state.update {
             when (it) {
-                is SettingsUiState.Content -> it.copy(isAppProtected = isEnabled)
+                is SettingsUiState.Content -> it.copy(isAppProtected = true)
                 else -> it
             }
         }
+        _setPinCodeDialogVisibilityEvent.emit(false)
+    }
+
+    private fun onPinCodeDisabled() {
+        try {
+            repository.removePinCode()
+            _state.update {
+                when (it) {
+                    is SettingsUiState.Content -> it.copy(isAppProtected = false)
+                    else -> it
+                }
+            }
+        } catch (e: Exception) {
+            //TODO implement error handling mechanism
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package com.antsfamily.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.antsfamily.data.local.EncryptedSharedPrefers
 import com.antsfamily.data.local.NotesDatabase
 import com.antsfamily.data.local.SharedPrefs
 import dagger.Module
@@ -29,6 +30,12 @@ object DataModule {
     @Provides
     fun provideSharedPrefs(@ApplicationContext appContext: Context): SharedPrefs =
         SharedPrefs(appContext)
+
+    @Singleton
+    @Provides
+    fun provideEncryptedSharedPrefs(@ApplicationContext appContext: Context): EncryptedSharedPrefers =
+        EncryptedSharedPrefers(appContext)
+
 
     private const val DATABASE_NAME = "Naughty Notes DB"
 }

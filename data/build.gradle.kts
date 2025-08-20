@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room)
     implementation(libs.room.ktx)
+    implementation(libs.crypto)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

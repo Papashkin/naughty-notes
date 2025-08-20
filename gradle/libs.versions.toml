@@ -21,6 +21,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.6.1"
 material = "1.10.0"
+crypto = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +51,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+crypto = { group = "androidx.security", name = "security-crypto", version.ref = "crypto"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

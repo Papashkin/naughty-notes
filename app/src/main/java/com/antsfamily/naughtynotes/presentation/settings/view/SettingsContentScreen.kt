@@ -5,8 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -15,15 +15,16 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.settings.SettingsUiState
 import com.antsfamily.naughtynotes.ui.theme.Padding
-
 
 @Composable
 fun SettingsContentScreen(
@@ -34,36 +35,25 @@ fun SettingsContentScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Padding.medium)
+            .padding(start = Padding.medium, end = Padding.medium, top = Padding.huge)
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         Text(
-            stringResource(R.string.compose_settings_security),
+            stringResource(R.string.settings_screen_settings_security),
             style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(top = Padding.x_large)
         )
 
         ListItem(
+            modifier = Modifier.padding(top = Padding.medium),
             colors = ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
             headlineContent = {
                 Text(
-                    text = if (state.isAppProtected) {
-                        stringResource(R.string.settings_screen_pin_on)
-                    } else {
-                        stringResource(R.string.settings_screen_pin_off)
-                    },
+                    text = stringResource(R.string.settings_screen_settings_pin),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(top = Padding.x_small)
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = stringResource(R.string.compose_settings_pin),
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(top = Padding.tiny)
                 )
             },
             leadingContent = {
@@ -82,66 +72,41 @@ fun SettingsContentScreen(
         )
 
         if (state.isAppProtected) {
-            ListItem(
-                colors = ListItemDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surface
+            Button(
+                modifier = Modifier.padding(
+                    start = Padding.medium,
+                    end = Padding.medium,
+                    bottom = Padding.medium
                 ),
-                headlineContent = {
-                    Text(
-                        text = stringResource(R.string.settings_pincode_title),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(top = Padding.x_small)
-                    )
-                },
-                supportingContent = {
-                    Text(
-                        text = stringResource(R.string.settings_pincode_subtitle),
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-                },
-                leadingContent = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_settings_security),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = null,
-                    )
-                },
-                trailingContent = {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                        contentDescription = null,
-                    )
-                }
-            )
+                onClick = {}
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_screen_pincode_change_PIN),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
+        } else {
+            HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
         }
 
         Text(
-            stringResource(R.string.compose_settings),
+            stringResource(R.string.settings_screen_appearance_title),
             style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(top = Padding.xx_large)
         )
 
         ListItem(
+            modifier = Modifier.padding(top = Padding.medium),
             colors = ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
             headlineContent = {
                 Text(
-                    text = if (state.isDarkMode) {
-                        stringResource(R.string.settings_screen_theme_on)
-                    } else {
-                        stringResource(R.string.settings_screen_theme_off)
-                    },
+                    text = stringResource(R.string.settings_screen_settings_dark_mode),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(top = Padding.x_small)
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = stringResource(R.string.compose_settings_dark_mode),
-                    style = MaterialTheme.typography.labelMedium,
                 )
             },
             leadingContent = {
@@ -158,6 +123,7 @@ fun SettingsContentScreen(
                 )
             }
         )
+        HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
     }
 }
 
@@ -166,7 +132,7 @@ fun SettingsContentScreen(
 private fun SettingsContentScreenPreview() {
     SettingsContentScreen(
         state = SettingsUiState.Content(
-            false,
+            true,
             true
         ),
         {},
