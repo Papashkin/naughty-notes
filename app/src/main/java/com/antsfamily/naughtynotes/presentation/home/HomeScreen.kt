@@ -94,138 +94,131 @@ fun PortraitHomeContent(
             .statusBarsPadding()
             .padding(horizontal = Padding.large)
     ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .statusBarsPadding(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.home_screen_title),
-                    maxLines = 1,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Start
-                )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.home_screen_title),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(Padding.medium))
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.home_screen_subtitle),
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(36.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            if (!state.isCurrentMonth) {
+                TextButton(onClick = { onTodayButtonClick() }) {
+                    Text(
+
+                        text = stringResource(R.string.home_screen_button_today),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
+        }
 
-            Spacer(Modifier.height(Padding.medium))
+        CalendarView(
+            yearMonth = state.yearMonth,
+            datesWithNotes = state.datesWithNotes,
+            onMonthChanged = { onMonthChanged(it) },
+            onDayClick = { onDayClick(it) }
+        )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.home_screen_subtitle),
-                    style = MaterialTheme.typography.bodyMedium
+        Spacer(Modifier.height(Padding.medium))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+        ) {
+            Card(
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(Padding.medium),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
-                if (!state.isCurrentMonth) {
-                    TextButton(onClick = { onTodayButtonClick() }) {
-                        Text(
-                            text = stringResource(R.string.home_screen_button_today),
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center),
+                        text = state.datesWithNotes.size.toString(),
+                        style = MaterialTheme.typography.displayLarge,
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(Padding.regular),
+                        style = MaterialTheme.typography.labelLarge,
+                        text = stringResource(R.string.home_screen_banner_total_notes_of_month)
+                    )
                 }
             }
 
-            Spacer(Modifier.height(Padding.medium))
-
-            CalendarView(
-                yearMonth = state.yearMonth,
-                datesWithNotes = state.datesWithNotes,
-                onMonthChanged = { onMonthChanged(it) },
-                onDayClick = { onDayClick(it) }
-            )
-
-            Spacer(Modifier.height(Padding.medium))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Padding.regular)
             ) {
                 Card(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.6f),
                     shape = RoundedCornerShape(Padding.medium),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
                     )
                 ) {
                     Box(Modifier.fillMaxSize()) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = state.datesWithNotes.size.toString(),
-                            style = MaterialTheme.typography.displayLarge,
+                            text = state.daysSinceLastNote.toString(),
+                            style = MaterialTheme.typography.displaySmall,
                         )
                         Text(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .padding(Padding.regular),
-                            style = MaterialTheme.typography.labelLarge,
-                            text = stringResource(R.string.home_screen_banner_total_notes_of_month)
+                            style = MaterialTheme.typography.labelMedium,
+                            text = stringResource(R.string.home_screen_banner_days_since_last_note)
                         )
                     }
                 }
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(Padding.regular)
+                Card(
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .clickable { onSettingsClick() },
+                    shape = RoundedCornerShape(Padding.medium),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
-                    Card(
-                        modifier = Modifier.weight(0.6f),
-                        shape = RoundedCornerShape(Padding.medium),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
-                            contentColor = MaterialTheme.colorScheme.onSecondary
-                        )
+                    Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Box(Modifier.fillMaxSize()) {
-                            Text(
-                                modifier = Modifier.align(Alignment.Center),
-                                text = state.daysSinceLastNote.toString(),
-                                style = MaterialTheme.typography.displaySmall,
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(Padding.regular),
-                                style = MaterialTheme.typography.labelMedium,
-                                text = stringResource(R.string.home_screen_banner_days_since_last_note)
-                            )
-                        }
-                    }
-
-                    Card(
-                        modifier = Modifier
-                            .weight(0.4f)
-                            .clickable { onSettingsClick() },
-                        shape = RoundedCornerShape(Padding.medium),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                            contentColor = MaterialTheme.colorScheme.onSurface
+                        Icon(
+                            modifier = Modifier.size(36.dp),
+                            imageVector = Icons.Rounded.Settings,
+                            contentDescription = null
                         )
-                    ) {
-                        Column(
-                            Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(36.dp),
-                                imageVector = Icons.Rounded.Settings,
-                                contentDescription = null
-                            )
-                            Text(
-                                style = MaterialTheme.typography.labelMedium,
-                                text = stringResource(R.string.home_screen_banner_settings)
-                            )
-                        }
+                        Text(
+                            style = MaterialTheme.typography.labelMedium,
+                            text = stringResource(R.string.home_screen_banner_settings)
+                        )
                     }
                 }
             }
+        }
     }
 }
 

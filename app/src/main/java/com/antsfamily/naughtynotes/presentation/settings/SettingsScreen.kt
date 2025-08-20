@@ -24,8 +24,8 @@ fun SettingsScreen(
 
     Column(
         modifier = Modifier
-            .statusBarsPadding()
             .background(color = MaterialTheme.colorScheme.surface)
+            .statusBarsPadding()
     ) {
         TopBar(
             title = stringResource(R.string.compose_settings_title),
@@ -38,7 +38,7 @@ fun SettingsScreen(
             is SettingsUiState.Content -> SettingsContentScreen(
                 state = uiState,
                 onPinClick = { viewModel.onPinClick(it) },
-                onThemeChanged = {},
+                onThemeChanged = { viewModel.onThemeChanged(it) },
             )
         }
     }

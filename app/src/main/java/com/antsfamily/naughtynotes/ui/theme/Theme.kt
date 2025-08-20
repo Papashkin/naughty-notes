@@ -14,10 +14,9 @@ import androidx.core.view.WindowCompat
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    statusBarColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable () -> Unit
 ) {
-    SetSystemBarColors(statusBarColor, darkTheme)
+    SetSystemBarColors(MaterialTheme.colorScheme.surface, darkTheme)
     MaterialTheme(
         colorScheme = if (darkTheme) darkScheme else lightScheme,
         typography = appTypography,
