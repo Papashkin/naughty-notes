@@ -18,6 +18,3 @@ data class AllNotes(val dateEpoch: Long): Route()
 
 @Serializable
 data object Settings: Route()
-
-@Serializable
-data object PinCode: Route()

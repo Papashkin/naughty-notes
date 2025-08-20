@@ -15,9 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
-import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
-import com.antsfamily.naughtynotes.presentation.pincode.PinCodeScreen
+import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import kotlinx.coroutines.launch
@@ -82,11 +81,7 @@ fun Navigator() {
                 composable<Settings> {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
-                        navigateToPinCodeScreen = { navController.navigate(PinCode) }
                     )
-                }
-                composable<PinCode> {
-                    PinCodeScreen()
                 }
             }
         }

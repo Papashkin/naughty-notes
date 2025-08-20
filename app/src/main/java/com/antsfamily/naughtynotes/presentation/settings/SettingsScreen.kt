@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,22 +16,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.pincode.PinCodeBottomSheetDialog
 import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScreen
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    navigateToPinCodeScreen: () -> Unit
 ) {
-
-    LaunchedEffect(Unit) {
-        viewModel.navigateToPinCodeScreenEvent.collect {
-            navigateToPinCodeScreen()
-        }
+    val (isPinCodeDialogVisible, setIsPinCodeDialogVisible) = remember {
+        mutableStateOf(false)
     }
 
     val state = viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.setPinCodeDialogVisibilityEvent.collect {
+            setIsPinCodeDialogVisible(it)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -37,7 +42,7 @@ fun SettingsScreen(
             .statusBarsPadding()
     ) {
         TopBar(
-            title = stringResource(R.string.compose_settings_title),
+            title = stringResource(R.string.settings_screen_settings),
             onNavigationBack = {
                 onNavigateBack()
             }
@@ -51,10 +56,17 @@ fun SettingsScreen(
             )
         }
     }
+
+    if (isPinCodeDialogVisible) {
+        PinCodeBottomSheetDialog(
+            onSuccessfulPinSaved = { viewModel.onPinCodeSaved() },
+            onDismiss = { setIsPinCodeDialogVisible(false) }
+        )
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(onNavigateBack = {}, navigateToPinCodeScreen = {})
+    SettingsScreen(onNavigateBack = {})
 }

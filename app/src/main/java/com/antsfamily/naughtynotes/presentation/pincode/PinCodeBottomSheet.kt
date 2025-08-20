@@ -1,76 +1,74 @@
 package com.antsfamily.naughtynotes.presentation.pincode
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
 import com.antsfamily.naughtynotes.presentation.pincode.view.PinCodeKeyboard
 import com.antsfamily.naughtynotes.presentation.pincode.view.PinCodeView
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PinCodeScreen(
-    viewModel: PinCodeViewModel = hiltViewModel()
+fun PinCodeBottomSheetDialog(
+    viewModel: PinCodeViewModel = hiltViewModel(),
+    onSuccessfulPinSaved: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
+    val context = LocalContext.current
 
     val state = viewModel.state.collectAsStateWithLifecycle()
 
-    when (val uiState = state.value) {
-        is PinCodeUiState.Loading -> FullScreenLoading()
-        is PinCodeUiState.Content -> ContentView(
-            content = uiState,
-            onKeyClick = { viewModel.onKeyClicked(it) },
-            onShowCodeClick = { viewModel.onShowCodeClicked() },
-            onDeleteClick = { viewModel.onDeleteClicked() }
-        )
-
-        is PinCodeUiState.Error -> TODO()
+    LaunchedEffect(Unit) {
+        viewModel.showSuccessfulPinSaveFlow.collect {
+            onSuccessfulPinSaved()
+        }
     }
-}
+    LaunchedEffect(Unit) {
+        viewModel.dismissDialogFlow.collect {
+            onDismiss()
+        }
+    }
 
-@Composable
-fun ContentView(
-    content: PinCodeUiState.Content,
-    onKeyClick: (Int) -> Unit,
-    onDeleteClick: () -> Unit,
-    onShowCodeClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .fillMaxSize()
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .padding(horizontal = Padding.large),
+    ModalBottomSheet(
+        onDismissRequest = { viewModel.onDialogDismissed() },
+        sheetState = SheetState(
+            density = Density(context),
+            skipPartiallyExpanded = true
+        ),
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(horizontal = Padding.large),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             Icon(
                 modifier = Modifier
-                    .padding(top = Padding.medium)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = RoundedCornerShape(12.dp)
@@ -82,7 +80,7 @@ fun ContentView(
             )
 
             Text(
-                modifier = Modifier.padding(top = Padding.large),
+                modifier = Modifier.padding(top = Padding.medium),
                 text = stringResource(R.string.pin_code_screen_title),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge
@@ -96,28 +94,24 @@ fun ContentView(
             )
 
             PinCodeView(
-                modifier = Modifier.padding(Padding.large),
-                isCodeVisible = content.isCodeVisible,
-                code = content.code
+                modifier = Modifier.padding(Padding.small),
+                isCodeVisible = state.value.isCodeVisible,
+                code = state.value.code
             )
 
             PinCodeKeyboard(
-                modifier = Modifier.padding(top = Padding.large),
-                isCodeVisible = content.isCodeVisible,
-                onKeyClick = { onKeyClick(it) },
-                onDeleteClick = { onDeleteClick() },
-                onShowCodeClick = { onShowCodeClick() }
+                isCodeVisible = state.value.isCodeVisible,
+                onKeyClick = { viewModel.onKeyClicked(it) },
+                onDeleteClick = { viewModel.onDeleteClicked() },
+                onShowCodeClick = { viewModel.onShowCodeClicked() }
             )
-        }
 
-        if (content.isSavePinButtonVisible) {
             LoadingButton(
                 modifier = Modifier
-                    .padding(20.dp)
-                    .align(Alignment.BottomCenter)
+                    .padding(Padding.large)
                     .fillMaxWidth(),
-                onClick = {
-                },
+                enabled = state.value.isSaveButtonEnabled,
+                onClick = { viewModel.onSaveButtonClicked() },
             ) {
                 Text(text = stringResource(R.string.pin_code_screen_button_save))
             }
@@ -125,18 +119,8 @@ fun ContentView(
     }
 }
 
-
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun ContentPreview() {
-    ContentView(
-        content = PinCodeUiState.Content(
-            isCodeVisible = false,
-            code = "23",
-            isSavePinButtonVisible = false
-        ),
-        onKeyClick = {},
-        onDeleteClick = {},
-        onShowCodeClick = {}
-    )
+private fun PinCodeBottomSheetDialogPreview() {
+    PinCodeBottomSheetDialog(onSuccessfulPinSaved = {}, onDismiss = {})
 }
