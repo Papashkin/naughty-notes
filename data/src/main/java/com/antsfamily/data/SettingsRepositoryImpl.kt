@@ -7,13 +7,11 @@ import javax.inject.Inject
 class SettingsRepositoryImpl @Inject constructor(
     private val settingsStore: SettingsStore,
 ) : SettingsRepository {
+    override fun getPinCode(): Int? =
+        settingsStore.getPinCode()
 
-    override fun getIsPinCreated(): Boolean {
-        return settingsStore.getIsPinCreated()
-    }
-
-    override fun setIsPinCreated(isCreated: Boolean) {
-        settingsStore.setIsPinCreated(isCreated)
+    override fun setPinCode(code: Int) {
+        settingsStore.setPinCode(code)
     }
 
     override fun getIsDarkMode(): Boolean {
