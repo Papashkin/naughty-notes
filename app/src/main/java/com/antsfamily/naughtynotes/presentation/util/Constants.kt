@@ -6,6 +6,10 @@ import com.antsfamily.domain.model.PracticeType
 import java.time.LocalDate
 import java.time.Month
 
+const val PIN_CODE_SIZE = 4
+
+const val PIN_CODE_KEY_BULLET = "\u25CF"
+
 val PREVIEW_NOTES = listOf(
     NoteModel(
         3643,
