@@ -88,4 +88,8 @@
     <string name="settings_pincode_title">Set a new PIN code</string>
     <string name="settings_pincode_subtitle">or change existing one</string>
 
+    <string name="pin_code_screen_title">Enter your PIN</string>
+    <string name="pin_code_screen_subtitle">Use your personal PIN to securely unlock the application and continue where you left off</string>
+    <string name="pin_code_screen_button_save">Save</string>
+
 </resources>

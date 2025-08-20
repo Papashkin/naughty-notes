@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.repository.SettingsRepository
 import com.antsfamily.naughtynotes.ui.theme.AppThemeSwitcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +24,10 @@ class SettingsViewModel @Inject constructor(
     val state: StateFlow<SettingsUiState>
         get() = _state
 
+    private val _navigateToPinCodeScreenEvent = MutableSharedFlow<Unit>()
+    val navigateToPinCodeScreenEvent: SharedFlow<Unit>
+        get() = _navigateToPinCodeScreenEvent.asSharedFlow()
+
     init {
         getSettings()
     }
@@ -32,7 +39,7 @@ class SettingsViewModel @Inject constructor(
 
             _state.value = SettingsUiState.Content(
                 isDarkMode = isDarkMode,
-                isAppProtected = pinCode != null
+                isAppProtected = pinCode != null,
             )
         } catch (e: Exception) {
             //TODO implement error handling
@@ -50,11 +57,17 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onPinClick(isEnabled: Boolean) {
+    fun onPinClick(isEnabled: Boolean) = viewModelScope.launch {
         if (isEnabled) {
-            //TODO implement mechanism that deletes PIN set
+            _navigateToPinCodeScreenEvent.emit(Unit)
         } else {
-            //TODO implement bottom dialog where you can setup PIN
+            //TODO implement mechanism that deletes PIN set
+        }
+        _state.update {
+            when (it) {
+                is SettingsUiState.Content -> it.copy(isAppProtected = isEnabled)
+                else -> it
+            }
         }
     }
 }

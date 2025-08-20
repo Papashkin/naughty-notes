@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +20,15 @@ import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScr
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    navigateToPinCodeScreen: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateToPinCodeScreenEvent.collect {
+            navigateToPinCodeScreen()
+        }
+    }
+
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     Column(
@@ -47,5 +56,5 @@ fun SettingsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(onNavigateBack = {})
+    SettingsScreen(onNavigateBack = {}, navigateToPinCodeScreen = {})
 }
