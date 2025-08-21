@@ -1,10 +1,9 @@
 package com.antsfamily.naughtynotes.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.naughtynotes.presentation.util.getDatesForMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

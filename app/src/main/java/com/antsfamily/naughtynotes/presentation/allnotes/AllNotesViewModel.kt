@@ -3,8 +3,11 @@ package com.antsfamily.naughtynotes.presentation.allnotes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.repository.NoteRepository
+import com.antsfamily.domain.AddNoteUseCase
+import com.antsfamily.domain.DeleteNoteUseCase
+import com.antsfamily.domain.GetNotesByDateUseCase
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.repository.NoteRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,6 +26,9 @@ import java.time.LocalDate
 
 @HiltViewModel(assistedFactory = AllNotesViewModel.Factory::class)
 class AllNotesViewModel @AssistedInject constructor(
+    private val deleteNoteUseCase: DeleteNoteUseCase,
+    private val addNoteUseCase: AddNoteUseCase,
+    private val getNotesByDateUseCase: GetNotesByDateUseCase,
     private val repository: NoteRepository,
     @Assisted("epoch") private val epoch: Long,
 ) : ViewModel() {
@@ -58,7 +64,7 @@ class AllNotesViewModel @AssistedInject constructor(
 
     fun onDeleteClick(note: NoteModel) = viewModelScope.launch {
         noteToDelete = note
-        repository.deleteNote(note)
+        deleteNoteUseCase(note)
         _state.update {
             when (it) {
                 is AllNotesUiState.Content -> it.copy(notes = it.notes.minus(note))
@@ -70,7 +76,7 @@ class AllNotesViewModel @AssistedInject constructor(
 
     fun onDeleteNoteReverted() = viewModelScope.launch {
         noteToDelete?.let { note ->
-            repository.addNote(note)
+            addNoteUseCase(note)
             _state.update { state ->
                 when (state) {
                     is AllNotesUiState.Content -> state.copy(
@@ -94,7 +100,7 @@ class AllNotesViewModel @AssistedInject constructor(
     private fun getNotes() = viewModelScope.launch {
         val date = LocalDate.ofEpochDay(epoch)
         try {
-            val notes = repository.getNotesByDate(date)
+            val notes = getNotesByDateUseCase(date)
             _state.value = AllNotesUiState.Content(date, notes)
         } catch (e: Exception) {
             //TODO fix it later with error Type and it's handler
