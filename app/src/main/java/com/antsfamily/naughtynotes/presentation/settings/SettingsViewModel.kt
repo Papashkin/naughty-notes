@@ -2,7 +2,9 @@ package com.antsfamily.naughtynotes.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.antsfamily.domain.repository.SettingsRepository
+import com.antsfamily.domain.GetSettingsUseCase
+import com.antsfamily.domain.RemovePinCodeUseCase
+import com.antsfamily.domain.SetDarkThemeUseCase
 import com.antsfamily.naughtynotes.ui.theme.AppThemeSwitcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repository: SettingsRepository,
+    private val getSettingsUseCase: GetSettingsUseCase,
+    private val removePinCodeUseCase: RemovePinCodeUseCase,
+    private val setDarkThemeUseCase: SetDarkThemeUseCase,
     private val themeSwitcher: AppThemeSwitcher
 ) : ViewModel() {
 
@@ -34,12 +38,11 @@ class SettingsViewModel @Inject constructor(
 
     private fun getSettings() = viewModelScope.launch {
         try {
-            val isDarkMode = repository.getIsDarkMode()
-            val isPinCodeSet = repository.isPinCodeSet()
+            val settings = getSettingsUseCase()
 
             _state.value = SettingsUiState.Content(
-                isDarkMode = isDarkMode,
-                isAppProtected = isPinCodeSet,
+                isDarkMode = settings.isDarkMode,
+                isAppProtected = settings.isPinCodeSet,
             )
         } catch (e: Exception) {
             //TODO implement error handling
@@ -47,7 +50,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onThemeChanged(isDarkMode: Boolean) = viewModelScope.launch {
-        repository.setIsDarkMode(isDarkMode)
+        setDarkThemeUseCase(isDarkMode)
         themeSwitcher.setAppTheme(isDarkMode)
         _state.update {
             when (it) {
@@ -77,7 +80,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun onPinCodeDisabled() {
         try {
-            repository.removePinCode()
+            removePinCodeUseCase()
             _state.update {
                 when (it) {
                     is SettingsUiState.Content -> it.copy(isAppProtected = false)
