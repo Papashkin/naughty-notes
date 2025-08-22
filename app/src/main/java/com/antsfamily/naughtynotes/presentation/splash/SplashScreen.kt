@@ -19,11 +19,17 @@ import com.antsfamily.naughtynotes.R
 fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
+    navigateToCheckPin: () -> Unit,
 ) {
 
     LaunchedEffect(Unit) {
         viewModel.navigationToHomeFlow.collect {
             navigateToHome()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.navigationToPinVerificationFlow.collect {
+            navigateToCheckPin()
         }
     }
 

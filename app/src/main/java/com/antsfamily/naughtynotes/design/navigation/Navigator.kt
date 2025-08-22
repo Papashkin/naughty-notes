@@ -19,6 +19,7 @@ import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
+import com.antsfamily.naughtynotes.presentation.verifypincode.PinCodeVerificationScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -37,7 +38,22 @@ fun Navigator() {
             ) {
                 composable<Splash> { _ ->
                     SplashScreen(
-                        navigateToHome = { navController.navigate(Home) { popUpToTop(navController) } },
+                        navigateToHome = {
+                            navController.navigate(Home) { popUpToTop(navController) }
+                        },
+                        navigateToCheckPin = {
+                            navController.navigate(PinCodeVerification) { popUpToTop(navController) }
+                        }
+                    )
+                }
+                composable<PinCodeVerification> { _ ->
+                    BackHandler(true) {
+                        //no-op
+                    }
+                    PinCodeVerificationScreen(
+                        navigateToHome = {
+                            navController.navigate(Home) { popUpToTop(navController) }
+                        },
                     )
                 }
                 composable<Home> { _ ->

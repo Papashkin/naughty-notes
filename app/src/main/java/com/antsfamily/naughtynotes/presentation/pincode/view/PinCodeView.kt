@@ -27,7 +27,8 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 fun PinCodeView(
     modifier: Modifier = Modifier,
     isCodeVisible: Boolean,
-    code: String
+    code: String,
+    isError: Boolean = false,
 ) {
     Row(
         modifier = modifier.padding(Padding.medium),
@@ -48,11 +49,15 @@ fun PinCodeView(
                         shape = RoundedCornerShape(Padding.regular)
                     )
                     .border(
-                        width = if (code.length == i) 2.dp else 0.dp,
-                        color = if (code.length == i) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.surfaceContainer
+                        width = when {
+                            code.length == i -> 2.dp
+                            isError -> 2.dp
+                            else -> 0.dp
+                        },
+                        color = when {
+                            code.length == i -> MaterialTheme.colorScheme.primary
+                            isError -> MaterialTheme.colorScheme.error
+                            else -> MaterialTheme.colorScheme.surfaceContainer
                         },
                         shape = RoundedCornerShape(Padding.regular)
                     )
@@ -85,5 +90,6 @@ private fun PinCodeViewPreview() {
         PinCodeView(isCodeVisible = true, code = "12345")
         PinCodeView(isCodeVisible = true, code = "2353")
         PinCodeView(isCodeVisible = true, code = "19")
+        PinCodeView(isCodeVisible = true, code = "1980", isError = true)
     }
 }
