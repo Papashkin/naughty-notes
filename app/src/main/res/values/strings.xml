@@ -89,4 +89,9 @@
     <string name="pin_code_screen_button_save">Save</string>
     <string name="pin_code_screen_save_success">PIN was successfully saved</string>
 
+    <string name="pin_code_verification_screen_button_log_in">Log in</string>
+    <string name="pin_code_verification_screen_error_first_attempt">PIN doesn’t match. 2 attempts remaining.</string>
+    <string name="pin_code_verification_screen_error_second_attempt">PIN doesn’t match. Last attempt left.</string>
+    <string name="pin_code_verification_screen_error_last_attempt">Your account is locked for 10 minutes due to multiple incorrect attempts.</string>
+
 </resources>

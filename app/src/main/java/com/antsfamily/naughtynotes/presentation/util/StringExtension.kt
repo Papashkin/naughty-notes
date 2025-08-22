@@ -5,6 +5,7 @@ import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 
 @StringRes
 fun PracticeType.toStringId(): Int {
@@ -65,4 +66,13 @@ fun PracticeLocation.toStringId(): Int {
 fun NoteFormType.toStringId(): Int = when (this) {
     NoteFormType.CREATE -> R.string.note_form_type_create
     NoteFormType.EDIT -> R.string.note_form_type_edit
+}
+
+@StringRes
+fun VerificationErrorType.toStringId(): Int {
+    return when (this) {
+        VerificationErrorType.FIRST_ATTEMPT -> R.string.pin_code_verification_screen_error_first_attempt
+        VerificationErrorType.SECOND_ATTEMPT -> R.string.pin_code_verification_screen_error_second_attempt
+        VerificationErrorType.LAST_ATTEMPT -> R.string.pin_code_verification_screen_error_last_attempt
+    }
 }
