@@ -39,7 +39,7 @@ fun RatingBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Padding.tiny),
+            .padding(vertical = Padding.x_small),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         for (i in 1..starCount) {
@@ -49,8 +49,7 @@ fun RatingBar(
                     contentDescription = "Star $i",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .size(64.dp)
-                        .padding(Padding.small)
+                        .size(50.dp)
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
@@ -59,19 +58,17 @@ fun RatingBar(
                 if (i == 1) {
                     Text(
                         text = stringResource(scaleMinLabel),
-                        modifier = Modifier.width(64.dp),
-                        minLines = 2,
+                        modifier = Modifier.width(50.dp),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
                 if (i == starCount) {
                     Text(
                         text = stringResource(scaleMaxLabel),
-                        modifier = Modifier.width(64.dp),
-                        minLines = 2,
+                        modifier = Modifier.width(50.dp),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }

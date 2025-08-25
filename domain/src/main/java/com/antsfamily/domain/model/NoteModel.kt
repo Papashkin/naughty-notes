@@ -9,6 +9,7 @@ data class NoteModel(
     val location: PracticeLocation,
     val isProtected: Boolean,
     val hasOrgasm: Boolean,
+    val hasPartnerOrgasm: Boolean,
     val painRate: Int,
     val personalNote: String,
     val rate: Int

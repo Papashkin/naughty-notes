@@ -10,6 +10,8 @@ const val PIN_CODE_SIZE = 4
 
 const val PIN_CODE_KEY_BULLET = "\u25CF"
 
+const val CREATE_NOTE_NOTE_LENGTH_MAX = 60
+
 val PREVIEW_NOTES = listOf(
     NoteModel(
         3643,
@@ -18,6 +20,7 @@ val PREVIEW_NOTES = listOf(
         PracticeLocation.CAR,
         isProtected = true,
         hasOrgasm = false,
+        hasPartnerOrgasm = false,
         painRate = 2,
         rate = 4,
         personalNote = ""
@@ -29,6 +32,7 @@ val PREVIEW_NOTES = listOf(
         PracticeLocation.SHOWER,
         isProtected = true,
         hasOrgasm = false,
+        hasPartnerOrgasm = true,
         painRate = 2,
         rate = 4,
         personalNote = "That was something crazy"
@@ -40,6 +44,7 @@ val PREVIEW_NOTES = listOf(
         PracticeLocation.CHANGING_ROOM,
         isProtected = false,
         hasOrgasm = false,
+        hasPartnerOrgasm = true,
         painRate = 2,
         rate = 4,
         personalNote = ""
@@ -51,6 +56,7 @@ val PREVIEW_NOTES = listOf(
         PracticeLocation.HOTEL,
         isProtected = true,
         hasOrgasm = true,
+        hasPartnerOrgasm = false,
         painRate = 2,
         rate = 4,
         personalNote = "That was something crazy"
