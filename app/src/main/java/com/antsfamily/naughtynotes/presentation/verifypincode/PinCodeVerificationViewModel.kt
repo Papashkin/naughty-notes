@@ -8,7 +8,6 @@ import com.antsfamily.domain.VerifyPinCodeUseCase
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -55,7 +54,11 @@ class PinCodeVerificationViewModel @Inject constructor(
         if (isLocked) return
 
         _state.update {
-            it.copy(code = it.code.dropLast(1))
+            val newCode = it.code.dropLast(1)
+            it.copy(
+                code = newCode,
+                isProceedButtonEnabled = newCode.length == PIN_CODE_SIZE
+            )
         }
     }
 
@@ -95,9 +98,6 @@ class PinCodeVerificationViewModel @Inject constructor(
         if (errorType == VerificationErrorType.LAST_ATTEMPT) {
             setAppLockTimeUseCase()
             isLocked = true
-            _state.update {
-                it.copy(isProceedButtonEnabled = false)
-            }
         }
 
         //TODO implement to save lock time in SharedPrefs
