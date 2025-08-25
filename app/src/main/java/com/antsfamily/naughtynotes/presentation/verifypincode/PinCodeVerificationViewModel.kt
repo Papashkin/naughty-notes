@@ -2,6 +2,8 @@ package com.antsfamily.naughtynotes.presentation.verifypincode
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.antsfamily.domain.InvalidateAppLockTimeUseCase
+import com.antsfamily.domain.SetAppLockTimeUseCase
 import com.antsfamily.domain.VerifyPinCodeUseCase
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
@@ -19,7 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PinCodeVerificationViewModel @Inject constructor(
-    private val verifyPinCodeUseCase: VerifyPinCodeUseCase
+    private val verifyPinCodeUseCase: VerifyPinCodeUseCase,
+    private val setAppLockTimeUseCase: SetAppLockTimeUseCase,
+    private val invalidateAppLockTimeUseCase: InvalidateAppLockTimeUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PinCodeVerificationUiState())
@@ -64,6 +68,7 @@ class PinCodeVerificationViewModel @Inject constructor(
         val code = _state.value.code
         val isVerified = verifyPinCodeUseCase(code = code)
         if (isVerified) {
+            invalidateAppLockTimeUseCase()
             _navigateToHomeFlow.emit(Unit)
         } else {
             attempts++
@@ -77,6 +82,13 @@ class PinCodeVerificationViewModel @Inject constructor(
             1 -> VerificationErrorType.FIRST_ATTEMPT
             2 -> VerificationErrorType.SECOND_ATTEMPT
             else -> VerificationErrorType.LAST_ATTEMPT
+        }
+
+        if (errorType == VerificationErrorType.LAST_ATTEMPT) {
+            setAppLockTimeUseCase()
+            _state.update {
+                it.copy(isProceedButtonEnabled = false)
+            }
         }
 
         //TODO implement to save lock time in SharedPrefs

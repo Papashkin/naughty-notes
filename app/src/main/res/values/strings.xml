@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Naughty Notes</string>
 
+    <string name="splash_screen_too_many_incorrect_attempts">Too many incorrect attempts. Please try again in %1$s.</string>
+
     <string name="practice_type_anal">Anal</string>
     <string name="practice_type_oral">Oral</string>
     <string name="practice_type_vaginal">Vaginal</string>
@@ -92,6 +94,6 @@
     <string name="pin_code_verification_screen_button_log_in">Log in</string>
     <string name="pin_code_verification_screen_error_first_attempt">PIN doesn’t match. 2 attempts remaining.</string>
     <string name="pin_code_verification_screen_error_second_attempt">PIN doesn’t match. Last attempt left.</string>
-    <string name="pin_code_verification_screen_error_last_attempt">Your account is locked for 10 minutes due to multiple incorrect attempts.</string>
+    <string name="pin_code_verification_screen_error_last_attempt">Your account is locked for 10 minutes\ndue to multiple incorrect attempts.</string>
 
 </resources>

@@ -8,12 +8,14 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 fun Navigator() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -43,6 +46,18 @@ fun Navigator() {
                         },
                         navigateToCheckPin = {
                             navController.navigate(PinCodeVerification) { popUpToTop(navController) }
+                        },
+                        showLockSnackbar = {
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = context.getString(
+                                            R.string.splash_screen_too_many_incorrect_attempts,
+                                            it
+                                        ),
+                                        duration = SnackbarDuration.Short
+                                    )
+                            }
                         }
                     )
                 }

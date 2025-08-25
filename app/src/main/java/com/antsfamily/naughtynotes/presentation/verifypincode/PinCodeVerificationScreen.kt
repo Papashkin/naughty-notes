@@ -82,13 +82,14 @@ fun PinCodeVerificationScreen(
 
         if (state.value.errorType != null) {
             Text(
-                modifier = Modifier.height(24.dp),
+                modifier = Modifier.height(40.dp),
                 text = stringResource(state.value.errorType!!.toStringId()),
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.error
             )
         } else {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(40.dp))
         }
 
         PinCodeKeyboard(

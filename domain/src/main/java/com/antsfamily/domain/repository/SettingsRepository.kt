@@ -7,4 +7,7 @@ interface SettingsRepository {
     fun verifyPinCode(code: String): Boolean
     fun getIsDarkMode(): Boolean
     fun setIsDarkMode(isDarkMode: Boolean)
+    fun invalidateLockTimestamp()
+    fun setLockTimestamp(timestamp: Long)
+    fun getLockTimestamp(): Long
 }

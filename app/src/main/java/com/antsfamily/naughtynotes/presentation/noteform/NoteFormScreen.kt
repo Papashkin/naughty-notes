@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -331,30 +330,24 @@ fun NoteFormContent(
             }
         }
 
-        Box(
+        LoadingButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .background(color = MaterialTheme.colorScheme.surface),
+                .padding(20.dp)
+                .fillMaxWidth(),
+            onClick = {
+                keyboardController?.hide()
+                onSaveButtonClick()
+            },
+            loading = state.isSaveButtonLoadingVisible,
+            enabled = state.isSaveButtonEnabled,
         ) {
-            LoadingButton(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth(),
-                onClick = {
-                    keyboardController?.hide()
-                    onSaveButtonClick()
-                },
-                loading = state.isSaveButtonLoadingVisible,
-                enabled = state.isSaveButtonEnabled,
-            ) {
-                Text(text = stringResource(R.string.note_form_screen_button_save))
-            }
+            Text(text = stringResource(R.string.note_form_screen_button_save))
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 private fun CreateNoteContentPreview() {
     NoteFormContent(
