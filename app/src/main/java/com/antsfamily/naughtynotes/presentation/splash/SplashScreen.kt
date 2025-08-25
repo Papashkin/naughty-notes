@@ -20,6 +20,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToCheckPin: () -> Unit,
+    showLockSnackbar: (String) -> Unit,
 ) {
 
     LaunchedEffect(Unit) {
@@ -30,6 +31,11 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         viewModel.navigationToPinVerificationFlow.collect {
             navigateToCheckPin()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.showAppLockSnackbarFlow.collect {
+            showLockSnackbar(it)
         }
     }
 

@@ -31,4 +31,16 @@ class SettingsRepositoryImpl @Inject constructor(
     override fun setIsDarkMode(isDarkMode: Boolean) {
         settingsStore.setDarkModeEnabled(isDarkMode)
     }
+
+    override fun invalidateLockTimestamp() {
+        settingsStore.invalidateLockTimestamp()
+    }
+
+    override fun setLockTimestamp(timestamp: Long) {
+        settingsStore.setLockTimestamp(timestamp)
+    }
+
+    override fun getLockTimestamp(): Long {
+        return settingsStore.getLockTimestamp()
+    }
 }

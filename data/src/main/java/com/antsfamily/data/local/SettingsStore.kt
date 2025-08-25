@@ -27,13 +27,26 @@ class SettingsStore @Inject constructor(
     fun setPinCode(code: String) = securePrefs.savePin(code)
 
     fun setDarkModeEnabled(isEnabled: Boolean) = sharedPrefs.editAndCommit {
-        it.putBoolean(KEY_PROFILE_IS_DARK_MODE, isEnabled)
+        it.putBoolean(KEY_SETTINGS_IS_DARK_MODE, isEnabled)
     }
 
     fun getDarkModeEnabled(): Boolean =
-        sharedPrefs.getPrefs().getBoolean(KEY_PROFILE_IS_DARK_MODE, false)
+        sharedPrefs.getPrefs().getBoolean(KEY_SETTINGS_IS_DARK_MODE, false)
+
+    fun setLockTimestamp(timestamp: Long) = sharedPrefs.editAndCommit {
+        it.putLong(KEY_SETTINGS_LOCK_TIMESTAMP, timestamp)
+    }
+
+    fun invalidateLockTimestamp() = sharedPrefs.editAndCommit {
+        it.putLong(KEY_SETTINGS_LOCK_TIMESTAMP, 0L)
+    }
+
+    fun getLockTimestamp(): Long = sharedPrefs
+        .getPrefs()
+        .getLong(KEY_SETTINGS_LOCK_TIMESTAMP, 0L)
 
     companion object {
-        private const val KEY_PROFILE_IS_DARK_MODE = "key_profile_is_dark_mode"
+        private const val KEY_SETTINGS_IS_DARK_MODE = "key_settings_is_dark_mode"
+        private const val KEY_SETTINGS_LOCK_TIMESTAMP = "key_settings_lock_timestamp"
     }
 }
