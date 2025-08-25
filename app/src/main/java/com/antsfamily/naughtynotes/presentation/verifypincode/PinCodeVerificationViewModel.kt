@@ -8,7 +8,6 @@ import com.antsfamily.domain.VerifyPinCodeUseCase
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,36 +34,48 @@ class PinCodeVerificationViewModel @Inject constructor(
         get() = _navigateToHomeFlow.asSharedFlow()
 
     private var attempts: Int = 0
+    private var isLocked: Boolean = false
 
     fun onKeyClicked(value: Int) = viewModelScope.launch {
+        if (isLocked) return@launch
+
         _state.update {
-            val newCode = it.code.plus(value)
+            val newCode = it.code.plus(value).take(4)
             it.copy(
                 code = newCode,
                 isErrorVisible = false,
                 errorType = null,
-                isProceedButtonEnabled = newCode.length == PIN_CODE_SIZE
+                isProceedButtonEnabled = !isLocked && newCode.length == PIN_CODE_SIZE
             )
         }
     }
 
     fun onDeleteClicked() {
+        if (isLocked) return
+
         _state.update {
-            it.copy(code = it.code.dropLast(1))
+            val newCode = it.code.dropLast(1)
+            it.copy(
+                code = newCode,
+                isProceedButtonEnabled = newCode.length == PIN_CODE_SIZE
+            )
         }
     }
 
     fun onShowCodeClicked() {
+        if (isLocked) return
+
         _state.update {
             it.copy(isCodeVisible = !it.isCodeVisible)
         }
     }
 
     fun onProceedClicked() = viewModelScope.launch {
+        if (isLocked) return@launch
+
         _state.update {
             it.copy(isProceedButtonLoadingVisible = true)
         }
-        delay(500)
         val code = _state.value.code
         val isVerified = verifyPinCodeUseCase(code = code)
         if (isVerified) {
@@ -78,17 +89,15 @@ class PinCodeVerificationViewModel @Inject constructor(
 
     private fun handleErrorAttempt() {
         val errorType = when (attempts) {
-            0 -> return
             1 -> VerificationErrorType.FIRST_ATTEMPT
             2 -> VerificationErrorType.SECOND_ATTEMPT
-            else -> VerificationErrorType.LAST_ATTEMPT
+            3 -> VerificationErrorType.LAST_ATTEMPT
+            else -> return
         }
 
         if (errorType == VerificationErrorType.LAST_ATTEMPT) {
             setAppLockTimeUseCase()
-            _state.update {
-                it.copy(isProceedButtonEnabled = false)
-            }
+            isLocked = true
         }
 
         //TODO implement to save lock time in SharedPrefs
@@ -98,6 +107,7 @@ class PinCodeVerificationViewModel @Inject constructor(
                 code = "",
                 isErrorVisible = true,
                 isProceedButtonLoadingVisible = false,
+                isProceedButtonEnabled = false,
                 errorType = errorType
             )
         }
