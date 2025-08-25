@@ -3,6 +3,7 @@ package com.antsfamily.data.di
 import android.content.Context
 import androidx.room.Room
 import com.antsfamily.data.local.EncryptedSharedPrefers
+import com.antsfamily.data.local.Migration_1_2
 import com.antsfamily.data.local.NotesDatabase
 import com.antsfamily.data.local.SharedPrefs
 import dagger.Module
@@ -20,6 +21,7 @@ object DataModule {
     @Provides
     fun provideNotesDatabase(@ApplicationContext appContext: Context): NotesDatabase =
         Room.databaseBuilder(appContext, NotesDatabase::class.java, DATABASE_NAME)
+            .addMigrations(Migration_1_2)
             .build()
 
     @Singleton

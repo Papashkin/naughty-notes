@@ -7,6 +7,7 @@ import com.antsfamily.domain.SaveOrUpdateNoteUseCase
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.util.CREATE_NOTE_NOTE_LENGTH_MAX
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -127,6 +128,16 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
+    fun setHasPartnerOrgasm(hasOrgasm: Boolean) {
+        _state.update {
+            when (it) {
+                is NoteFormUiState.Content -> it.copy(hasPartnerOrgasm = hasOrgasm)
+                else -> it
+            }
+        }
+        checkSaveButtonAvailability()
+    }
+
     fun onSaveButtonClick() = viewModelScope.launch {
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
@@ -138,6 +149,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 location = state.location,
                 isProtected = state.isProtected,
                 hasOrgasm = state.hasOrgasm,
+                hasPartnerOrgasm = state.hasPartnerOrgasm,
                 pleasureRate = state.pleasureRate,
                 painRate = state.painRate,
                 personalNote = state.note
@@ -178,6 +190,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 location = it.location,
                 isProtected = it.isProtected,
                 hasOrgasm = it.hasOrgasm,
+                hasPartnerOrgasm = it.hasPartnerOrgasm,
                 pleasureRate = it.rate,
                 painRate = it.painRate,
                 note = it.personalNote,

@@ -19,6 +19,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
         location: PracticeLocation,
         isProtected: Boolean,
         hasOrgasm: Boolean,
+        hasPartnerOrgasm: Boolean,
         painRate: Int,
         pleasureRate: Int,
         personalNote: String,
@@ -31,6 +32,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
             location = location,
             isProtected = isProtected,
             hasOrgasm = hasOrgasm,
+            hasPartnerOrgasm = hasPartnerOrgasm,
             rate = pleasureRate,
             painRate = painRate,
             personalNote = personalNote

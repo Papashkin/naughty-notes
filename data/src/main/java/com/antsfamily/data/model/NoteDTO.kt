@@ -15,6 +15,7 @@ data class NoteDTO(
     val location: String,
     val isProtected: Boolean,
     val hasOrgasm: Boolean,
+    val hasPartnerOrgasm: Boolean,
     val pleasureRate: Int,
     val painRate: Int,
     val note: String?,
@@ -27,6 +28,7 @@ fun NoteModel.toDTO(): NoteDTO = NoteDTO(
     location = this.location.name,
     isProtected = this.isProtected,
     hasOrgasm = this.hasOrgasm,
+    hasPartnerOrgasm = this.hasPartnerOrgasm,
     pleasureRate = this.rate,
     painRate = this.painRate,
     note = this.personalNote
@@ -39,6 +41,7 @@ fun NoteDTO.toModel(): NoteModel = NoteModel(
     location = PracticeLocation.valueOf(this.location),
     isProtected = this.isProtected,
     hasOrgasm = this.hasOrgasm,
+    hasPartnerOrgasm = this.hasPartnerOrgasm,
     rate = this.pleasureRate,
     painRate = this.painRate,
     personalNote = this.note.orEmpty()
