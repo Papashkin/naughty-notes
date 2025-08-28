@@ -94,20 +94,7 @@ fun PortraitHomeContent(
             .statusBarsPadding()
             .padding(horizontal = Padding.large)
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.home_screen_title),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(Modifier.height(Padding.medium))
-
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.home_screen_subtitle),
-            style = MaterialTheme.typography.bodyMedium
-        )
+        HomeHeader()
 
         Row(
             modifier = Modifier
@@ -118,7 +105,6 @@ fun PortraitHomeContent(
             if (!state.isCurrentMonth) {
                 TextButton(onClick = { onTodayButtonClick() }) {
                     Text(
-
                         text = stringResource(R.string.home_screen_button_today),
                         fontWeight = FontWeight.SemiBold
                     )
@@ -189,6 +175,24 @@ fun PortraitHomeContent(
             }
         }
     }
+}
+
+@Composable
+fun HomeHeader() {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(R.string.home_screen_title),
+        style = MaterialTheme.typography.titleLarge,
+        textAlign = TextAlign.Center
+    )
+
+    Spacer(Modifier.height(Padding.medium))
+
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(R.string.home_screen_subtitle),
+        style = MaterialTheme.typography.bodyMedium
+    )
 }
 
 @Preview(showSystemUi = true, showBackground = true)
