@@ -12,6 +12,8 @@ const val PIN_CODE_KEY_BULLET = "\u25CF"
 
 const val CREATE_NOTE_NOTE_LENGTH_MAX = 60
 
+const val CALENDAR_VIEW_MONTH_AMOUNT = 12L
+
 val PREVIEW_NOTES = listOf(
     NoteModel(
         3643,

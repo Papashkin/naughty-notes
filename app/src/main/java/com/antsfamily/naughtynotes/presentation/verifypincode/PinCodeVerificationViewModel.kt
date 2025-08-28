@@ -40,7 +40,7 @@ class PinCodeVerificationViewModel @Inject constructor(
         if (isLocked) return@launch
 
         _state.update {
-            val newCode = it.code.plus(value).take(4)
+            val newCode = it.code.plus(value).take(PIN_CODE_SIZE)
             it.copy(
                 code = newCode,
                 isErrorVisible = false,

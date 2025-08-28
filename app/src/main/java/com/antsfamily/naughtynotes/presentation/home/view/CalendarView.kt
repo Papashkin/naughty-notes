@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.util.CALENDAR_VIEW_MONTH_AMOUNT
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
@@ -62,7 +63,6 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
-private const val CALENDAR_VIEW_MONTH_AMOUNT = 12L
 
 @Composable
 fun CalendarView(
@@ -113,10 +113,9 @@ fun CalendarView(
                 Day(
                     day = day,
                     currentDay = currentDay,
-                    isWithRecords = day.date in datesWithNotes
-                ) {
-                    onDayClick(it)
-                }
+                    isWithRecords = day.date in datesWithNotes,
+                    onClick = { onDayClick(it) }
+                )
             },
             monthHeader = {
                 MonthHeader(daysOfWeek = daysOfWeek)
@@ -176,6 +175,7 @@ private fun Day(
                     (day.date == currentDay) -> MaterialTheme.colorScheme.onPrimary
                     else -> MaterialTheme.colorScheme.onSurface
                 }
+
                 else -> MaterialTheme.colorScheme.surfaceContainer
             },
         )
@@ -189,7 +189,7 @@ private fun Day(
                 } else {
                     MaterialTheme.colorScheme.primary
                 },
-                contentDescription = null,
+                contentDescription = "Date contains at least one record",
                 modifier = Modifier
                     .padding(Padding.tiny)
                     .size(12.dp)

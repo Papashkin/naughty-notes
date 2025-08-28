@@ -3,7 +3,6 @@ package com.antsfamily.naughtynotes.presentation.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.view.CalendarView
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.home.view.InfoCard
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate
 import java.time.YearMonth
@@ -139,57 +139,26 @@ fun PortraitHomeContent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Padding.medium)
         ) {
-            Card(
+            InfoCard(
                 modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(Padding.medium),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                Box(Modifier.fillMaxSize()) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = state.datesWithNotes.size.toString(),
-                        style = MaterialTheme.typography.displayLarge,
-                    )
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(Padding.regular),
-                        style = MaterialTheme.typography.labelLarge,
-                        text = stringResource(R.string.home_screen_banner_total_notes_of_month)
-                    )
-                }
-            }
+                value = state.datesWithNotes.size.toString(),
+                descriptionText = R.string.home_screen_banner_total_notes_of_month,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(Padding.regular)
             ) {
-                Card(
+
+                InfoCard(
                     modifier = Modifier.weight(0.6f),
-                    shape = RoundedCornerShape(Padding.medium),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    )
-                ) {
-                    Box(Modifier.fillMaxSize()) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = state.daysSinceLastNote.toString(),
-                            style = MaterialTheme.typography.displaySmall,
-                        )
-                        Text(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(Padding.regular),
-                            style = MaterialTheme.typography.labelMedium,
-                            text = stringResource(R.string.home_screen_banner_days_since_last_note)
-                        )
-                    }
-                }
+                    value = state.daysSinceLastNote.toString(),
+                    descriptionText = R.string.home_screen_banner_days_since_last_note,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
 
                 Card(
                     modifier = Modifier

@@ -17,8 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -118,6 +121,7 @@ fun SettingsContentScreen(
             },
             trailingContent = {
                 Switch(
+                    modifier = Modifier.semantics { testTagsAsResourceId = true }.testTag("dark_mode_switch"),
                     checked = state.isDarkMode,
                     onCheckedChange = { onThemeChanged(it) },
                 )
