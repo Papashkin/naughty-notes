@@ -50,9 +50,31 @@ class NoteFormViewModel @AssistedInject constructor(
 
     init {
         if (noteId == null) {
-            setupCreateNoteContent()
+            setCreateNoteDefaultState()
         } else {
             setupEditNoteContent(noteId)
+        }
+    }
+
+    private fun setupEditNoteContent(noteId: Int) = viewModelScope.launch {
+        val note = getNoteByIdUseCase(noteId)
+        note?.let {
+            _state.value = NoteFormUiState.Content(
+                formType = NoteFormType.EDIT,
+                date = selectedDate,
+                type = it.type,
+                location = it.location,
+                isProtected = it.isProtected,
+                hasOrgasm = it.hasOrgasm,
+                hasPartnerOrgasm = it.hasPartnerOrgasm,
+                pleasureRate = it.rate,
+                painRate = it.painRate,
+                note = it.personalNote,
+                isSaveButtonEnabled = true,
+                isSaveButtonLoadingVisible = false
+            )
+        } ?: run {
+            //TODO implement error handling
         }
     }
 
@@ -138,6 +160,15 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
+    private fun checkSaveButtonAvailability() {
+        _state.update {
+            when (it) {
+                is NoteFormUiState.Content -> it.copy(isSaveButtonEnabled = it.isValid)
+                else -> it
+            }
+        }
+    }
+
     fun onSaveButtonClick() = viewModelScope.launch {
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
@@ -159,46 +190,14 @@ class NoteFormViewModel @AssistedInject constructor(
 
             if (noteId == null) {
                 setCreateNoteDefaultState()
+                //TODO rework success mechanism to allow back navigation after note's changes are saved
             }
-        }
-    }
 
-    private fun checkSaveButtonAvailability() {
-        _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> it.copy(isSaveButtonEnabled = it.isValid)
-                else -> it
-            }
+            _state.value = state.copy(isSaveButtonLoadingVisible = false)
         }
     }
 
     private fun setCreateNoteDefaultState() {
         _state.value = NoteFormUiState.Content.Default.copy(date = selectedDate)
-    }
-
-    private fun setupCreateNoteContent() {
-        _state.value = NoteFormUiState.Content.Default.copy(date = selectedDate)
-    }
-
-    private fun setupEditNoteContent(noteId: Int) = viewModelScope.launch {
-        val note = getNoteByIdUseCase(noteId)
-        note?.let {
-            _state.value = NoteFormUiState.Content(
-                formType = NoteFormType.EDIT,
-                date = selectedDate,
-                type = it.type,
-                location = it.location,
-                isProtected = it.isProtected,
-                hasOrgasm = it.hasOrgasm,
-                hasPartnerOrgasm = it.hasPartnerOrgasm,
-                pleasureRate = it.rate,
-                painRate = it.painRate,
-                note = it.personalNote,
-                isSaveButtonEnabled = true,
-                isSaveButtonLoadingVisible = false
-            )
-        } ?: run {
-            //TODO implement error handling
-        }
     }
 }

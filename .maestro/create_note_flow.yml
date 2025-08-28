@@ -1,0 +1,13 @@
+appId: com.antsfamily.naughtynotes
+---
+- launchApp
+- tapOn: "1"
+- tapOn: "Type of practice"
+- tapOn: "Oral"
+- tapOn: "Location"
+- tapOn: "Kitchen"
+- tapOn:
+    text: "Star 4"
+    index: 1
+- tapOn: "Save"
+- assertVisible: "New note was successfully saved"

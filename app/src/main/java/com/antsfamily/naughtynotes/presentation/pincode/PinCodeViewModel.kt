@@ -33,7 +33,7 @@ class PinCodeViewModel @Inject constructor(
 
     fun onKeyClicked(value: Int) {
         _state.update {
-            val newCode = it.code.plus(value)
+            val newCode = it.code.plus(value).take(PIN_CODE_SIZE)
             it.copy(
                 code = newCode,
                 isSaveButtonEnabled = newCode.length == PIN_CODE_SIZE
