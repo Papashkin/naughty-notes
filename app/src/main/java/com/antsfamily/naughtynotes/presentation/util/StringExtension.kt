@@ -69,6 +69,12 @@ fun NoteFormType.toStringId(): Int = when (this) {
 }
 
 @StringRes
+fun NoteFormType.toSnackbarMessageId(): Int = when (this) {
+    NoteFormType.CREATE -> R.string.note_form_screen_create_snackbar_success
+    NoteFormType.EDIT -> R.string.note_form_screen_edit_snackbar_success
+}
+
+@StringRes
 fun VerificationErrorType.toStringId(): Int {
     return when (this) {
         VerificationErrorType.FIRST_ATTEMPT -> R.string.pin_code_verification_screen_error_first_attempt

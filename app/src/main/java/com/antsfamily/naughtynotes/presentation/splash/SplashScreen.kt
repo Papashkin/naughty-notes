@@ -1,9 +1,7 @@
 package com.antsfamily.naughtynotes.presentation.splash
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,15 +46,10 @@ fun SplashViewWithIcon() {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_app),
-                contentDescription = null
-            )
-        }
+        Image(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_app),
+            contentDescription = "application icon"
+        )
     }
 }
 

@@ -39,13 +39,13 @@ fun InfoCard(
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 text = value,
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.displaySmall,
             )
             Text(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(Padding.regular),
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 text = stringResource(descriptionText)
             )
         }

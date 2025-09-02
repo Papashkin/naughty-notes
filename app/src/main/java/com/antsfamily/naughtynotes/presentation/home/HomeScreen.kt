@@ -90,8 +90,6 @@ fun PortraitHomeContent(
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colorScheme.surface)
-            .navigationBarsPadding()
-            .statusBarsPadding()
             .padding(horizontal = Padding.large)
     ) {
         HomeHeader()
@@ -162,12 +160,12 @@ fun PortraitHomeContent(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Icon(
-                            modifier = Modifier.size(36.dp),
+                            modifier = Modifier.size(32.dp),
                             imageVector = Icons.Rounded.Settings,
                             contentDescription = null
                         )
                         Text(
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.labelSmall,
                             text = stringResource(R.string.home_screen_banner_settings)
                         )
                     }
