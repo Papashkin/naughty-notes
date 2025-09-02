@@ -119,7 +119,7 @@ fun ContentView(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
-                            contentDescription = null
+                            contentDescription = "Add"
                         )
                     }
                 }

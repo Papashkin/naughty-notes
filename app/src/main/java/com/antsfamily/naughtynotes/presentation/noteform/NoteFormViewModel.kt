@@ -43,8 +43,8 @@ class NoteFormViewModel @AssistedInject constructor(
     private val _navigateBackEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     val navigateBackEvent: SharedFlow<Unit> = _navigateBackEvent
 
-    private val _noteSaveSnackBarEvent: MutableSharedFlow<PracticeType> = MutableSharedFlow()
-    val noteSaveSnackBarEvent: SharedFlow<PracticeType> = _noteSaveSnackBarEvent
+    private val _noteSaveSnackBarEvent: MutableSharedFlow<NoteFormType> = MutableSharedFlow()
+    val noteSaveSnackBarEvent: SharedFlow<NoteFormType> = _noteSaveSnackBarEvent
 
     private val selectedDate: LocalDate by lazy { LocalDate.ofEpochDay(dateEpoch) }
 
@@ -173,7 +173,7 @@ class NoteFormViewModel @AssistedInject constructor(
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
 
-            saveOrUpdateNoteUseCase.invoke(
+            saveOrUpdateNoteUseCase(
                 id = noteId,
                 date = state.date,
                 type = state.type,
@@ -186,7 +186,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 personalNote = state.note
             )
 
-            _noteSaveSnackBarEvent.emit(state.type)
+            _noteSaveSnackBarEvent.emit(state.formType)
 
             if (noteId == null) {
                 setCreateNoteDefaultState()

@@ -81,7 +81,9 @@ fun SettingsContentScreen(
                     end = Padding.medium,
                     bottom = Padding.medium
                 ),
-                onClick = {}
+                onClick = {
+                    //TODO implement PIN code change mechanism
+                }
             ) {
                 Text(
                     text = stringResource(R.string.settings_screen_pincode_change_PIN),

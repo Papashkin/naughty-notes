@@ -1,6 +1,7 @@
 package com.antsfamily.naughtynotes.design.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -8,6 +9,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
@@ -21,6 +23,7 @@ import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
+import com.antsfamily.naughtynotes.presentation.util.toSnackbarMessageId
 import com.antsfamily.naughtynotes.presentation.verifypincode.PinCodeVerificationScreen
 import kotlinx.coroutines.launch
 
@@ -34,8 +37,8 @@ fun Navigator() {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { values ->
-            print(values.toString())
             NavHost(
+                modifier = Modifier.padding(values),
                 navController = navController,
                 startDestination = Splash
             ) {
@@ -93,7 +96,10 @@ fun Navigator() {
                         onSnackbarShow = {
                             scope.launch {
                                 snackbarHostState
-                                    .showSnackbar(message = it, duration = SnackbarDuration.Short)
+                                    .showSnackbar(
+                                        message = context.getString(it.toSnackbarMessageId()),
+                                        duration = SnackbarDuration.Short
+                                    )
                             }
                         }
                     )
