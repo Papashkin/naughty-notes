@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.InvalidateAppLockTimeUseCase
 import com.antsfamily.domain.SetAppLockTimeUseCase
 import com.antsfamily.domain.VerifyPinCodeUseCase
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -77,7 +78,14 @@ class PinCodeVerificationViewModel @Inject constructor(
             it.copy(isProceedButtonLoadingVisible = true)
         }
         val code = _state.value.code
-        val isVerified = verifyPinCodeUseCase(code = code)
+        val result = verifyPinCodeUseCase(code = code)
+        when (result) {
+            is UseCaseResult.Error -> handleVerifyPinCodeErrorResult(result.exception)
+            is UseCaseResult.Success -> handleVerifyPinCodeSuccessResult(result.data)
+        }
+    }
+
+    private suspend fun handleVerifyPinCodeSuccessResult(isVerified: Boolean) {
         if (isVerified) {
             invalidateAppLockTimeUseCase()
             _navigateToHomeFlow.emit(Unit)
@@ -85,6 +93,10 @@ class PinCodeVerificationViewModel @Inject constructor(
             attempts++
             handleErrorAttempt()
         }
+    }
+
+    private fun handleVerifyPinCodeErrorResult(e: Exception) {
+        //TODO think about do we need this
     }
 
     private fun handleErrorAttempt() {

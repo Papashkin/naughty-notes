@@ -1,6 +1,5 @@
 package com.antsfamily.naughtynotes.presentation.allnotes
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.AddNoteUseCase
@@ -50,8 +49,8 @@ class AllNotesViewModel @AssistedInject constructor(
     private val _navigationToNoteFormFlow = MutableSharedFlow<Int?>()
     val navigationToNoteFormFlow: SharedFlow<Int?> = _navigationToNoteFormFlow.asSharedFlow()
 
-    private val _deleteNoteFlow = MutableSharedFlow<NoteModel>()
-    val deleteNoteFlow: SharedFlow<NoteModel> = _deleteNoteFlow.asSharedFlow()
+    private val _deleteNoteFlow = MutableSharedFlow<Unit>()
+    val deleteNoteFlow: SharedFlow<Unit> = _deleteNoteFlow.asSharedFlow()
 
     private var noteToDelete: NoteModel? = null
 
@@ -66,13 +65,17 @@ class AllNotesViewModel @AssistedInject constructor(
     fun onDeleteClick(note: NoteModel) = viewModelScope.launch {
         noteToDelete = note
         deleteNoteUseCase(note)
-        _state.update {
-            when (it) {
-                is AllNotesUiState.Content -> it.copy(notes = it.notes.minus(note))
-                else -> it
+
+        (_state.value as? AllNotesUiState.Content)?.let { state ->
+            val updatedNotesList = state.notes.minus(note)
+            if (updatedNotesList.isNotEmpty()) {
+                _state.update { state.copy(notes = updatedNotesList) }
+            } else {
+                _state.update { AllNotesUiState.EmptyContent }
             }
         }
-        _deleteNoteFlow.emit(note)
+
+        _deleteNoteFlow.emit(Unit)
     }
 
     fun onDeleteNoteReverted() = viewModelScope.launch {
@@ -81,8 +84,10 @@ class AllNotesViewModel @AssistedInject constructor(
             _state.update { state ->
                 when (state) {
                     is AllNotesUiState.Content -> state.copy(
-                        notes = state.notes.plus(note).sortedBy { it.date })
+                        notes = state.notes.plus(note).sortedBy { it.date }
+                    )
 
+                    is AllNotesUiState.EmptyContent -> AllNotesUiState.Content(listOf(note))
                     else -> state
                 }
             }
@@ -109,7 +114,11 @@ class AllNotesViewModel @AssistedInject constructor(
     }
 
     private suspend fun handleNotesByDateSuccessResult(notes: List<NoteModel>, date: LocalDate) {
-        _state.value = AllNotesUiState.Content(date, notes)
+        _state.value = if (notes.isNotEmpty()) {
+            AllNotesUiState.Content(notes)
+        } else {
+            AllNotesUiState.EmptyContent
+        }
         subscribeToNotes(date)
     }
 
@@ -121,11 +130,7 @@ class AllNotesViewModel @AssistedInject constructor(
     private suspend fun subscribeToNotes(date: LocalDate) {
         repository.subscribeToNotesOnDate(date)
             .onStart { /* no-op */ }
-            .onCompletion {
-                Log.e(
-                    this@AllNotesViewModel::class.simpleName, "=== Notes fetching COMPLETE ==="
-                )
-            }
+            .onCompletion { /* no-op */ }
             .collect {
                 onNewNotesReceived(it)
             }
