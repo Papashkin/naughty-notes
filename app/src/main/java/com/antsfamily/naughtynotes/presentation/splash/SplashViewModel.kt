@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetIsPinSetUseCase
 import com.antsfamily.domain.VerifyAppLockedUseCase
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.presentation.util.toMinutesString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -34,7 +35,15 @@ class SplashViewModel @Inject constructor(
 
     private fun verifyAppLocked() = viewModelScope.launch {
         delay(300)
-        val (remainTime, isLocked) = verifyAppLockedUseCase()
+        val result = verifyAppLockedUseCase()
+        when (result) {
+            is UseCaseResult.Success -> handleVerifyAppLockedSuccessResult(result.data)
+            is UseCaseResult.Error -> handleVerifyAppLockedErrorResult(result.exception)
+        }
+    }
+
+    private suspend fun handleVerifyAppLockedSuccessResult(result: Pair<Long, Boolean>) {
+        val (remainTime, isLocked) = result
         if (isLocked) {
             handleAppIsLocked(remainTime)
         } else {
@@ -42,17 +51,31 @@ class SplashViewModel @Inject constructor(
         }
     }
 
+    private fun handleVerifyAppLockedErrorResult(e: Exception) {
+        //TODO implement error handling if it's needed
+    }
+
     private suspend fun handleAppIsLocked(remainTime: Long) {
         _showAppLockSnackbarFlow.emit(remainTime.toMinutesString())
     }
 
     private suspend fun getIsPinSet() {
+        val result = getIsPinSetUseCase()
+        when (result) {
+            is UseCaseResult.Error -> handleErrorPinResult(result.exception)
+            is UseCaseResult.Success -> handleSuccessPinResult(result.data)
+        }
+    }
 
-        val isPinSet = getIsPinSetUseCase()
+    private suspend fun handleSuccessPinResult(isPinSet: Boolean) {
         if (isPinSet) {
             _navigationToPinVerificationFlow.emit(Unit)
         } else {
             _navigationToHomeFlow.emit(Unit)
         }
+    }
+
+    private fun handleErrorPinResult(e: Exception) {
+        //TODO implement error handling
     }
 }

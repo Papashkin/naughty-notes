@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetNoteByIdUseCase
 import com.antsfamily.domain.SaveOrUpdateNoteUseCase
+import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.util.CREATE_NOTE_NOTE_LENGTH_MAX
 import dagger.assisted.Assisted
@@ -57,7 +59,14 @@ class NoteFormViewModel @AssistedInject constructor(
     }
 
     private fun setupEditNoteContent(noteId: Int) = viewModelScope.launch {
-        val note = getNoteByIdUseCase(noteId)
+        val result = getNoteByIdUseCase(noteId)
+        when (result) {
+            is UseCaseResult.Success -> handleSuccessNoteResult(result.data)
+            is UseCaseResult.Error -> handleErrorPinResult(result.exception)
+        }
+    }
+
+    private suspend fun handleSuccessNoteResult(note: NoteModel?) {
         note?.let {
             _state.value = NoteFormUiState.Content(
                 formType = NoteFormType.EDIT,
@@ -73,9 +82,11 @@ class NoteFormViewModel @AssistedInject constructor(
                 isSaveButtonEnabled = true,
                 isSaveButtonLoadingVisible = false
             )
-        } ?: run {
-            //TODO implement error handling
         }
+    }
+
+    private fun handleErrorPinResult(e: Exception) {
+        //TODO implement error handling
     }
 
     fun setPleasureRate(rate: Int) {
@@ -173,7 +184,7 @@ class NoteFormViewModel @AssistedInject constructor(
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
 
-            saveOrUpdateNoteUseCase(
+            val result = saveOrUpdateNoteUseCase(
                 id = noteId,
                 date = state.date,
                 type = state.type,
@@ -186,14 +197,27 @@ class NoteFormViewModel @AssistedInject constructor(
                 personalNote = state.note
             )
 
-            _noteSaveSnackBarEvent.emit(state.formType)
+            when (result) {
+                is UseCaseResult.Error -> {
+                    //TODO implement error handling mechanism
+                }
 
-            if (noteId == null) {
-                setCreateNoteDefaultState()
-                //TODO rework success mechanism to allow back navigation after note's changes are saved
+                is UseCaseResult.Success -> handleSaveNoteSuccessResult(state.formType)
             }
+        }
+    }
 
-            _state.value = state.copy(isSaveButtonLoadingVisible = false)
+    private suspend fun handleSaveNoteSuccessResult(formType: NoteFormType) {
+        (_state.value as? NoteFormUiState.Content)?.let { state ->
+
+            _noteSaveSnackBarEvent.emit(formType)
+
+            _state.value = if (noteId == null) {
+                NoteFormUiState.Content.Default.copy(date = selectedDate)
+                //TODO rework success mechanism to allow back navigation after note's changes are saved
+            } else {
+                state.copy(isSaveButtonLoadingVisible = false)
+            }
         }
     }
 

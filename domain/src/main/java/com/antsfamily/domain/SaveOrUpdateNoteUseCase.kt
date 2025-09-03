@@ -3,6 +3,7 @@ package com.antsfamily.domain
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.repository.NoteRepository
 import java.time.LocalDate
 import javax.inject.Inject
@@ -23,8 +24,7 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
         painRate: Int,
         pleasureRate: Int,
         personalNote: String,
-    ) {
-
+    ): UseCaseResult<Unit> = try {
         val note = NoteModel(
             id = id ?: Random.nextInt(),
             date = date,
@@ -43,6 +43,9 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
         } ?: run {
             saveNote(note)
         }
+        UseCaseResult.Success(Unit)
+    } catch (e: Exception) {
+        UseCaseResult.Error(e)
     }
 
     private suspend fun saveNote(note: NoteModel) {

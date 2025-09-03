@@ -125,7 +125,7 @@ fun ContentView(
                 style = MaterialTheme.typography.bodyMedium
             )
             NoteForm(
-                state,
+                state = state,
                 keyboardController = keyboardController,
                 setPracticeType = { setPracticeType(it) },
                 setPracticeLocation = { setPracticeLocation(it) },

@@ -16,7 +16,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -50,9 +52,7 @@ class HomeViewModel @Inject constructor(
     private fun getNotes() = viewModelScope.launch {
         repository.notes
             .onStart { /* no-op */ }
-            .onCompletion {
-                // no-op
-            }
+            .onCompletion { /* no-op */ }
             .collect {
                 notes = it
                 handleNotes()
@@ -60,12 +60,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleNotes() {
-        val lastNoteDate = notes.maxByOrNull { it.date }?.date?.dayOfMonth ?: 0
+        val lastNoteDate = notes.maxByOrNull { it.date }?.date ?: today
+        val daysSinceLastNote = ChronoUnit.DAYS.between( lastNoteDate, today).toInt()
         _state.value = HomeUiState.Content(
             yearMonth = currentMonth,
             isCurrentMonth = true,
             datesWithNotes = notes.getDatesForMonth(currentMonth),
-            daysSinceLastNote = today.dayOfMonth - lastNoteDate
+            daysSinceLastNote = abs(daysSinceLastNote)
         )
     }
 
