@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,7 +55,7 @@ fun AllNotesScreen(
     navigateToNoteForm: (Int?) -> Unit,
 ) {
     val date: LocalDate = rememberSaveable { LocalDate.ofEpochDay(epoch) }
-
+    val context = LocalContext.current
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     Column(
@@ -123,8 +124,8 @@ fun AllNotesScreen(
             viewModel.deleteNoteFlow.collect {
                 val snackbarResult = snackbarHostState
                     .showSnackbar(
-                        message = "Note deleted",
-                        actionLabel = "Undo",
+                        message = context.getString(R.string.all_notes_screen_snackbar_note_deleted),
+                        actionLabel = context.getString(R.string.all_notes_screen_snackbar_undo),
                         duration = SnackbarDuration.Short
                     )
                 when (snackbarResult) {

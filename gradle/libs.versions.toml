@@ -13,7 +13,7 @@ composeBom = "2025.06.01"
 androidxNavigation = "2.9.0"
 hilt = "2.53.1"
 coroutinesTest = "1.10.1"
-mockito = "5.4.0"
+mockito = "5.18.0"
 coreTesting = "2.2.0"
 room = "2.7.2"
 kotlinSerialization = "2.1.10"
@@ -42,7 +42,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-core-testing =  { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
-mockito =  { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
+mockito =  { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 room = {group = "androidx.room", name="room-compiler", version.ref = "room" }
 room-runtime = {group = "androidx.room", name="room-runtime", version.ref = "room" }
 room-ktx = {group = "androidx.room", name="room-ktx", version.ref = "room" }
