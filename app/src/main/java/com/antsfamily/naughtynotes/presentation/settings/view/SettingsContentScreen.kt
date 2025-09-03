@@ -37,9 +37,9 @@ fun SettingsContentScreen(
 ) {
     Column(
         modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.surface)
             .fillMaxSize()
             .padding(start = Padding.medium, end = Padding.medium, top = Padding.huge)
-            .background(color = MaterialTheme.colorScheme.surface)
     ) {
         Text(
             stringResource(R.string.settings_screen_settings_security),
@@ -139,7 +139,7 @@ private fun SettingsContentScreenPreview() {
     SettingsContentScreen(
         state = SettingsUiState.Content(
             true,
-            true
+            false
         ),
         {},
         {},

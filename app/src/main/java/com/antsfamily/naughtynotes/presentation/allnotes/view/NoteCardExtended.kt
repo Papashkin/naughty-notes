@@ -40,8 +40,8 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 @Composable
 fun NoteCardExtended(
     note: NoteModel,
-    onEditClick: (NoteModel) -> Unit,
-    onDeleteClick: (NoteModel) -> Unit
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     val (menuExpanded, setMenuExpanded) = remember { mutableStateOf(false) }
 
@@ -93,14 +93,14 @@ fun NoteCardExtended(
                         text = { Text(stringResource(R.string.all_notes_screen_menu_edit)) },
                         onClick = {
                             setMenuExpanded(false)
-                            onEditClick(note)
+                            onEditClick()
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.all_notes_screen_menu_delete)) },
                         onClick = {
                             setMenuExpanded(false)
-                            onDeleteClick(note)
+                            onDeleteClick()
                         }
                     )
                 }

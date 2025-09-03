@@ -2,7 +2,6 @@ package com.antsfamily.naughtynotes.presentation.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,13 +38,10 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .background(color = MaterialTheme.colorScheme.surface)
-            .statusBarsPadding()
     ) {
         TopBar(
             title = stringResource(R.string.settings_screen_settings),
-            onNavigationBack = {
-                onNavigateBack()
-            }
+            onNavigationBack = { onNavigateBack() }
         )
         when (val uiState = state.value) {
             is SettingsUiState.Loading -> FullScreenLoading()
