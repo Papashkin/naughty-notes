@@ -7,6 +7,7 @@ import com.antsfamily.domain.AddNoteUseCase
 import com.antsfamily.domain.DeleteNoteUseCase
 import com.antsfamily.domain.GetNotesByDateUseCase
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.repository.NoteRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -99,15 +100,22 @@ class AllNotesViewModel @AssistedInject constructor(
 
     private fun getNotes() = viewModelScope.launch {
         val date = LocalDate.ofEpochDay(epoch)
-        try {
-            val notes = getNotesByDateUseCase(date)
-            _state.value = AllNotesUiState.Content(date, notes)
-        } catch (e: Exception) {
-            //TODO fix it later with error Type and it's handler
-            _state.value = AllNotesUiState.Error(e.message.orEmpty())
-        } finally {
-            subscribeToNotes(date)
+        val result = getNotesByDateUseCase(date)
+
+        when (result) {
+            is UseCaseResult.Success -> handleNotesByDateSuccessResult(result.data, date)
+            is UseCaseResult.Error -> handleNotesByDateErrorResult(result.exception)
         }
+    }
+
+    private suspend fun handleNotesByDateSuccessResult(notes: List<NoteModel>, date: LocalDate) {
+        _state.value = AllNotesUiState.Content(date, notes)
+        subscribeToNotes(date)
+    }
+
+    private fun handleNotesByDateErrorResult(e: Exception) {
+        //TODO fix it later with error Type and it's handler
+        _state.value = AllNotesUiState.Error(e.message.orEmpty())
     }
 
     private suspend fun subscribeToNotes(date: LocalDate) {

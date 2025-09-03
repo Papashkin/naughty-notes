@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetSettingsUseCase
 import com.antsfamily.domain.RemovePinCodeUseCase
 import com.antsfamily.domain.SetDarkThemeUseCase
+import com.antsfamily.domain.model.SettingsModel
+import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.ui.theme.AppThemeSwitcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,16 +39,22 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun getSettings() = viewModelScope.launch {
-        try {
-            val settings = getSettingsUseCase()
-
-            _state.value = SettingsUiState.Content(
-                isDarkMode = settings.isDarkMode,
-                isAppProtected = settings.isPinCodeSet,
-            )
-        } catch (e: Exception) {
-            //TODO implement error handling
+        val result = getSettingsUseCase()
+        when (result) {
+            is UseCaseResult.Success -> handleGetSettingsSuccessResult(result.data)
+            is UseCaseResult.Error -> handleGetSettingsErrorResult(result.exception)
         }
+    }
+
+    private fun handleGetSettingsSuccessResult(settings: SettingsModel) {
+        _state.value = SettingsUiState.Content(
+            isDarkMode = settings.isDarkMode,
+            isAppProtected = settings.isPinCodeSet,
+        )
+    }
+
+    private fun handleGetSettingsErrorResult(e: Exception) {
+        //TODO implement error handling
     }
 
     fun onThemeChanged(isDarkMode: Boolean) = viewModelScope.launch {
