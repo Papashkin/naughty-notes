@@ -45,7 +45,6 @@ jobs:
         with:
           api-level: 30
           arch: x86_64
-          profile: Nexus 6
           disable-animations: false
           script: ./gradlew connectedCheck
 
