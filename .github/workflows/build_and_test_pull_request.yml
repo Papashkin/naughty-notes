@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew test
 
   ui-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: build
 
     steps:
@@ -44,6 +44,7 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
           api-level: 30
+          target: google_apis
           arch: x86_64
           disable-animations: false
           script: ./gradlew connectedCheck
