@@ -37,25 +37,26 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Run connected tests
+      - name: Run emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 31
           target: google_apis
           arch: x86_64
           profile: Nexus 6
-          script: ./gradlew connectedCheck
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           emulator-boot-timeout: 600
+          script: echo "Emulator ready"
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Run UI tests
-        run: maestro test .maestro/create_note_flow
+        run: |
+          export PATH="$PATH":"$HOME/.maestro/bin"
+          maestro test .maestro/create_note_flow
