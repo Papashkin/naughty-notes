@@ -17,9 +17,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Build with Gradle
-        run: ./gradlew build --stacktrace
-
       - name: Run Tests
         run: ./gradlew test
 
@@ -54,7 +51,11 @@ jobs:
           api-level: 30
           target: google_apis
           arch: x86_64
+          profile: Nexus 6
           script: ./gradlew connectedCheck
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          emulator-boot-timeout: 600
 
       - name: Run UI tests
         run: maestro test .maestro/create_note_flow
