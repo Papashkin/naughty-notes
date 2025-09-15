@@ -12,10 +12,12 @@ class GetSettingsUseCase @Inject constructor(
     operator fun invoke(): UseCaseResult<SettingsModel> = try {
         val isDarkMode = repository.getIsDarkMode()
         val isPinCodeSet = repository.isPinCodeSet()
+        val version = repository.getAppVersion()
 
         val settings = SettingsModel(
             isDarkMode = isDarkMode,
-            isPinCodeSet = isPinCodeSet
+            isPinCodeSet = isPinCodeSet,
+            appVersion = version
         )
         UseCaseResult.Success(settings)
     } catch (e: Exception) {

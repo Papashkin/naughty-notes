@@ -10,4 +10,5 @@ interface SettingsRepository {
     fun invalidateLockTimestamp()
     fun setLockTimestamp(timestamp: Long)
     fun getLockTimestamp(): Long
+    fun getAppVersion(): String?
 }

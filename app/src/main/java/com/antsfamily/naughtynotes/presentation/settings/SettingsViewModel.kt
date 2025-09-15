@@ -23,7 +23,7 @@ class SettingsViewModel @Inject constructor(
     private val getSettingsUseCase: GetSettingsUseCase,
     private val removePinCodeUseCase: RemovePinCodeUseCase,
     private val setDarkThemeUseCase: SetDarkThemeUseCase,
-    private val themeSwitcher: AppThemeSwitcher
+    private val themeSwitcher: AppThemeSwitcher,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<SettingsUiState>(SettingsUiState.Loading)
@@ -50,6 +50,7 @@ class SettingsViewModel @Inject constructor(
         _state.value = SettingsUiState.Content(
             isDarkMode = settings.isDarkMode,
             isAppProtected = settings.isPinCodeSet,
+            appVersion = settings.appVersion
         )
     }
 

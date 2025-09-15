@@ -66,7 +66,7 @@ class NoteFormViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleSuccessNoteResult(note: NoteModel?) {
+    private fun handleSuccessNoteResult(note: NoteModel?) {
         note?.let {
             _state.value = NoteFormUiState.Content(
                 formType = NoteFormType.EDIT,
