@@ -1,11 +1,13 @@
 package com.antsfamily.data
 
+import com.antsfamily.data.local.AppVersionSource
 import com.antsfamily.data.local.SettingsStore
 import com.antsfamily.domain.repository.SettingsRepository
 import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
     private val settingsStore: SettingsStore,
+    private val appVersionSource: AppVersionSource
 ) : SettingsRepository {
 
     override fun setPinCode(code: String) {
@@ -42,5 +44,9 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override fun getLockTimestamp(): Long {
         return settingsStore.getLockTimestamp()
+    }
+
+    override fun getAppVersion(): String? {
+        return appVersionSource.getAppVersion()
     }
 }
