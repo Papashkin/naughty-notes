@@ -38,6 +38,7 @@ fun SettingsContentScreen(
     state: SettingsUiState.Content,
     onPinClick: (Boolean) -> Unit,
     onThemeChanged: (Boolean) -> Unit,
+    onCodeChangeClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -86,9 +87,7 @@ fun SettingsContentScreen(
                         end = Padding.medium,
                         bottom = Padding.medium
                     ),
-                    onClick = {
-                        //TODO implement PIN code change mechanism
-                    }
+                    onClick = { onCodeChangeClick() }
                 ) {
                     Text(
                         text = stringResource(R.string.settings_screen_pincode_change_PIN),
@@ -167,6 +166,7 @@ private fun SettingsContentScreenPreview() {
             false,
             "1.0"
         ),
+        {},
         {},
         {},
     )

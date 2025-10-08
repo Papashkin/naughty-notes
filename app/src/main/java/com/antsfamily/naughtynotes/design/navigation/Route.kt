@@ -21,3 +21,6 @@ data object Settings: Route()
 
 @Serializable
 data object PinCodeVerification: Route()
+
+@Serializable
+data object ChangeExistingPinCode: Route()

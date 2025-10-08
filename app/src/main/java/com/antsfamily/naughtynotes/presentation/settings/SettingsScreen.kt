@@ -22,6 +22,7 @@ import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScr
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onCodeChangeClick: () -> Unit
 ) {
     val (isPinCodeDialogVisible, setIsPinCodeDialogVisible) = remember {
         mutableStateOf(false)
@@ -49,6 +50,7 @@ fun SettingsScreen(
                 state = uiState,
                 onPinClick = { viewModel.onPinClick(it) },
                 onThemeChanged = { viewModel.onThemeChanged(it) },
+                onCodeChangeClick = { onCodeChangeClick() }
             )
         }
     }
@@ -64,5 +66,5 @@ fun SettingsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(onNavigateBack = {})
+    SettingsScreen(onNavigateBack = {}, onCodeChangeClick = {})
 }
