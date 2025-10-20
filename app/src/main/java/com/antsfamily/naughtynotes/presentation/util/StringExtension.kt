@@ -4,6 +4,9 @@ import androidx.annotation.StringRes
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeButtonState
+import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
+import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 
@@ -80,5 +83,31 @@ fun VerificationErrorType.toStringId(): Int {
         VerificationErrorType.FIRST_ATTEMPT -> R.string.pin_code_verification_screen_error_first_attempt
         VerificationErrorType.SECOND_ATTEMPT -> R.string.pin_code_verification_screen_error_second_attempt
         VerificationErrorType.LAST_ATTEMPT -> R.string.pin_code_verification_screen_error_last_attempt
+    }
+}
+
+@StringRes
+fun ChangePinCodeStep.toStringId(): Int {
+    return when (this) {
+        ChangePinCodeStep.EXISTED_CODE -> R.string.change_existing_pin_code_screen_subtitle_1
+        ChangePinCodeStep.NEW_CODE -> R.string.change_existing_pin_code_screen_subtitle_2
+        ChangePinCodeStep.REPEAT_NEW_CODE -> R.string.change_existing_pin_code_screen_subtitle_3
+    }
+}
+
+@StringRes
+fun ChangePinCodeButtonState.toStringId(): Int {
+    return when (this) {
+        ChangePinCodeButtonState.PROCEED -> R.string.change_existing_pin_code_screen_button_continue
+        ChangePinCodeButtonState.SAVE -> R.string.change_existing_pin_code_screen_button_save
+    }
+}
+
+@StringRes
+fun ChangePinErrorType.toStringId(): Int {
+    return when (this) {
+        ChangePinErrorType.WRONG_PIN -> R.string.change_existing_pin_code_screen_error_wrong_pin
+        ChangePinErrorType.PINS_NOT_MATCH -> R.string.change_existing_pin_code_screen_error_pins_not_match
+        ChangePinErrorType.UNKNOWN -> R.string.change_existing_pin_code_screen_error_unknown
     }
 }

@@ -102,4 +102,16 @@
     <string name="pin_code_verification_screen_error_second_attempt">PIN doesn’t match. Last attempt left.</string>
     <string name="pin_code_verification_screen_error_last_attempt">Your account is locked for 10 minutes\ndue to multiple incorrect attempts.</string>
 
+    <string name="change_existing_pin_code_screen_title">Update your PIN</string>
+    <string name="change_existing_pin_code_screen_subtitle_1">Let’s start with your current PIN</string>
+    <string name="change_existing_pin_code_screen_subtitle_2">Now pick a new PIN</string>
+    <string name="change_existing_pin_code_screen_subtitle_3">One more time, just to be sure</string>
+    <string name="change_existing_pin_code_screen_button_continue">Continue</string>
+    <string name="change_existing_pin_code_screen_button_save">Save</string>
+    <string name="change_existing_pin_code_screen_save_success">PIN was successfully changed</string>
+
+    <string name="change_existing_pin_code_screen_error_wrong_pin">Wrong PIN code</string>
+    <string name="change_existing_pin_code_screen_error_pins_not_match">PINs don\'t match</string>
+    <string name="change_existing_pin_code_screen_error_unknown">Something\'s happened, please try again</string>
+
 </resources>

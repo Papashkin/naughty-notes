@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
+import com.antsfamily.naughtynotes.presentation.changepincode.ChangeExistingPinCodeScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
@@ -118,6 +119,23 @@ fun Navigator() {
                 composable<Settings> {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
+                        onCodeChangeClick = {
+                            navController.navigate(ChangeExistingPinCode)
+                        }
+                    )
+                }
+                composable<ChangeExistingPinCode> {
+                    ChangeExistingPinCodeScreen(
+                        navigateBack = { navController.popBackStack() },
+                        onSuccessfulPinChanged = {
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = context.getString(R.string.change_existing_pin_code_screen_save_success),
+                                        duration = SnackbarDuration.Short
+                                    )
+                            }
+                        }
                     )
                 }
             }
