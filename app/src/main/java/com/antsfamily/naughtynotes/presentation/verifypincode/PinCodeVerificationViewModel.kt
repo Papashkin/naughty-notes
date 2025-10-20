@@ -37,8 +37,8 @@ class PinCodeVerificationViewModel @Inject constructor(
     private var attempts: Int = 0
     private var isLocked: Boolean = false
 
-    fun onKeyClicked(value: Int) = viewModelScope.launch {
-        if (isLocked) return@launch
+    fun onKeyClicked(value: Int) {
+        if (isLocked) return
 
         _state.update {
             val newCode = it.code.plus(value).take(PIN_CODE_SIZE)

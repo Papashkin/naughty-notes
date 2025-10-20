@@ -18,8 +18,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -56,6 +55,46 @@ class AllNotesViewModel @AssistedInject constructor(
 
     init {
         getNotes()
+    }
+
+    private fun getNotes() = viewModelScope.launch {
+        val date = LocalDate.ofEpochDay(epoch)
+        val result = getNotesByDateUseCase(date)
+
+        when (result) {
+            is UseCaseResult.Success -> handleNotesByDateSuccessResult(result.data, date)
+            is UseCaseResult.Error -> handleNotesByDateErrorResult(result.exception)
+        }
+    }
+
+    private suspend fun handleNotesByDateSuccessResult(notes: List<NoteModel>, date: LocalDate) {
+        _state.value = if (notes.isNotEmpty()) {
+            AllNotesUiState.Content(notes)
+        } else {
+            AllNotesUiState.EmptyContent
+        }
+        subscribeToNotes(date)
+    }
+
+    private fun handleNotesByDateErrorResult(e: Exception) {
+        //TODO fix it later with error Type and it's handler
+        _state.value = AllNotesUiState.Error(e.message.orEmpty())
+    }
+
+    private suspend fun subscribeToNotes(date: LocalDate) {
+        repository.subscribeToNotesOnDate(date)
+            .catch { /* no-op */ }
+            .collect {
+                onNewNotesReceived(it)
+            }
+    }
+
+    private fun onNewNotesReceived(notes: List<NoteModel>) {
+        _state.update {
+            if (it !is AllNotesUiState.Content) return@update it
+
+            if (it.notes == notes) it else it.copy(notes = notes)
+        }
     }
 
     fun onEditClick(note: NoteModel) = viewModelScope.launch {
@@ -101,46 +140,5 @@ class AllNotesViewModel @AssistedInject constructor(
 
     fun onAddNoteClick() = viewModelScope.launch {
         _navigationToNoteFormFlow.emit(null)
-    }
-
-    private fun getNotes() = viewModelScope.launch {
-        val date = LocalDate.ofEpochDay(epoch)
-        val result = getNotesByDateUseCase(date)
-
-        when (result) {
-            is UseCaseResult.Success -> handleNotesByDateSuccessResult(result.data, date)
-            is UseCaseResult.Error -> handleNotesByDateErrorResult(result.exception)
-        }
-    }
-
-    private suspend fun handleNotesByDateSuccessResult(notes: List<NoteModel>, date: LocalDate) {
-        _state.value = if (notes.isNotEmpty()) {
-            AllNotesUiState.Content(notes)
-        } else {
-            AllNotesUiState.EmptyContent
-        }
-        subscribeToNotes(date)
-    }
-
-    private fun handleNotesByDateErrorResult(e: Exception) {
-        //TODO fix it later with error Type and it's handler
-        _state.value = AllNotesUiState.Error(e.message.orEmpty())
-    }
-
-    private suspend fun subscribeToNotes(date: LocalDate) {
-        repository.subscribeToNotesOnDate(date)
-            .onStart { /* no-op */ }
-            .onCompletion { /* no-op */ }
-            .collect {
-                onNewNotesReceived(it)
-            }
-    }
-
-    private fun onNewNotesReceived(notes: List<NoteModel>) {
-        _state.update {
-            if (it !is AllNotesUiState.Content) return@update it
-
-            if (it.notes == notes) it else it.copy(notes = notes)
-        }
     }
 }

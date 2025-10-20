@@ -13,23 +13,23 @@ import java.time.LocalDate
 abstract class NotesDao {
 
     @Query("SELECT * from notedto")
-    abstract suspend fun getAllRecords(): List<NoteDTO>
+    abstract suspend fun getNotes(): List<NoteDTO>
 
     @Query("SELECT * from notedto")
-    abstract fun allRecordsFlow(): Flow<List<NoteDTO>>
+    abstract fun getNotesFlow(): Flow<List<NoteDTO>>
 
     @Query("Select * from notedto where id = :id")
-    abstract suspend fun getRecordById(id: Int): NoteDTO?
+    abstract suspend fun getNoteById(id: Int): NoteDTO?
 
     @Query("SELECT * from notedto where date = :date")
-    abstract fun allRecordsOnDateFlow(date: LocalDate): Flow<List<NoteDTO>>
+    abstract fun getNotesOnDateFlow(date: LocalDate): Flow<List<NoteDTO>>
 
     @Insert
-    abstract suspend fun addRecord(profile: NoteDTO)
+    abstract suspend fun addNote(profile: NoteDTO)
 
     @Delete
-    abstract suspend fun deleteRecord(profile: NoteDTO)
+    abstract suspend fun deleteNote(profile: NoteDTO)
 
     @Update
-    abstract suspend fun updateRecord(profile: NoteDTO)
+    abstract suspend fun updateNote(profile: NoteDTO)
 }

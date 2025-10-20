@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.repository.NoteRepository
-import com.antsfamily.naughtynotes.presentation.util.getDatesForMonth
+import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,17 +51,20 @@ class HomeViewModel @Inject constructor(
 
     private fun getNotes() = viewModelScope.launch {
         repository.notes
-            .onStart { /* no-op */ }
-            .onCompletion { /* no-op */ }
+            .onStart { _state.value = HomeUiState.Loading }
+            .catch { /* no-op */ }
             .collect {
-                notes = it
-                handleNotes()
+                handleNotes(it)
             }
     }
 
-    private fun handleNotes() {
+    private fun handleNotes(notes: List<NoteModel>) {
+        this.notes = notes
         val lastNoteDate = notes.maxByOrNull { it.date }?.date ?: today
-        val daysSinceLastNote = ChronoUnit.DAYS.between( lastNoteDate, today).toInt()
+        val daysSinceLastNote = ChronoUnit
+            .DAYS
+            .between( lastNoteDate, today)
+            .toInt()
         _state.value = HomeUiState.Content(
             yearMonth = currentMonth,
             isCurrentMonth = true,
@@ -114,4 +117,8 @@ class HomeViewModel @Inject constructor(
     fun onSettingsClick() = viewModelScope.launch {
         _navigateToSettingsEvent.emit(Unit)
     }
+
+    private fun List<NoteModel>.getDatesForMonth(month: YearMonth): List<LocalDate> =
+        this.filter { note -> note.date.yearMonth == month }
+            .map { note -> note.date }
 }
