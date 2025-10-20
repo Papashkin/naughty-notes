@@ -119,9 +119,8 @@ fun Navigator() {
                 composable<Settings> {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
-                        onCodeChangeClick = {
-                            navController.navigate(ChangeExistingPinCode)
-                        }
+                        onCodeChangeClick = { navController.navigate(ChangeExistingPinCode) },
+                        onStatsClick = { navController.navigate(Stats) },
                     )
                 }
                 composable<ChangeExistingPinCode> {
@@ -137,6 +136,9 @@ fun Navigator() {
                             }
                         }
                     )
+                }
+                composable<Stats> { _ ->
+                    //TODO implement Stats screen here
                 }
             }
         }
