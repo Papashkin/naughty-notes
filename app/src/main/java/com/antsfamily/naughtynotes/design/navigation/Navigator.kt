@@ -139,7 +139,9 @@ fun Navigator() {
                     )
                 }
                 composable<Stats> { _ ->
-                    StatsScreen()
+                    StatsScreen(
+                        onNavigateBack = { navController.popBackStack() },
+                    )
                 }
             }
         }

@@ -18,7 +18,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -77,14 +76,12 @@ fun StatsChart(
 
             Canvas(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(300.dp)
                     .padding(Padding.medium)
             ) {
                 val width = size.width
                 val radius = width / 2f
-                val strokeWidth = radius * .4f
-                val innerRadius = radius - strokeWidth
-                val lineStrokeWidth = 3.dp.toPx()
+                val strokeWidth = radius * .25f
 
                 var startAngle = -90f
 
@@ -104,15 +101,6 @@ fun StatsChart(
                         )
                     }
 
-                    rotate(90f + startAngle) {
-                        drawLine(
-                            color = Color.White,
-                            start = Offset(radius, strokeWidth),
-                            end = Offset(radius, 0f),
-                            strokeWidth = lineStrokeWidth
-                        )
-                    }
-
                     val textMeasureResult = textMeasureResults[index]
                     val textSize = textMeasureResult.size
                     val textCenter = textSize.center
@@ -122,10 +110,10 @@ fun StatsChart(
                             textLayoutResult = textMeasureResult,
                             color = Color.Black,
                             topLeft = Offset(
-                                -textCenter.x + center.x + (innerRadius + strokeWidth / 2) * cos(
+                                -textCenter.x + center.x + (radius + strokeWidth / 2) * cos(
                                     angleInRadians
                                 ),
-                                -textCenter.y + center.y + (innerRadius + strokeWidth / 2) * sin(
+                                -textCenter.y + center.y + (radius + strokeWidth / 2) * sin(
                                     angleInRadians
                                 )
                             )

@@ -115,12 +115,14 @@
     <string name="change_existing_pin_code_screen_error_pins_not_match">PINs don\'t match</string>
     <string name="change_existing_pin_code_screen_error_unknown">Something\'s happened, please try again</string>
 
-    <string name="statistic_screen_chip_activity">Type of practice</string>
-    <string name="statistic_screen_chip_place">Location</string>
-
-    <string name="statistic_screen_selector_time_current_month">For current month</string>
-    <string name="statistic_screen_selector_time_previous_month">For previous month</string>
-    <string name="statistic_screen_selector_time_last_year">For the last year</string>
-    <string name="statistic_screen_selector_time_all">All</string>
+    <string name="statistic_screen_title">Statistics</string>
+    <string name="statistic_screen_subtitle">View statistics by:</string>
+    <string name="statistic_screen_chip_activity">type of practice</string>
+    <string name="statistic_screen_chip_place">location</string>
+    <string name="statistic_screen_selector_time_for">For:</string>
+    <string name="statistic_screen_selector_time_current_month">current month</string>
+    <string name="statistic_screen_selector_time_previous_month">previous month</string>
+    <string name="statistic_screen_selector_time_this_year">this year</string>
+    <string name="statistic_screen_selector_time_all">all the time</string>
 
 </resources>

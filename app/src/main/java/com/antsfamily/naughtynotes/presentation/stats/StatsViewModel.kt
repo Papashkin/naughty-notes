@@ -2,6 +2,7 @@ package com.antsfamily.naughtynotes.presentation.stats
 
 import androidx.lifecycle.ViewModel
 import com.antsfamily.domain.repository.NoteRepository
+import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,4 +17,7 @@ class StatsViewModel @Inject constructor(
     val state: StateFlow<StatsUiState> get() = _state
 
 
+    fun onChipClick(type: StatChipType) {
+        //TODO implement logic here
+    }
 }

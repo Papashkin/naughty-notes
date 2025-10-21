@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +29,7 @@ fun ChipList(
 
     LazyRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(Padding.regular),
-        contentPadding = PaddingValues(horizontal = Padding.medium)
+        horizontalArrangement = Arrangement.spacedBy(Padding.small),
     ) {
         items(chips) { chip ->
             ChipItem(
@@ -54,23 +52,24 @@ fun ChipItem(
 ) {
     Button(
         onClick = { if (!isSelected) onClick() },
-        shape = RoundedCornerShape(Padding.regular),
+        contentPadding = PaddingValues(horizontal = Padding.medium),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isSelected) {
                 MaterialTheme.colorScheme.primary
             } else {
-                MaterialTheme.colorScheme.secondary
+                MaterialTheme.colorScheme.outlineVariant
             },
             contentColor = if (isSelected) {
                 MaterialTheme.colorScheme.onPrimary
             } else {
-                MaterialTheme.colorScheme.onSecondary
+                MaterialTheme.colorScheme.outline
             },
         ),
     ) {
         Text(
             text = stringResource(type.toStringId()),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

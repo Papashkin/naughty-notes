@@ -9,6 +9,7 @@ import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCod
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.stats.model.TimeSelectionItem
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 
 @StringRes
@@ -118,5 +119,15 @@ fun StatChipType.toStringId(): Int {
     return when (this) {
         StatChipType.ACTIVITY -> R.string.statistic_screen_chip_activity
         StatChipType.PLACE -> R.string.statistic_screen_chip_place
+    }
+}
+
+@StringRes
+fun TimeSelectionItem.toStringId(): Int {
+    return when (this) {
+        TimeSelectionItem.CURRENT_MONTH -> R.string.statistic_screen_selector_time_current_month
+        TimeSelectionItem.PREV_MONTH -> R.string.statistic_screen_selector_time_previous_month
+        TimeSelectionItem.THIS_YEAR -> R.string.statistic_screen_selector_time_this_year
+        TimeSelectionItem.ALL_TIME -> R.string.statistic_screen_selector_time_all
     }
 }
