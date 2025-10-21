@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -32,9 +33,9 @@ class NoteRepositoryImpl @Inject constructor(
                 }
             }
 
-    override suspend fun getAllNotes(): List<NoteModel> {
+    override suspend fun getAllNotes(): List<NoteModel> = withContext(Dispatchers.IO) {
         val data = dao.getNotes()
-        return data.map { it.toModel() }
+        data.map { it.toModel() }
     }
 
     override suspend fun getNotesByMonthAndYear(month: Int, year: Int): List<NoteModel> {

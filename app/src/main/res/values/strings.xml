@@ -89,6 +89,7 @@
     <string name="settings_screen_settings_pin">PIN code</string>
     <string name="settings_screen_settings_security">Security</string>
     <string name="settings_screen_settings_dark_mode">Dark mode</string>
+    <string name="settings_screen_settings_stats">Statistics</string>
     <string name="settings_screen_pincode_title">Set a new PIN code</string>
     <string name="settings_screen_pincode_change_PIN">Change PIN code</string>
 
@@ -113,5 +114,13 @@
     <string name="change_existing_pin_code_screen_error_wrong_pin">Wrong PIN code</string>
     <string name="change_existing_pin_code_screen_error_pins_not_match">PINs don\'t match</string>
     <string name="change_existing_pin_code_screen_error_unknown">Something\'s happened, please try again</string>
+
+    <string name="statistic_screen_chip_activity">Type of practice</string>
+    <string name="statistic_screen_chip_place">Location</string>
+
+    <string name="statistic_screen_selector_time_current_month">For current month</string>
+    <string name="statistic_screen_selector_time_previous_month">For previous month</string>
+    <string name="statistic_screen_selector_time_last_year">For the last year</string>
+    <string name="statistic_screen_selector_time_all">All</string>
 
 </resources>

@@ -24,6 +24,7 @@ import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
+import com.antsfamily.naughtynotes.presentation.stats.StatsScreen
 import com.antsfamily.naughtynotes.presentation.util.toSnackbarMessageId
 import com.antsfamily.naughtynotes.presentation.verifypincode.PinCodeVerificationScreen
 import kotlinx.coroutines.launch
@@ -138,7 +139,7 @@ fun Navigator() {
                     )
                 }
                 composable<Stats> { _ ->
-                    //TODO implement Stats screen here
+                    StatsScreen()
                 }
             }
         }

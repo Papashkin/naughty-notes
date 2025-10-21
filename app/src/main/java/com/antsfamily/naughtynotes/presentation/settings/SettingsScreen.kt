@@ -51,7 +51,8 @@ fun SettingsScreen(
                 state = uiState,
                 onPinClick = { viewModel.onPinClick(it) },
                 onThemeChanged = { viewModel.onThemeChanged(it) },
-                onCodeChangeClick = { onCodeChangeClick() }
+                onCodeChangeClick = { onCodeChangeClick() },
+                onStatsClick =  { onStatsClick() }
             )
         }
     }

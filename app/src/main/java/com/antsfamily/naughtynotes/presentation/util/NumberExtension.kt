@@ -10,3 +10,6 @@ fun Long.toMinutesString(): String {
         "%1d minutes".format(duration.inWholeMinutes.plus(1))
     }
 }
+
+val Float.degreeToAngle
+    get() = (this * Math.PI / 180f).toFloat()
