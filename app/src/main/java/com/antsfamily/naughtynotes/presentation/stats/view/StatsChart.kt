@@ -29,6 +29,7 @@ import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.stats.model.getTotalSum
 import com.antsfamily.naughtynotes.presentation.util.COLORS_LIST
+import com.antsfamily.naughtynotes.presentation.util.STATS_ANIMATION_DURATION
 import com.antsfamily.naughtynotes.presentation.util.degreeToAngle
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import kotlin.math.cos
@@ -37,7 +38,6 @@ import kotlin.math.sin
 @Composable
 fun StatsChart(
     modifier: Modifier = Modifier,
-    animDuration: Int = 1000,
     items: List<StatsItem>
 ) {
     val textColor = MaterialTheme.colorScheme.onSurface
@@ -49,7 +49,7 @@ fun StatsChart(
         rotationAnim.animateTo(
             targetValue = finalRotationValue,
             animationSpec = tween(
-                durationMillis = animDuration,
+                durationMillis = STATS_ANIMATION_DURATION,
                 delayMillis = 100,
                 easing = LinearEasing
             )

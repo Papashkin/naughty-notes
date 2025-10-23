@@ -35,7 +35,6 @@ class StatsViewModel @Inject constructor(
     private val _state: MutableStateFlow<StatsUiState> = MutableStateFlow(StatsUiState.Loading)
     val state: StateFlow<StatsUiState> get() = _state
 
-
     private var selectorType: StatChipType = CHIP_TYPE_DEFAULT
     private var selectorTimeframe: TimeFrameItem = TIMEFRAME_DEFAULT
 
@@ -66,7 +65,7 @@ class StatsViewModel @Inject constructor(
 
     private fun setStatContent() = viewModelScope.launch {
         val statItems = getStats(selectorType, selectorTimeframe)
-        _state.value = StatsUiState.Content(data = statItems)
+        _state.value = StatsUiState.Content(statItems)
     }
 
     private suspend fun getStats(
@@ -99,7 +98,6 @@ class StatsViewModel @Inject constructor(
             }
             .toList()
             .sortedByDescending { (_, notes) -> notes.size }
-            .take(4)
             .map { (type, notes) -> StatsItem(info = type, value = notes.size) }
 
         statItems

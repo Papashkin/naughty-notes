@@ -22,9 +22,11 @@ import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.stats.view.ChipList
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChart
+import com.antsfamily.naughtynotes.presentation.stats.view.StatsChartLegend
 import com.antsfamily.naughtynotes.presentation.stats.view.TimeDropdownItem
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -57,12 +59,26 @@ fun StatsScreen(
             when (val uiState = state.value) {
                 is StatsUiState.Loading -> FullScreenLoading()
                 is StatsUiState.Error -> FullScreenError(uiState.string)
-                is StatsUiState.Content -> StatsChart(
-                    modifier = Modifier.padding(top = Padding.x_large),
-                    items = uiState.data
+                is StatsUiState.Content -> StatsContentView(
+                    modifier = Modifier.padding(top = Padding.medium),
+                    items = uiState.statItems
                 )
             }
         }
+    }
+}
+
+@Composable
+fun StatsContentView(
+    modifier: Modifier = Modifier,
+    items: List<StatsItem>
+) {
+    Column {
+        StatsChart(
+            modifier = modifier,
+            items = items
+        )
+        StatsChartLegend(items = items)
     }
 }
 
