@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +53,7 @@ fun StatsScreen(
 
         val state = viewModel.state.collectAsState()
 
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxHeight()) {
             when (val uiState = state.value) {
                 is StatsUiState.Loading -> FullScreenLoading()
                 is StatsUiState.Error -> FullScreenError(uiState.string)
