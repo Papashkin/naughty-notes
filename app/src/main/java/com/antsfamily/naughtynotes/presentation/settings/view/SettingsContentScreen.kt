@@ -2,11 +2,15 @@ package com.antsfamily.naughtynotes.presentation.settings.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,6 +43,7 @@ fun SettingsContentScreen(
     onPinClick: (Boolean) -> Unit,
     onThemeChanged: (Boolean) -> Unit,
     onCodeChangeClick: () -> Unit,
+    onStatsClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -136,9 +141,41 @@ fun SettingsContentScreen(
                 }
             )
             HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
+
+            ListItem(
+                modifier = Modifier
+                    .padding(top = Padding.medium)
+                    .clickable {
+                        onStatsClick()
+                    },
+                colors = ListItemDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                headlineContent = {
+                    Text(
+                        text = stringResource(R.string.settings_screen_settings_stats),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                },
+                leadingContent = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_settings_stats),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        contentDescription = null,
+                    )
+                },
+                trailingContent = {
+                    Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null)
+                }
+            )
+            HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
         }
 
-        Column(modifier = Modifier.align(Alignment.BottomCenter)) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+        ) {
             Text(
                 stringResource(R.string.app_name),
                 style = MaterialTheme.typography.labelSmall,
@@ -162,10 +199,11 @@ fun SettingsContentScreen(
 private fun SettingsContentScreenPreview() {
     SettingsContentScreen(
         state = SettingsUiState.Content(
-            true,
-            false,
+            isAppProtected = true,
+            isDarkMode = false,
             "1.0"
         ),
+        {},
         {},
         {},
         {},

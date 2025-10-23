@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
 fun MainContent(
     viewModel: MainViewModel = hiltViewModel()
 ) {
-
     val state = viewModel.state.collectAsStateWithLifecycle()
     AppTheme(state.value) {
         Navigator()

@@ -8,6 +8,8 @@ import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCod
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 
 @StringRes
@@ -109,5 +111,23 @@ fun ChangePinErrorType.toStringId(): Int {
         ChangePinErrorType.WRONG_PIN -> R.string.change_existing_pin_code_screen_error_wrong_pin
         ChangePinErrorType.PINS_NOT_MATCH -> R.string.change_existing_pin_code_screen_error_pins_not_match
         ChangePinErrorType.UNKNOWN -> R.string.change_existing_pin_code_screen_error_unknown
+    }
+}
+
+@StringRes
+fun StatChipType.toStringId(): Int {
+    return when (this) {
+        StatChipType.ACTIVITY -> R.string.statistic_screen_chip_activity
+        StatChipType.PLACE -> R.string.statistic_screen_chip_place
+    }
+}
+
+@StringRes
+fun TimeFrameItem.toStringId(): Int {
+    return when (this) {
+        TimeFrameItem.CURRENT_MONTH -> R.string.statistic_screen_selector_time_current_month
+        TimeFrameItem.PREV_MONTH -> R.string.statistic_screen_selector_time_previous_month
+        TimeFrameItem.THIS_YEAR -> R.string.statistic_screen_selector_time_this_year
+        TimeFrameItem.ALL_TIME -> R.string.statistic_screen_selector_time_all
     }
 }
