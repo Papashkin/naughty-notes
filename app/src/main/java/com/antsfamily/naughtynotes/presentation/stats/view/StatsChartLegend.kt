@@ -46,7 +46,7 @@ fun StatsChartLegend(
         delay(STATS_ANIMATION_DURATION.toLong())
         items.indices.forEach { i ->
             visibleItemCount = i + 1
-            delay(200)
+            delay(100)
         }
     }
 
@@ -54,9 +54,8 @@ fun StatsChartLegend(
         itemsIndexed(items) { index, item ->
             AnimatedVisibility(
                 visible = index < visibleItemCount,
-                enter = fadeIn(animationSpec = tween(300)) + slideInVertically(
-                    initialOffsetY = { it / 2 }
-                ),
+                enter = fadeIn(animationSpec = tween(300))
+                        + slideInVertically(initialOffsetY = { it / 2 }),
                 exit = fadeOut()
             ) {
                 ListItem(
