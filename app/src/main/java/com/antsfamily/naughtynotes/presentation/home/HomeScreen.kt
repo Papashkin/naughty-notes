@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -25,7 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +45,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToNoteForm: (Long) -> Unit,
     navigateToAllNotes: (Long) -> Unit,
-    navigateToSettings: () -> Unit
+    navigateToProfile: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -59,8 +59,8 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.navigateToSettingsEvent.collect {
-            navigateToSettings()
+        viewModel.navigateToProfileEvent.collect {
+            navigateToProfile()
         }
     }
 
@@ -73,7 +73,7 @@ fun HomeScreen(
             onMonthChanged = { viewModel.onMonthChanged(it) },
             onTodayButtonClick = { viewModel.onTodayButtonClick() },
             onDayClick = { viewModel.onDayClick(it) },
-            onSettingsClick = { viewModel.onSettingsClick() }
+            onProfileClick = { viewModel.onProfileClick() }
         )
     }
 }
@@ -84,7 +84,7 @@ fun PortraitHomeContent(
     onMonthChanged: (YearMonth) -> Unit,
     onTodayButtonClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
-    onSettingsClick: () -> Unit,
+    onProfileClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -147,7 +147,7 @@ fun PortraitHomeContent(
                 Card(
                     modifier = Modifier
                         .weight(0.4f)
-                        .clickable { onSettingsClick() },
+                        .clickable { onProfileClick() },
                     shape = RoundedCornerShape(Padding.medium),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -161,12 +161,13 @@ fun PortraitHomeContent(
                     ) {
                         Icon(
                             modifier = Modifier.size(32.dp),
-                            imageVector = Icons.Rounded.Settings,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
                             contentDescription = null
                         )
                         Text(
-                            style = MaterialTheme.typography.labelSmall,
-                            text = stringResource(R.string.home_screen_banner_settings)
+                            modifier = Modifier.padding(top = Padding.x_small),
+                            style = MaterialTheme.typography.labelMedium,
+                            text = stringResource(R.string.home_screen_banner_profile)
                         )
                     }
                 }
