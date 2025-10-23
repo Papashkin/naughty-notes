@@ -1,15 +1,15 @@
 package com.antsfamily.naughtynotes.presentation.stats.model
 
-import androidx.compose.ui.graphics.Color
+import com.antsfamily.domain.model.StatInfo
 
 data class StatsItem(
-    val color: Color,
-    val data: Pair<String, Int>
+    val info: StatInfo,
+    val value: Int,
 ) {
 
     fun percent(totalSum: Float): Float {
-        return (360 * data.second / totalSum)
+        return (360 * value / totalSum)
     }
 }
 
-fun List<StatsItem>.getTotalSum() = this.sumOf { it.data.second }.toFloat()
+fun List<StatsItem>.getTotalSum() = this.sumOf { it.value }.toFloat()

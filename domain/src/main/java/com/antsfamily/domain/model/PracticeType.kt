@@ -1,6 +1,6 @@
 package com.antsfamily.domain.model
 
-enum class PracticeType {
+enum class PracticeType : StatInfo {
     UNKNOWN,
     VAGINAL,
     ORAL,

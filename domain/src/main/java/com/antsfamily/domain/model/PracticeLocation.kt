@@ -1,7 +1,7 @@
 package com.antsfamily.domain.model
 
 
-enum class PracticeLocation {
+enum class PracticeLocation: StatInfo {
     UNKNOWN,
     BEDROOM,
     LIVING_ROOM,

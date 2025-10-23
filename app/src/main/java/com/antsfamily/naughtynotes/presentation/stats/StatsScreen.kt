@@ -10,16 +10,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
+import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
-import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
+import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.stats.view.ChipList
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChart
 import com.antsfamily.naughtynotes.presentation.stats.view.TimeDropdownItem
@@ -42,24 +44,34 @@ fun StatsScreen(
             onNavigationBack = { onNavigateBack() }
         )
 
-        SubHeader(Modifier.padding(Padding.large))
-
-        StatsChart(
-            modifier = Modifier.padding(top = Padding.x_large),
-            //TODO implement proper items here
-            items = listOf(
-                StatsItem(Color.Red, "A" to 35),
-                StatsItem(Color.Blue, "B" to 84),
-                StatsItem(Color.Green, "C" to 20),
-                StatsItem(Color.Yellow, "D" to 73),
-            )
+        SubHeader(
+            modifier = Modifier.padding(Padding.large),
+            onChipClick = { viewModel.onChipChange(it) },
+            onTimeframeSelect = { viewModel.onTimeframeChange(it) }
         )
+
+        val state = viewModel.state.collectAsState()
+
+        Column(modifier = Modifier.fillMaxWidth()) {
+            when (val uiState = state.value) {
+                is StatsUiState.Loading -> FullScreenLoading()
+                is StatsUiState.Error -> FullScreenError(uiState.string)
+                is StatsUiState.Content -> StatsChart(
+                    modifier = Modifier.padding(top = Padding.x_large),
+                    items = uiState.data
+                )
+            }
+        }
     }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SubHeader(modifier: Modifier = Modifier) {
+fun SubHeader(
+    modifier: Modifier = Modifier,
+    onChipClick: (StatChipType) -> Unit = {},
+    onTimeframeSelect: (TimeFrameItem) -> Unit = {}
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start
@@ -71,7 +83,9 @@ fun SubHeader(modifier: Modifier = Modifier) {
         ChipList(
             chips = StatChipType.entries,
             modifier = Modifier.padding(vertical = Padding.small)
-        ) {}
+        ) {
+            onChipClick(it)
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -82,7 +96,9 @@ fun SubHeader(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium
             )
             Box {
-                TimeDropdownItem { }
+                TimeDropdownItem {
+                    onTimeframeSelect(it)
+                }
             }
         }
     }

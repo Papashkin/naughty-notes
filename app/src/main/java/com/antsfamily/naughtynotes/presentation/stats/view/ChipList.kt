@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.antsfamily.naughtynotes.presentation.stats.model.CHIP_TYPE_DEFAULT
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
@@ -25,7 +26,7 @@ fun ChipList(
     modifier: Modifier = Modifier,
     onChipClick: (StatChipType) -> Unit = {}
 ) {
-    val (selectedTypeId, setSelectedTypeId) = remember { mutableStateOf(chips.first()) }
+    val (selectedTypeId, setSelectedTypeId) = remember { mutableStateOf(CHIP_TYPE_DEFAULT) }
 
     LazyRow(
         modifier = modifier,

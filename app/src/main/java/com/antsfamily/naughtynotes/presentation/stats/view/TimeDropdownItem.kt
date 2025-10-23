@@ -25,7 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.antsfamily.naughtynotes.presentation.stats.model.TimeSelectionItem
+import com.antsfamily.naughtynotes.presentation.stats.model.TIMEFRAME_DEFAULT
+import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -33,9 +34,9 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 @Composable
 fun TimeDropdownItem(
     modifier: Modifier = Modifier,
-    onSelect: (TimeSelectionItem) -> Unit
+    onTimeframeChange: (TimeFrameItem) -> Unit
 ) {
-    val (selectedItem, setSelectedItem) = remember { mutableStateOf(TimeSelectionItem.CURRENT_MONTH) }
+    val (selectedItem, setSelectedItem) = remember { mutableStateOf(TIMEFRAME_DEFAULT) }
     var isExpanded by remember { mutableStateOf(false) }
 
     Row(
@@ -60,7 +61,7 @@ fun TimeDropdownItem(
         expanded = isExpanded,
         onDismissRequest = { isExpanded = false }
     ) {
-        TimeSelectionItem.entries.forEach { item ->
+        TimeFrameItem.entries.forEach { item ->
             DropdownMenuItem(
                 text = {
                     Text(stringResource(item.toStringId()))
@@ -74,7 +75,7 @@ fun TimeDropdownItem(
                 },
                 onClick = {
                     setSelectedItem(item)
-                    onSelect(item)
+                    onTimeframeChange(item)
                     isExpanded = false
                 }
             )

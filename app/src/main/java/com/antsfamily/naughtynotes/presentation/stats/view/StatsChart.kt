@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.stats.model.getTotalSum
 import com.antsfamily.naughtynotes.presentation.util.degreeToAngle
@@ -68,7 +69,7 @@ fun StatsChart(
             val textMeasureResults = remember(items) {
                 items.map {
                     textMeasurer.measure(
-                        text = "${it.data.second}",
+                        text = "${it.value}",
                         style = TextStyle(fontSize = 18.sp)
                     )
                 }
@@ -91,7 +92,7 @@ fun StatsChart(
 
                     if (startAngle <= currentSweepAngle) {
                         drawArc(
-                            color = item.color,
+                            color = COLORS_LIST[index],
                             startAngle = startAngle,
                             sweepAngle = sweepAngle.coerceAtMost(currentSweepAngle - startAngle),
                             useCenter = false,
@@ -127,6 +128,29 @@ fun StatsChart(
     }
 }
 
+private val COLORS_LIST = listOf(
+    Color(0xFF9E9E9E),  // neutral gray
+    Color(0xFF8E7CC3),  // lavender purple
+    Color(0xFFFFB74D),  // warm amber
+    Color(0xFF4FC3F7),  // light aqua blue
+    Color(0xFFFF8A65),  // coral orange
+    Color(0xFFA1887F),  // taupe brown
+    Color(0xFF7986CB),  // periwinkle blue
+    Color(0xFFDCE775),  // lime yellow
+    Color(0xFFBA68C8),  // violet
+    Color(0xFFF06292),  // soft pink
+    Color(0xFF4DB6AC),  // teal
+    Color(0xFFFFCC80),  // sand orange
+    Color(0xFF81C784),  // green
+    Color(0xFFAED581),  // light green
+    Color(0xFF64B5F6),  // soft blue
+    Color(0xFF90A4AE),  // gray-blue
+    Color(0xFFFFB300),  // warm gold
+    Color(0xFF9575CD),  // light violet
+    Color(0xFF4DD0E1),  // turquoise
+    Color(0xFF7986CB),  // blue-gray
+    Color(0xFFE57373),  // soft red
+)
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -134,10 +158,9 @@ fun StatsChart(
 private fun StatsChartPreview() {
     StatsChart(
         items = listOf(
-            StatsItem(Color.Red, "A" to 35),
-            StatsItem(Color.Blue, "B" to 84),
-            StatsItem(Color.Green, "C" to 11),
-            StatsItem(Color.Yellow, "D" to 63),
+            StatsItem(PracticeType.ANAL, 35),
+            StatsItem(PracticeType.ORAL, 84),
+            StatsItem(PracticeType.TRIBADISM, 63),
         )
     )
 }
