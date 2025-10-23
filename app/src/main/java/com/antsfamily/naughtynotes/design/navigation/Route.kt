@@ -17,6 +17,9 @@ data class NoteForm(val dateEpoch: Long, val noteId: Int?): Route()
 data class AllNotes(val dateEpoch: Long): Route()
 
 @Serializable
+data object Profile: Route()
+
+@Serializable
 data object Settings: Route()
 
 @Serializable

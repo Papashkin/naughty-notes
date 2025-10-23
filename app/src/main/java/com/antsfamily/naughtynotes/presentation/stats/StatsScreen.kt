@@ -38,8 +38,8 @@ fun StatsScreen(
 ) {
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surface)
-            .fillMaxWidth(),
+            .fillMaxHeight()
+            .background(color = MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.Center
     ) {
         TopBar(

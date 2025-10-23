@@ -22,6 +22,7 @@ import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
 import com.antsfamily.naughtynotes.presentation.changepincode.ChangeExistingPinCodeScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
+import com.antsfamily.naughtynotes.presentation.profile.ProfileScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import com.antsfamily.naughtynotes.presentation.stats.StatsScreen
@@ -83,7 +84,7 @@ fun Navigator() {
                     HomeScreen(
                         navigateToNoteForm = { navController.navigate(NoteForm(it, null)) },
                         navigateToAllNotes = { navController.navigate(AllNotes(it)) },
-                        navigateToSettings = { navController.navigate(Settings) }
+                        navigateToProfile = { navController.navigate(Profile) }
                     )
                 }
                 composable<NoteForm> { entry ->
@@ -117,11 +118,17 @@ fun Navigator() {
                         }
                     )
                 }
+                composable<Profile> {
+                    ProfileScreen(
+                        navigateBack = { navController.popBackStack() },
+                        onSettingsClick = { navController.navigate(Settings) },
+                        onStatisticClick = { navController.navigate(Stats) },
+                    )
+                }
                 composable<Settings> {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
                         onCodeChangeClick = { navController.navigate(ChangeExistingPinCode) },
-                        onStatsClick = { navController.navigate(Stats) },
                     )
                 }
                 composable<ChangeExistingPinCode> {

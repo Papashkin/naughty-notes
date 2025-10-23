@@ -37,9 +37,9 @@ class HomeViewModel @Inject constructor(
     val navigateToAllNotesEvent: SharedFlow<Long>
         get() = _navigateToAllNotesEvent
 
-    private val _navigateToSettingsEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val navigateToSettingsEvent: SharedFlow<Unit>
-        get() = _navigateToSettingsEvent
+    private val _navigateToProfileEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val navigateToProfileEvent: SharedFlow<Unit>
+        get() = _navigateToProfileEvent
 
     private var notes: List<NoteModel> = mutableListOf()
     private val currentMonth: YearMonth = YearMonth.now()
@@ -114,8 +114,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSettingsClick() = viewModelScope.launch {
-        _navigateToSettingsEvent.emit(Unit)
+    fun onProfileClick() = viewModelScope.launch {
+        _navigateToProfileEvent.emit(Unit)
     }
 
     private fun List<NoteModel>.getDatesForMonth(month: YearMonth): List<LocalDate> =

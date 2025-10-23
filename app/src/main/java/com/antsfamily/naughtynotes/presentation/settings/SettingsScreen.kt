@@ -23,7 +23,6 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
     onCodeChangeClick: () -> Unit,
-    onStatsClick: () -> Unit
 ) {
     val (isPinCodeDialogVisible, setIsPinCodeDialogVisible) = remember {
         mutableStateOf(false)
@@ -42,7 +41,7 @@ fun SettingsScreen(
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         TopBar(
-            title = stringResource(R.string.settings_screen_settings),
+            title = stringResource(R.string.settings_screen_title),
             onNavigationBack = { onNavigateBack() }
         )
         when (val uiState = state.value) {
@@ -52,7 +51,6 @@ fun SettingsScreen(
                 onPinClick = { viewModel.onPinClick(it) },
                 onThemeChanged = { viewModel.onThemeChanged(it) },
                 onCodeChangeClick = { onCodeChangeClick() },
-                onStatsClick =  { onStatsClick() }
             )
         }
     }
@@ -68,5 +66,5 @@ fun SettingsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(onNavigateBack = {}, onCodeChangeClick = {}, onStatsClick = {})
+    SettingsScreen(onNavigateBack = {}, onCodeChangeClick = {})
 }

@@ -1,7 +1,7 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -29,7 +29,7 @@ fun ChipList(
     val (selectedTypeId, setSelectedTypeId) = remember { mutableStateOf(CHIP_TYPE_DEFAULT) }
 
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Padding.small),
     ) {
         items(chips) { chip ->
@@ -53,7 +53,6 @@ fun ChipItem(
 ) {
     Button(
         onClick = { if (!isSelected) onClick() },
-        contentPadding = PaddingValues(horizontal = Padding.medium),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isSelected) {
                 MaterialTheme.colorScheme.primary
