@@ -27,6 +27,7 @@ import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import com.antsfamily.naughtynotes.presentation.stats.StatsScreen
 import com.antsfamily.naughtynotes.presentation.util.toSnackbarMessageId
+import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.presentation.verifypincode.PinCodeVerificationScreen
 import kotlinx.coroutines.launch
 
@@ -61,6 +62,15 @@ fun Navigator() {
                                             R.string.splash_screen_too_many_incorrect_attempts,
                                             it
                                         ),
+                                        duration = SnackbarDuration.Short
+                                    )
+                            }
+                        },
+                        showErrorSnackbar = {
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = context.getString(it.toStringId()),
                                         duration = SnackbarDuration.Short
                                     )
                             }
@@ -101,6 +111,15 @@ fun Navigator() {
                                 snackbarHostState
                                     .showSnackbar(
                                         message = context.getString(it.toSnackbarMessageId()),
+                                        duration = SnackbarDuration.Short
+                                    )
+                            }
+                        },
+                        onErrorSnackbarShow = {
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = context.getString(it.toStringId()),
                                         duration = SnackbarDuration.Short
                                     )
                             }

@@ -1,5 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.settings
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetSettingsUseCase
@@ -7,6 +8,7 @@ import com.antsfamily.domain.RemovePinCodeUseCase
 import com.antsfamily.domain.SetDarkThemeUseCase
 import com.antsfamily.domain.model.SettingsModel
 import com.antsfamily.domain.model.UseCaseResult
+import com.antsfamily.domain.model.toType
 import com.antsfamily.naughtynotes.ui.theme.AppThemeSwitcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -55,7 +57,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun handleGetSettingsErrorResult(e: Exception) {
-        //TODO implement error handling
+        _state.value = SettingsUiState.Error(e.toType())
     }
 
     fun onThemeChanged(isDarkMode: Boolean) = viewModelScope.launch {
@@ -97,8 +99,7 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            //TODO implement error handling mechanism
+            Log.e(this::class.simpleName, e.message ?: e.toString())
         }
-
     }
 }

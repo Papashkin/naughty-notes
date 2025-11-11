@@ -1,10 +1,13 @@
 package com.antsfamily.naughtynotes.presentation.splash
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.GetIsPinSetUseCase
 import com.antsfamily.domain.VerifyAppLockedUseCase
+import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.UseCaseResult
+import com.antsfamily.domain.model.toType
 import com.antsfamily.naughtynotes.presentation.util.toMinutesString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -29,6 +32,9 @@ class SplashViewModel @Inject constructor(
     private val _showAppLockSnackbarFlow = MutableSharedFlow<String>()
     val showAppLockSnackbarFlow: SharedFlow<String> = _showAppLockSnackbarFlow.asSharedFlow()
 
+    private val _showErrorSnackbarFlow = MutableSharedFlow<ErrorType>()
+    val showErrorSnackbarFlow: SharedFlow<ErrorType> = _showErrorSnackbarFlow.asSharedFlow()
+
     init {
         verifyAppLocked()
     }
@@ -51,8 +57,8 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private fun handleVerifyAppLockedErrorResult(e: Exception) {
-        //TODO implement error handling if it's needed
+    private suspend fun handleVerifyAppLockedErrorResult(e: Exception) {
+        _showErrorSnackbarFlow.emit(e.toType())
     }
 
     private suspend fun handleAppIsLocked(remainTime: Long) {
@@ -76,6 +82,6 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun handleErrorPinResult(e: Exception) {
-        //TODO implement error handling
+        Log.e(this::class.simpleName, e.message ?: e.toString())
     }
 }

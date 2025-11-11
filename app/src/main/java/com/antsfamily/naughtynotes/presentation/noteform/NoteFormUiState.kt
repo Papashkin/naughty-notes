@@ -1,5 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.noteform
 
+import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
@@ -8,6 +9,7 @@ import java.time.format.DateTimeFormatter
 
 sealed class NoteFormUiState {
     data object Loading : NoteFormUiState()
+    data class Error(val type: ErrorType) : NoteFormUiState()
     data class Content(
         val formType: NoteFormType,
         val date: LocalDate,

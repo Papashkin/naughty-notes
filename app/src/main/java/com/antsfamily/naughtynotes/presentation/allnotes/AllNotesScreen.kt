@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCardExtended
+import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.formatToString
@@ -94,7 +95,8 @@ fun AllNotesScreen(
         when (val uiState = state.value) {
             is AllNotesUiState.Loading -> FullScreenLoading()
             is AllNotesUiState.EmptyContent -> EmptyNotesList()
-            is AllNotesUiState.Error -> { /* TODO implement error state */
+            is AllNotesUiState.Error -> FullScreenError(uiState.type, true) {
+                viewModel.onRetryClick()
             }
 
             is AllNotesUiState.Content -> LazyColumn(

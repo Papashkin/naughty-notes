@@ -8,6 +8,7 @@ import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.model.UseCaseResult
+import com.antsfamily.domain.model.toType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.util.CREATE_NOTE_NOTE_LENGTH_MAX
 import dagger.assisted.Assisted
@@ -86,7 +87,7 @@ class NoteFormViewModel @AssistedInject constructor(
     }
 
     private fun handleErrorPinResult(e: Exception) {
-        //TODO implement error handling
+        _state.value = NoteFormUiState.Error(e.toType())
     }
 
     fun setPleasureRate(rate: Int) {
@@ -198,10 +199,7 @@ class NoteFormViewModel @AssistedInject constructor(
             )
 
             when (result) {
-                is UseCaseResult.Error -> {
-                    //TODO implement error handling mechanism
-                }
-
+                is UseCaseResult.Error -> handleSaveNoteErrorResult(result.exception)
                 is UseCaseResult.Success -> handleSaveNoteSuccessResult(state.formType)
             }
         }
@@ -219,6 +217,10 @@ class NoteFormViewModel @AssistedInject constructor(
                 state.copy(isSaveButtonLoadingVisible = false)
             }
         }
+    }
+
+    private fun handleSaveNoteErrorResult(e: Exception) {
+        _state.value = NoteFormUiState.Error(e.toType())
     }
 
     private fun setCreateNoteDefaultState() {

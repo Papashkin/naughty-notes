@@ -7,6 +7,7 @@ import com.antsfamily.domain.DeleteNoteUseCase
 import com.antsfamily.domain.GetNotesByDateUseCase
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.UseCaseResult
+import com.antsfamily.domain.model.toType
 import com.antsfamily.domain.repository.NoteRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -77,8 +78,7 @@ class AllNotesViewModel @AssistedInject constructor(
     }
 
     private fun handleNotesByDateErrorResult(e: Exception) {
-        //TODO fix it later with error Type and it's handler
-        _state.value = AllNotesUiState.Error(e.message.orEmpty())
+        _state.value = AllNotesUiState.Error(e.toType())
     }
 
     private suspend fun subscribeToNotes(date: LocalDate) {
@@ -140,5 +140,10 @@ class AllNotesViewModel @AssistedInject constructor(
 
     fun onAddNoteClick() = viewModelScope.launch {
         _navigationToNoteFormFlow.emit(null)
+    }
+
+    fun onRetryClick() {
+        _state.value = AllNotesUiState.Loading
+        getNotes()
     }
 }

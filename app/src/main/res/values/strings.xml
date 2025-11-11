@@ -125,7 +125,10 @@
     <string name="statistic_screen_selector_time_this_year">this year</string>
     <string name="statistic_screen_selector_time_all">all the time</string>
 
-    <string name="error_screen_message_default">Something went wrong</string>
+    <string name="error_screen_message_network">There is a problem on server side.\nPlease try later</string>
+    <string name="error_screen_message_database">Something\'s happened with data.\nPlease try later</string>
+    <string name="error_screen_message_common">Ups, looks like we crashed something</string>
+    <string name="error_screen_message_unknown">Something went wrong</string>
 
     <string name="profile_screen_title">Profile</string>
 </resources>

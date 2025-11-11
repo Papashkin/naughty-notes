@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
@@ -42,7 +43,8 @@ fun NoteFormScreen(
         it.create(dateEpoch, noteId)
     },
     onNavigateBack: () -> Unit,
-    onSnackbarShow: (NoteFormType) -> Unit
+    onSnackbarShow: (NoteFormType) -> Unit,
+    onErrorSnackbarShow: (ErrorType) -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.navigateBackEvent.collect {
@@ -59,6 +61,7 @@ fun NoteFormScreen(
 
     when (val uiState = state.value) {
         is NoteFormUiState.Loading -> FullScreenLoading()
+        is NoteFormUiState.Error -> onErrorSnackbarShow(uiState.type)
         is NoteFormUiState.Content -> ContentView(
             uiState,
             setPracticeType = { viewModel.setPracticeType(it) },
