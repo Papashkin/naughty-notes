@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.pincode.PinCodeBottomSheetDialog
@@ -46,6 +47,7 @@ fun SettingsScreen(
         )
         when (val uiState = state.value) {
             is SettingsUiState.Loading -> FullScreenLoading()
+            is SettingsUiState.Error -> FullScreenError(uiState.type)
             is SettingsUiState.Content -> SettingsContentScreen(
                 state = uiState,
                 onPinClick = { viewModel.onPinClick(it) },

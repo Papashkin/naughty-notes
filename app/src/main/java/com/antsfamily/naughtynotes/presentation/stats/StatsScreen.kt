@@ -58,7 +58,7 @@ fun StatsScreen(
         Column(modifier = Modifier.fillMaxHeight()) {
             when (val uiState = state.value) {
                 is StatsUiState.Loading -> FullScreenLoading()
-                is StatsUiState.Error -> FullScreenError(uiState.string)
+                is StatsUiState.Error -> FullScreenError(uiState.type)
                 is StatsUiState.Content -> StatsContentView(
                     modifier = Modifier.padding(top = Padding.medium),
                     items = uiState.statItems

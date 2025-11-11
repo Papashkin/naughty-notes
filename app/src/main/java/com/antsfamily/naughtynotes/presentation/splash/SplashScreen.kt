@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.naughtynotes.R
 
 @Composable
@@ -19,6 +20,7 @@ fun SplashScreen(
     navigateToHome: () -> Unit,
     navigateToCheckPin: () -> Unit,
     showLockSnackbar: (String) -> Unit,
+    showErrorSnackbar: (ErrorType) -> Unit,
 ) {
 
     LaunchedEffect(Unit) {
@@ -34,6 +36,11 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         viewModel.showAppLockSnackbarFlow.collect {
             showLockSnackbar(it)
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.showErrorSnackbarFlow.collect {
+            showErrorSnackbar(it)
         }
     }
 

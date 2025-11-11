@@ -1,6 +1,7 @@
 package com.antsfamily.naughtynotes.presentation.util
 
 import androidx.annotation.StringRes
+import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
@@ -129,5 +130,15 @@ fun TimeFrameItem.toStringId(): Int {
         TimeFrameItem.PREV_MONTH -> R.string.statistic_screen_selector_time_previous_month
         TimeFrameItem.THIS_YEAR -> R.string.statistic_screen_selector_time_this_year
         TimeFrameItem.ALL_TIME -> R.string.statistic_screen_selector_time_all
+    }
+}
+
+@StringRes
+fun ErrorType.toStringId(): Int {
+    return when (this) {
+        ErrorType.NETWORK -> R.string.error_screen_message_network
+        ErrorType.DATABASE -> R.string.error_screen_message_database
+        ErrorType.COMMON -> R.string.error_screen_message_common
+        else -> R.string.error_screen_message_unknown
     }
 }

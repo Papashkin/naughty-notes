@@ -3,6 +3,7 @@ package com.antsfamily.naughtynotes.presentation.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.domain.model.toType
 import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.naughtynotes.presentation.stats.model.CHIP_TYPE_DEFAULT
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
@@ -54,8 +55,7 @@ class StatsViewModel @Inject constructor(
     }
 
     private fun handleAllNotesErrorResult(e: Exception) {
-        //TODO handle error properly
-        _state.value = StatsUiState.Error(e.toString())
+        _state.value = StatsUiState.Error(e.toType())
     }
 
     private fun handleAllNotesSuccessResult(notes: List<NoteModel>) {
