@@ -81,7 +81,9 @@ class ChangeExistingPinCodeViewModel @Inject constructor(
                     it.copy(
                         code = "",
                         step = ChangePinCodeStep.REPEAT_NEW_CODE,
-                        proceedButtonState = ChangePinCodeButtonState.SAVE
+                        proceedButtonState = ChangePinCodeButtonState.SAVE,
+                        isProceedButtonLoadingVisible = false,
+                        isProceedButtonEnabled = false
                     )
                 }
             }
@@ -109,7 +111,8 @@ class ChangeExistingPinCodeViewModel @Inject constructor(
                 it.copy(
                     code = "",
                     step = ChangePinCodeStep.NEW_CODE,
-                    isProceedButtonLoadingVisible = false
+                    isProceedButtonLoadingVisible = false,
+                    isProceedButtonEnabled = false
                 )
             }
         } else {
