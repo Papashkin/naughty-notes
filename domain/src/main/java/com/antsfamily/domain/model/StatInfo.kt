@@ -1,3 +1,5 @@
 package com.antsfamily.domain.model
 
-interface StatInfo
+interface StatInfo {
+    val isNotUnknown: Boolean
+}

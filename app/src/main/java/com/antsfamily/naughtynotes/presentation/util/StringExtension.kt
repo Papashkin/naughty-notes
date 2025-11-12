@@ -26,6 +26,13 @@ fun PracticeType.toStringId(): Int {
         PracticeType.UNKNOWN -> R.string.practice_type_unknown
     }
 }
+@StringRes
+fun PracticeType.toDropdownStringId(): Int {
+    return when (this) {
+        PracticeType.UNKNOWN -> R.string.note_form_screen_practice_type_dropdown_label
+        else  -> this.toStringId()
+    }
+}
 
 @StringRes
 fun PracticeType.toDescriptionStringId(): Int {
@@ -65,6 +72,14 @@ fun PracticeLocation.toStringId(): Int {
         PracticeLocation.TRAIN -> R.string.practice_location_train
         PracticeLocation.OTHER -> R.string.practice_location_other
         PracticeLocation.UNKNOWN -> R.string.practice_location_unknown
+    }
+}
+
+@StringRes
+fun PracticeLocation.toDropdownStringId(): Int {
+    return when (this) {
+        PracticeLocation.UNKNOWN -> R.string.note_form_screen_practice_location_dropdown_label
+        else  -> this.toStringId()
     }
 }
 

@@ -12,4 +12,5 @@ object Padding {
     val x_large = 24.dp
     val xx_large = 32.dp
     val huge = 48.dp
+    val gigantic = 54.dp
 }
