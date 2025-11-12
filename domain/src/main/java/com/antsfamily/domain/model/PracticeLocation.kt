@@ -24,4 +24,7 @@ enum class PracticeLocation: StatInfo {
     TRAIN,
     OTHER,
     ;
+
+    override val isNotUnknown: Boolean
+        get() = this != UNKNOWN
 }

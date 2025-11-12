@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -132,13 +133,14 @@ fun ContentView(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = Padding.huge),
+                    .padding(start = Padding.gigantic),
                 text = stringResource(
                     R.string.note_form_screen_subtitle,
                     state.date.formatToString()
                 ),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodySmall
             )
+            HorizontalDivider(thickness = Padding.medium, color = MaterialTheme.colorScheme.surface)
             NoteForm(
                 state = state,
                 keyboardController = keyboardController,

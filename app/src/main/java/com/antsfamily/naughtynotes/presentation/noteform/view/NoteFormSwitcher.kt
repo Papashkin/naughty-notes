@@ -2,11 +2,9 @@ package com.antsfamily.naughtynotes.presentation.noteform.view
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -17,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
@@ -28,11 +28,6 @@ fun NoteFormSwitcher(
 ) {
     Row(
         modifier = Modifier
-            .padding(top = Padding.small)
-            .background(
-                color = MaterialTheme.colorScheme.inverseOnSurface,
-                shape = RoundedCornerShape(Padding.small)
-            )
             .padding(Padding.small),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -50,5 +45,16 @@ fun NoteFormSwitcher(
             checked = isChecked,
             onCheckedChange = { setNewValue(it) }
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NoteFormSwitcherPreview() {
+    NoteFormSwitcher(
+        titleId = R.string.note_form_screen_protection_label,
+        iconId = R.drawable.ic_protection,
+        isChecked = true) {
+
     }
 }

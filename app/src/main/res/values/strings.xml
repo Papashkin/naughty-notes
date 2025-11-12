@@ -56,9 +56,9 @@
     <string name="note_form_screen_rate_bar_pleasure_label">Rate your pleasure</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>
     <string name="note_form_screen_subtitle">for %1$s</string>
-    <string name="note_form_screen_protection_switch_label">Protection?</string>
-    <string name="note_form_screen_orgasm_switch_label">Orgasm?</string>
-    <string name="note_form_screen_partner_orgasm_switch_label">Partner(s) orgasm?</string>
+    <string name="note_form_screen_protection_label">Protection</string>
+    <string name="note_form_screen_your_orgasm_label">Your\'s orgasm</string>
+    <string name="note_form_screen_partner_orgasm_label">Partner(s) orgasm</string>
     <string name="note_form_screen_button_save">Save</string>
 
     <string name="home_screen_title">Journal</string>

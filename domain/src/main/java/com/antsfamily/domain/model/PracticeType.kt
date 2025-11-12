@@ -13,4 +13,7 @@ enum class PracticeType : StatInfo {
 
     val isProtectionNeeded: Boolean
         get() = this != MASTURBATION
+
+    override val isNotUnknown: Boolean
+        get() = this != UNKNOWN
 }
