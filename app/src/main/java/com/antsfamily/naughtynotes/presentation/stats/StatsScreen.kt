@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
-import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem

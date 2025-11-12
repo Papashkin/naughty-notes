@@ -6,7 +6,6 @@ import com.antsfamily.domain.AddNoteUseCase
 import com.antsfamily.domain.DeleteNoteUseCase
 import com.antsfamily.domain.GetNotesByDateUseCase
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.model.toType
 import com.antsfamily.domain.repository.NoteRepository
 import dagger.assisted.Assisted
@@ -59,12 +58,12 @@ class AllNotesViewModel @AssistedInject constructor(
     }
 
     private fun getNotes() = viewModelScope.launch {
-        val date = LocalDate.ofEpochDay(epoch)
-        val result = getNotesByDateUseCase(date)
-
-        when (result) {
-            is UseCaseResult.Success -> handleNotesByDateSuccessResult(result.data, date)
-            is UseCaseResult.Error -> handleNotesByDateErrorResult(result.exception)
+        try {
+            val date = LocalDate.ofEpochDay(epoch)
+            val notes = getNotesByDateUseCase(date)
+            handleNotesByDateSuccessResult(notes, date)
+        } catch (e: Exception) {
+            handleNotesByDateErrorResult(e)
         }
     }
 

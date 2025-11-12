@@ -60,8 +60,6 @@
     <string name="note_form_screen_orgasm_switch_label">Orgasm?</string>
     <string name="note_form_screen_partner_orgasm_switch_label">Partner(s) orgasm?</string>
     <string name="note_form_screen_button_save">Save</string>
-    <string name="note_form_screen_create_snackbar_success">New note was successfully saved</string>
-    <string name="note_form_screen_edit_snackbar_success">Existed note was successfully updated</string>
 
     <string name="home_screen_title">Journal</string>
     <string name="home_screen_subtitle">Psst! Want to add a naughty note? Just click on a date 😉</string>

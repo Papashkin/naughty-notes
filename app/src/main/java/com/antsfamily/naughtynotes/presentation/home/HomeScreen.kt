@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.home.view.CalendarView
-import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.home.view.InfoCard
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate

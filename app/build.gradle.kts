@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.calendar.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.lottie)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
