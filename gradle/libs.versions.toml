@@ -54,6 +54,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 crypto = { group = "androidx.security", name = "security-crypto", version.ref = "crypto"}
 lottie = { group = "com.github.LottieFiles", name = "dotlottie-android", version.ref = "lottie" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

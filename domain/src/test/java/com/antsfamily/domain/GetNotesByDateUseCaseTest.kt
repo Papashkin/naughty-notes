@@ -3,7 +3,6 @@ package com.antsfamily.domain
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.repository.NoteRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -13,6 +12,7 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 import java.time.LocalDate
 import java.time.Month
+import kotlin.test.assertFailsWith
 
 @RunWith(MockitoJUnitRunner::class)
 class GetNotesByDateUseCaseTest {
@@ -34,7 +34,7 @@ class GetNotesByDateUseCaseTest {
             .thenReturn(USE_CASE_SUCCESS_NOTES)
         val result = getNotesByDateUseCase.invoke(date)
 
-        assert(result is UseCaseResult.Success)
+        assert(result.size == 2)
     }
 
     @Test
@@ -44,9 +44,9 @@ class GetNotesByDateUseCaseTest {
             .`when`(repository.getNotesByDate(date))
             .thenThrow(RuntimeException("error occurred"))
 
-        val result = getNotesByDateUseCase.invoke(date)
-
-        assert(result is UseCaseResult.Error)
+        assertFailsWith<RuntimeException> {
+            getNotesByDateUseCase.invoke(date)
+        }
     }
 
     companion object {
