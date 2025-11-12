@@ -1,4 +1,4 @@
-package com.antsfamily.naughtynotes.presentation.home.view
+package com.antsfamily.naughtynotes.presentation.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

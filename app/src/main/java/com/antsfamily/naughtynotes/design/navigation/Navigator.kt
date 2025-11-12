@@ -26,7 +26,6 @@ import com.antsfamily.naughtynotes.presentation.profile.ProfileScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import com.antsfamily.naughtynotes.presentation.stats.StatsScreen
-import com.antsfamily.naughtynotes.presentation.util.toSnackbarMessageId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.presentation.verifypincode.PinCodeVerificationScreen
 import kotlinx.coroutines.launch
@@ -106,15 +105,6 @@ fun Navigator() {
                         dateEpoch = data.dateEpoch,
                         noteId = data.noteId,
                         onNavigateBack = { navController.popBackStack() },
-                        onSnackbarShow = {
-                            scope.launch {
-                                snackbarHostState
-                                    .showSnackbar(
-                                        message = context.getString(it.toSnackbarMessageId()),
-                                        duration = SnackbarDuration.Short
-                                    )
-                            }
-                        },
                         onErrorSnackbarShow = {
                             scope.launch {
                                 snackbarHostState

@@ -1,7 +1,6 @@
 package com.antsfamily.domain
 
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,13 +11,7 @@ class GetNotesByDateUseCase @Inject constructor(
     private val repository: NoteRepository
 ) {
 
-    suspend operator fun invoke(date: LocalDate): UseCaseResult<List<NoteModel>> =
-        withContext(Dispatchers.IO) {
-            try {
-                val notes = repository.getNotesByDate(date)
-                UseCaseResult.Success(notes)
-            } catch (e: Exception) {
-                UseCaseResult.Error(e)
-            }
-        }
+    suspend operator fun invoke(date: LocalDate): List<NoteModel> = withContext(Dispatchers.IO) {
+        repository.getNotesByDate(date)
+    }
 }

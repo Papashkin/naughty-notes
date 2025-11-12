@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.home.TopBar
-import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.pincode.PinCodeBottomSheetDialog
 import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScreen
 

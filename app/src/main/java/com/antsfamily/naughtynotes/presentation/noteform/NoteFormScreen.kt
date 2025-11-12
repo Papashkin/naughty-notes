@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -27,11 +29,11 @@ import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.home.TopBar
-import com.antsfamily.naughtynotes.presentation.home.view.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
-import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.view.NoteForm
+import com.antsfamily.naughtynotes.presentation.noteform.view.SuccessDialog
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -43,9 +45,12 @@ fun NoteFormScreen(
         it.create(dateEpoch, noteId)
     },
     onNavigateBack: () -> Unit,
-    onSnackbarShow: (NoteFormType) -> Unit,
     onErrorSnackbarShow: (ErrorType) -> Unit
 ) {
+    val (isSuccessDialogVisible, setIsSuccessDialogVisible) = remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.navigateBackEvent.collect {
             onNavigateBack()
@@ -53,7 +58,7 @@ fun NoteFormScreen(
     }
     LaunchedEffect(Unit) {
         viewModel.noteSaveSnackBarEvent.collect {
-            onSnackbarShow(it)
+            setIsSuccessDialogVisible(true)
         }
     }
 
@@ -75,6 +80,13 @@ fun NoteFormScreen(
             onNavigateBack = { onNavigateBack() },
             onSaveButtonClick = { viewModel.onSaveButtonClick() }
         )
+    }
+
+    if (isSuccessDialogVisible) {
+        SuccessDialog {
+            setIsSuccessDialogVisible(false)
+            onNavigateBack()
+        }
     }
 }
 
