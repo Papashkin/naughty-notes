@@ -45,13 +45,12 @@ fun NoteForm(
     setNote: (String) -> Unit,
 ) {
     Column {
-        HorizontalDividerWithText(text = "General")
+        HorizontalDividerWithText(
+            modifier = Modifier.padding(bottom = Padding.medium),
+            text = "General"
+        )
         PracticeDropdown<PracticeType>(
-            modifier = Modifier.padding(
-                top = Padding.regular,
-                start = Padding.large,
-                end = Padding.large
-            ),
+            modifier = Modifier.padding(horizontal = Padding.large),
             title = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
             entries = PracticeType.entries,
             selected = state.type
@@ -73,18 +72,14 @@ fun NoteForm(
         }
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(top = Padding.medium),
+            modifier = Modifier.padding(vertical = Padding.medium),
             text = "Details"
         )
 
         ChipList(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = Padding.regular,
-                    start = Padding.large,
-                    end = Padding.large
-                ),
+                .padding(horizontal = Padding.large),
             Triple(
                 R.string.note_form_screen_protection_label, state.isProtected
             ) {
@@ -102,45 +97,7 @@ fun NoteForm(
         )
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(top = Padding.medium),
-            text = stringResource(R.string.note_form_screen_rate_bar_pleasure_label),
-        )
-
-        Column(
-            modifier = Modifier
-                .padding(top = Padding.small)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(Padding.x_small)
-                )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = Padding.x_small, horizontal = Padding.large),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(R.string.note_form_screen_pleasure_rate_min_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-                Text(
-                    text = stringResource(R.string.note_form_screen_pleasure_rate_max_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-            RatingBar(
-                rating = state.pleasureRate,
-                selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
-                defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
-                onRatingChanged = { setPleasureRate(it) }
-            )
-        }
-
-        HorizontalDividerWithText(
-            modifier = Modifier.padding(top = Padding.medium),
+            modifier = Modifier.padding(vertical = Padding.medium),
             text = stringResource(R.string.note_form_screen_rate_bar_pain_label),
         )
 
@@ -178,7 +135,45 @@ fun NoteForm(
         }
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(top = Padding.medium),
+            modifier = Modifier.padding(vertical = Padding.medium),
+            text = stringResource(R.string.note_form_screen_rate_bar_pleasure_label),
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(top = Padding.small)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(Padding.x_small)
+                )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Padding.x_small, horizontal = Padding.large),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.note_form_screen_pleasure_rate_min_label),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+                Text(
+                    text = stringResource(R.string.note_form_screen_pleasure_rate_max_label),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+            RatingBar(
+                rating = state.pleasureRate,
+                selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
+                defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
+                onRatingChanged = { setPleasureRate(it) }
+            )
+        }
+
+        HorizontalDividerWithText(
+            modifier = Modifier.padding(vertical = Padding.medium),
             text = "Feedback",
         )
 
@@ -186,19 +181,20 @@ fun NoteForm(
             label = {
                 Text(
                     text = stringResource(R.string.note_form_screen_note_text_field_label),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodySmall
                 )
             },
-            textStyle = MaterialTheme.typography.bodyMedium,
+            textStyle = MaterialTheme.typography.bodySmall,
             value = state.note,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     top = Padding.x_small,
                     bottom = Padding.medium,
                     start = Padding.large,
                     end = Padding.large
                 )
-                .fillMaxWidth(),
+            ,
             onValueChange = { setNote(it) },
             minLines = 4,
             supportingText = {

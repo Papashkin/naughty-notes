@@ -46,18 +46,18 @@
     <string name="practice_location_other">Other</string>
     <string name="practice_location_unknown">Not selected</string>
 
-    <string name="note_form_screen_pain_rate_min_label">no pain</string>
-    <string name="note_form_screen_pain_rate_max_label">painful!</string>
+    <string name="note_form_screen_pain_rate_min_label">comfortable</string>
+    <string name="note_form_screen_pain_rate_max_label">uncomfortable</string>
     <string name="note_form_screen_pleasure_rate_min_label">Bad!</string>
     <string name="note_form_screen_pleasure_rate_max_label">Super!</string>
     <string name="note_form_screen_practice_type_dropdown_label">Type of practice</string>
     <string name="note_form_screen_practice_location_dropdown_label">Location</string>
-    <string name="note_form_screen_rate_bar_pain_label">Was it painful?</string>
-    <string name="note_form_screen_rate_bar_pleasure_label">Rate your pleasure</string>
+    <string name="note_form_screen_rate_bar_pain_label">Any discomfort?</string>
+    <string name="note_form_screen_rate_bar_pleasure_label">How was your experience?</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>
     <string name="note_form_screen_subtitle">for %1$s</string>
     <string name="note_form_screen_protection_label">Protection</string>
-    <string name="note_form_screen_your_orgasm_label">Your\'s orgasm</string>
+    <string name="note_form_screen_your_orgasm_label">Your orgasm</string>
     <string name="note_form_screen_partner_orgasm_label">Partner(s) orgasm</string>
     <string name="note_form_screen_button_save">Save</string>
 

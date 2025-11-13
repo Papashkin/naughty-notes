@@ -17,7 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +42,9 @@ inline fun <reified T> PracticeDropdown(
     var isExpanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
-        modifier = modifier.height(48.dp),
+        modifier = modifier
+            .height(48.dp)
+            .shadow(elevation = 1.dp, shape = RoundedCornerShape(12.dp)),
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded }
     ) {
@@ -57,10 +59,10 @@ inline fun <reified T> PracticeDropdown(
             readOnly = true,
             placeholder = { Text(title) },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceDim,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceDim,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
             ),
             shape = RoundedCornerShape(12.dp),
             trailingIcon = {
