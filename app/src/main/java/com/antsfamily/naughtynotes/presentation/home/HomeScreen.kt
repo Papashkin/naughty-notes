@@ -149,6 +149,7 @@ fun PortraitHomeContent(
                         .weight(0.4f)
                         .clickable { onProfileClick() },
                     shape = RoundedCornerShape(Padding.medium),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer,
                         contentColor = MaterialTheme.colorScheme.onSurface
