@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -197,6 +198,13 @@ fun NoteForm(
             ,
             onValueChange = { setNote(it) },
             minLines = 4,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
+            ),
+            shape = RoundedCornerShape(12.dp),
             supportingText = {
                 Text(text = "${state.note.length}/$CREATE_NOTE_NOTE_LENGTH_MAX")
             }

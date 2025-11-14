@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -19,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -29,8 +27,8 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.noteform.view.HorizontalDividerWithText
 import com.antsfamily.naughtynotes.presentation.settings.SettingsUiState
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -48,11 +46,9 @@ fun SettingsContentScreen(
             .padding(start = Padding.medium, end = Padding.medium, top = Padding.huge)
     ) {
         Column {
-            Text(
-                stringResource(R.string.settings_screen_settings_security),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = Padding.x_large)
+            HorizontalDividerWithText(
+                modifier = Modifier.padding(top = Padding.x_large),
+                text = stringResource(R.string.settings_screen_settings_security),
             )
 
             ListItem(
@@ -96,16 +92,11 @@ fun SettingsContentScreen(
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
-                HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
-            } else {
-                HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
             }
 
-            Text(
-                stringResource(R.string.settings_screen_appearance_title),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = Padding.xx_large)
+            HorizontalDividerWithText(
+                modifier = Modifier.padding(top = Padding.medium),
+                text = stringResource(R.string.settings_screen_appearance_title)
             )
 
             ListItem(
@@ -136,7 +127,6 @@ fun SettingsContentScreen(
                     )
                 }
             )
-            HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
         }
 
         Column(

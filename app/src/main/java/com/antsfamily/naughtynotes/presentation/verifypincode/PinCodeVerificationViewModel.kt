@@ -1,11 +1,11 @@
 package com.antsfamily.naughtynotes.presentation.verifypincode
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.InvalidateAppLockTimeUseCase
 import com.antsfamily.domain.SetAppLockTimeUseCase
 import com.antsfamily.domain.VerifyPinCodeUseCase
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,25 +73,41 @@ class PinCodeVerificationViewModel @Inject constructor(
 
     fun onProceedClicked() = viewModelScope.launch {
         if (isLocked) return@launch
+        try {
+            showLoading()
+            val code = _state.value.code
+            val result = verifyPinCodeUseCase(code = code)
+            handleVerifyPinCodeSuccessResult(result)
+        } catch (e: Exception) {
+            handleVerifyPinCodeErrorResult(e)
+        } finally {
+            hideLoading()
+        }
+    }
 
-        _state.update {
-            it.copy(isProceedButtonLoadingVisible = true)
-        }
-        val code = _state.value.code
-        val result = verifyPinCodeUseCase(code = code)
-        when (result) {
-            is UseCaseResult.Error -> handleVerifyPinCodeErrorResult(result.exception)
-            is UseCaseResult.Success -> handleVerifyPinCodeSuccessResult(result.data)
-        }
+    private fun showLoading() {
+        _state.update { it.copy(isProceedButtonLoadingVisible = true) }
+    }
+
+    private fun hideLoading() {
+        _state.update { it.copy(isProceedButtonLoadingVisible = false) }
     }
 
     private suspend fun handleVerifyPinCodeSuccessResult(isVerified: Boolean) {
         if (isVerified) {
-            invalidateAppLockTimeUseCase()
-            _navigateToHomeFlow.emit(Unit)
+            invalidateClockAndProceed()
         } else {
-            attempts++
             handleErrorAttempt()
+        }
+    }
+
+    private suspend fun invalidateClockAndProceed() {
+        try {
+            invalidateAppLockTimeUseCase()
+        } catch (e: Exception) {
+            Log.e(this::class.simpleName, e.message ?: e.toString())
+        } finally {
+            _navigateToHomeFlow.emit(Unit)
         }
     }
 
@@ -100,6 +116,8 @@ class PinCodeVerificationViewModel @Inject constructor(
     }
 
     private fun handleErrorAttempt() {
+        attempts++
+
         val errorType = when (attempts) {
             1 -> VerificationErrorType.FIRST_ATTEMPT
             2 -> VerificationErrorType.SECOND_ATTEMPT
