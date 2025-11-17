@@ -74,6 +74,15 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.ChangeMonth -> onMonthChanged(intent.yearMonth)
+            is HomeIntent.SelectDay -> onDayClick(intent.date)
+            is HomeIntent.Settings -> onSettingsClick()
+            is HomeIntent.ShowToday -> onTodayButtonClick()
+        }
+    }
+
     fun onMonthChanged(month: YearMonth) {
         if (month == (_state.value as? HomeUiState.Content)?.yearMonth) return
 

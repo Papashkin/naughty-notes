@@ -56,13 +56,7 @@ fun HomeScreen(
         HomeHeader()
         when (val uiState = state.value) {
             is HomeUiState.Loading -> HomeContentLoadingView()
-            is HomeUiState.Content -> HomeContentView(
-                state = uiState,
-                onMonthChanged = { viewModel.onMonthChanged(it) },
-                onTodayButtonClick = { viewModel.onTodayButtonClick() },
-                onDayClick = { viewModel.onDayClick(it) },
-                onSettingsClick = { viewModel.onSettingsClick() }
-            )
+            is HomeUiState.Content -> HomeContentView(uiState, viewModel::handleIntent)
         }
     }
 }
