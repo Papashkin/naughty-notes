@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -72,56 +73,72 @@ fun CalendarView(
     onMonthChanged: (YearMonth) -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
-    val currentDay = remember { LocalDate.now() }
-    val daysOfWeek = remember { daysOfWeek() }
-
     Column(
         modifier = modifier
+            .heightIn(max = 440.dp)
             .clip(RoundedCornerShape(Padding.regular))
             .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
-        val state = rememberCalendarState(
-            startMonth = yearMonth.minusMonths(CALENDAR_VIEW_MONTH_AMOUNT),
-            endMonth = yearMonth.plusMonths(CALENDAR_VIEW_MONTH_AMOUNT),
-            firstVisibleMonth = yearMonth,
-            firstDayOfWeek = daysOfWeek.first(),
-            outDateStyle = OutDateStyle.EndOfGrid
-        )
-        val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstMostVisibleMonth(state) {
-            onMonthChanged(it)
-        }
-
-        CalendarTitle(
-            modifier = Modifier.padding(vertical = Padding.regular, horizontal = Padding.small),
-            currentMonth = visibleMonth.yearMonth,
-            goToPrevious = {
-                coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
-                }
-            },
-            goToNext = {
-                coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
-                }
-            },
-        )
-        HorizontalCalendar(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
-            state = state,
-            dayContent = { day ->
-                Day(
-                    day = day,
-                    currentDay = currentDay,
-                    isWithRecords = day.date in datesWithNotes,
-                    onClick = { onDayClick(it) }
-                )
-            },
-            monthHeader = {
-                MonthHeader(daysOfWeek = daysOfWeek)
-            },
+        CalendarContent(
+            yearMonth = yearMonth,
+            datesWithNotes = datesWithNotes,
+            onMonthChanged = { onMonthChanged(it) },
+            onDayClick = { onDayClick(it) }
         )
     }
+}
+
+@Composable
+fun CalendarContent(
+    yearMonth: YearMonth,
+    datesWithNotes: List<LocalDate>,
+    onMonthChanged: (YearMonth) -> Unit,
+    onDayClick: (LocalDate) -> Unit,
+) {
+    val currentDay = remember { LocalDate.now() }
+    val daysOfWeek = remember { daysOfWeek() }
+
+    val state = rememberCalendarState(
+        startMonth = yearMonth.minusMonths(CALENDAR_VIEW_MONTH_AMOUNT),
+        endMonth = yearMonth.plusMonths(CALENDAR_VIEW_MONTH_AMOUNT),
+        firstVisibleMonth = yearMonth,
+        firstDayOfWeek = daysOfWeek.first(),
+        outDateStyle = OutDateStyle.EndOfGrid
+    )
+    val coroutineScope = rememberCoroutineScope()
+    val visibleMonth = rememberFirstMostVisibleMonth(state) {
+        onMonthChanged(it)
+    }
+
+    CalendarTitle(
+        modifier = Modifier.padding(vertical = Padding.regular, horizontal = Padding.small),
+        currentMonth = visibleMonth.yearMonth,
+        goToPrevious = {
+            coroutineScope.launch {
+                state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
+            }
+        },
+        goToNext = {
+            coroutineScope.launch {
+                state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
+            }
+        },
+    )
+    HorizontalCalendar(
+        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
+        state = state,
+        dayContent = { day ->
+            Day(
+                day = day,
+                currentDay = currentDay,
+                isWithRecords = day.date in datesWithNotes,
+                onClick = { onDayClick(it) }
+            )
+        },
+        monthHeader = {
+            MonthHeader(daysOfWeek = daysOfWeek)
+        },
+    )
 }
 
 @Composable
@@ -293,7 +310,7 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 @Composable
 private fun CalendarViewPreview() {
     CalendarView(
-        yearMonth = YearMonth.of(2025, Month.AUGUST),
+        yearMonth = YearMonth.of(2025, Month.MARCH),
         datesWithNotes = listOf(
             LocalDate.of(2025, Month.JULY, 19),
             LocalDate.of(2025, Month.JULY, 21),

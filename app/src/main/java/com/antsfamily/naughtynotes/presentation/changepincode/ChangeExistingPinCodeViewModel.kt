@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.SavePinUseCase
 import com.antsfamily.domain.VerifyPinCodeUseCase
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeButtonState
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.util.PIN_CODE_SIZE
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -92,16 +90,17 @@ class ChangeExistingPinCodeViewModel @Inject constructor(
         }
     }
 
-    private fun verifyExistedPinCode() {
-        _state.update {
-            it.copy(isProceedButtonLoadingVisible = true)
-        }
-        val code = _state.value.code
-        val result = verifyPinCodeUseCase(code = code)
+    private suspend fun verifyExistedPinCode() {
+        _state.update { it.copy(isProceedButtonLoadingVisible = true) }
 
-        when (result) {
-            is UseCaseResult.Success -> handleVerifyPinCodeSuccessResult(result.data)
-            is UseCaseResult.Error -> handleVerifyPinCodeErrorResult()
+        try {
+            val code = _state.value.code
+            val result = verifyPinCodeUseCase(code = code)
+            handleVerifyPinCodeSuccessResult(result)
+        } catch (e: Exception) {
+            handleVerifyPinCodeErrorResult()
+        } finally {
+
         }
     }
 
@@ -148,9 +147,6 @@ class ChangeExistingPinCodeViewModel @Inject constructor(
         } else {
             savePinUseCase(newCode)
             _showSuccessfulPinSaveFlow.emit(Unit)
-            delay(300)
-            _navigateBackFlow.emit(Unit)
         }
-
     }
 }

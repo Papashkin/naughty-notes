@@ -1,17 +1,15 @@
 package com.antsfamily.domain
 
-import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.repository.SettingsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class InvalidateAppLockTimeUseCase @Inject constructor(
     private val repository: SettingsRepository
 ) {
 
-    operator fun invoke() = try {
+    suspend operator fun invoke() = withContext(Dispatchers.IO) {
         repository.invalidateLockTimestamp()
-        UseCaseResult.Success(Unit)
-    } catch (e: Exception) {
-        UseCaseResult.Error(e)
     }
 }

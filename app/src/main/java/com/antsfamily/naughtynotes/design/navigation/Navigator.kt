@@ -1,7 +1,11 @@
 package com.antsfamily.naughtynotes.design.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -11,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
@@ -41,7 +46,9 @@ fun Navigator() {
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { values ->
             NavHost(
-                modifier = Modifier.padding(values),
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(values),
                 navController = navController,
                 startDestination = Splash
             ) {
@@ -76,7 +83,10 @@ fun Navigator() {
                         }
                     )
                 }
-                composable<PinCodeVerification> { _ ->
+                composable<PinCodeVerification>(
+                    enterTransition = { slideUpAnimation() },
+                    exitTransition = { slideDownAnimation() }
+                ) { _ ->
                     BackHandler(true) {
                         //no-op
                     }
@@ -96,7 +106,10 @@ fun Navigator() {
                         navigateToProfile = { navController.navigate(Profile) }
                     )
                 }
-                composable<NoteForm> { entry ->
+                composable<NoteForm>(
+                    enterTransition = { slideInAnimation() },
+                    exitTransition = { slideOutAnimation() }
+                ) { entry ->
                     val data = entry.toRoute<NoteForm>()
                     BackHandler(true) {
                         //no-op
@@ -116,7 +129,10 @@ fun Navigator() {
                         }
                     )
                 }
-                composable<AllNotes> { entry ->
+                composable<AllNotes>(
+                    enterTransition = { slideInAnimation() },
+                    popExitTransition = { slideOutAnimation() }
+                ) { entry ->
                     val data = entry.toRoute<AllNotes>()
                     AllNotesScreen(
                         snackbarHostState = snackbarHostState,
@@ -127,34 +143,37 @@ fun Navigator() {
                         }
                     )
                 }
-                composable<Profile> {
+                composable<Profile>(
+                    enterTransition = { slideInAnimation() },
+                    popExitTransition = { slideOutAnimation() },
+                ) {
                     ProfileScreen(
                         navigateBack = { navController.popBackStack() },
                         onSettingsClick = { navController.navigate(Settings) },
                         onStatisticClick = { navController.navigate(Stats) },
                     )
                 }
-                composable<Settings> {
+                composable<Settings>(
+                    enterTransition = { slideInAnimation() },
+                    exitTransition = { slideOutAnimation() }
+                ) {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
                         onCodeChangeClick = { navController.navigate(ChangeExistingPinCode) },
                     )
                 }
-                composable<ChangeExistingPinCode> {
+                composable<ChangeExistingPinCode>(
+                    enterTransition = { slideUpAnimation() },
+                    exitTransition = { slideDownAnimation() }
+                ) {
                     ChangeExistingPinCodeScreen(
                         navigateBack = { navController.popBackStack() },
-                        onSuccessfulPinChanged = {
-                            scope.launch {
-                                snackbarHostState
-                                    .showSnackbar(
-                                        message = context.getString(R.string.change_existing_pin_code_screen_save_success),
-                                        duration = SnackbarDuration.Short
-                                    )
-                            }
-                        }
                     )
                 }
-                composable<Stats> { _ ->
+                composable<Stats>(
+                    enterTransition = { slideInAnimation() },
+                    exitTransition = { slideOutAnimation() }
+                ) { _ ->
                     StatsScreen(
                         onNavigateBack = { navController.popBackStack() },
                     )
@@ -169,3 +188,30 @@ fun NavOptionsBuilder.popUpToTop(navController: NavController) {
         inclusive = true
     }
 }
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.slideUpAnimation() =
+    slideIntoContainer(
+        towards = AnimatedContentTransitionScope.SlideDirection.Up,
+        animationSpec = tween(DURATION_ANIMATION)
+    )
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.slideDownAnimation() =
+    slideOutOfContainer(
+        towards = AnimatedContentTransitionScope.SlideDirection.Down,
+        animationSpec = tween(DURATION_ANIMATION)
+    )
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.slideInAnimation() =
+    slideIntoContainer(
+        towards = AnimatedContentTransitionScope.SlideDirection.Start,
+        animationSpec = tween(DURATION_ANIMATION)
+    )
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.slideOutAnimation() =
+    slideOutOfContainer(
+        towards = AnimatedContentTransitionScope.SlideDirection.End,
+        animationSpec = tween(DURATION_ANIMATION)
+    )
+
+
+const val DURATION_ANIMATION = 400

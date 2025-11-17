@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.repository.NoteRepository
+import com.antsfamily.naughtynotes.design.navigation.DURATION_ANIMATION
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -50,6 +52,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getNotes() = viewModelScope.launch {
+        delay(DURATION_ANIMATION.toLong())
         repository.notes
             .onStart { _state.value = HomeUiState.Loading }
             .catch { /* no-op */ }

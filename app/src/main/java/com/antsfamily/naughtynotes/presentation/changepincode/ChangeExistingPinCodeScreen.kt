@@ -13,6 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
+import com.antsfamily.naughtynotes.presentation.noteform.view.SuccessDialog
 import com.antsfamily.naughtynotes.presentation.pincode.view.PinCodeKeyboard
 import com.antsfamily.naughtynotes.presentation.pincode.view.PinCodeView
 import com.antsfamily.naughtynotes.presentation.util.toStringId
@@ -34,8 +37,11 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 fun ChangeExistingPinCodeScreen(
     viewModel: ChangeExistingPinCodeViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
-    onSuccessfulPinChanged: () -> Unit,
 ) {
+    val (isSuccessDialogVisible, setIsSuccessDialogVisible) = remember {
+        mutableStateOf(false)
+    }
+
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -46,7 +52,7 @@ fun ChangeExistingPinCodeScreen(
 
     LaunchedEffect(Unit) {
         viewModel.showSuccessfulPinSaveFlow.collect {
-            onSuccessfulPinChanged()
+            setIsSuccessDialogVisible(true)
         }
     }
 
@@ -122,13 +128,17 @@ fun ChangeExistingPinCodeScreen(
             )
         }
     }
+
+    if (isSuccessDialogVisible) {
+        SuccessDialog {
+            setIsSuccessDialogVisible(false)
+            navigateBack()
+        }
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PinCodeVerificationScreenPreview() {
-    ChangeExistingPinCodeScreen(
-        onSuccessfulPinChanged = {},
-        navigateBack = {}
-    )
+    ChangeExistingPinCodeScreen {}
 }
