@@ -23,7 +23,8 @@ import com.antsfamily.naughtynotes.presentation.settings.view.SettingsContentScr
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onCodeChangeClick: () -> Unit,
+    onStatisticsNavigate: () -> Unit,
+    onChangePinNavigate: () -> Unit,
 ) {
     val (isPinCodeDialogVisible, setIsPinCodeDialogVisible) = remember {
         mutableStateOf(false)
@@ -34,6 +35,16 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         viewModel.setPinCodeDialogVisibilityEvent.collect {
             setIsPinCodeDialogVisible(it)
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.navigateToStatisticsEvent.collect {
+            onStatisticsNavigate()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.navigateToChangePinEvent.collect {
+            onChangePinNavigate()
         }
     }
 
@@ -50,9 +61,7 @@ fun SettingsScreen(
             is SettingsUiState.Error -> FullScreenError(uiState.type)
             is SettingsUiState.Content -> SettingsContentScreen(
                 state = uiState,
-                onPinClick = { viewModel.onPinClick(it) },
-                onThemeChanged = { viewModel.onThemeChanged(it) },
-                onCodeChangeClick = { onCodeChangeClick() },
+                onActionClick = { viewModel.handleIntent(it) },
             )
         }
     }
@@ -68,5 +77,9 @@ fun SettingsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(onNavigateBack = {}, onCodeChangeClick = {})
+    SettingsScreen(
+        onNavigateBack = {},
+        onStatisticsNavigate = {},
+        onChangePinNavigate = {}
+    )
 }

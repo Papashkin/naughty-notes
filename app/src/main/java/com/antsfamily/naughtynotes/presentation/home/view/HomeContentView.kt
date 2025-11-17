@@ -43,7 +43,7 @@ fun HomeContentView(
     onMonthChanged: (YearMonth) -> Unit,
     onTodayButtonClick: () -> Unit,
     onDayClick: (LocalDate) -> Unit,
-    onProfileClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     Column(modifier = modifier) {
         Row(
@@ -99,7 +99,7 @@ fun HomeContentView(
                 Card(
                     modifier = Modifier
                         .weight(0.4f)
-                        .clickable { onProfileClick() },
+                        .clickable { onSettingsClick() },
                     shape = RoundedCornerShape(Padding.medium),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                     colors = CardDefaults.cardColors(
@@ -114,13 +114,13 @@ fun HomeContentView(
                     ) {
                         Icon(
                             modifier = Modifier.size(32.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_profile),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_settings),
                             contentDescription = null
                         )
                         Text(
                             modifier = Modifier.padding(top = Padding.x_small),
                             style = MaterialTheme.typography.labelMedium,
-                            text = stringResource(R.string.home_screen_banner_profile)
+                            text = stringResource(R.string.home_screen_banner_settings)
                         )
                     }
                 }
