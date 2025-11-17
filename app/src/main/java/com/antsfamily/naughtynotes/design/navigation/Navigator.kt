@@ -27,7 +27,6 @@ import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesScreen
 import com.antsfamily.naughtynotes.presentation.changepincode.ChangeExistingPinCodeScreen
 import com.antsfamily.naughtynotes.presentation.home.HomeScreen
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormScreen
-import com.antsfamily.naughtynotes.presentation.profile.ProfileScreen
 import com.antsfamily.naughtynotes.presentation.settings.SettingsScreen
 import com.antsfamily.naughtynotes.presentation.splash.SplashScreen
 import com.antsfamily.naughtynotes.presentation.stats.StatsScreen
@@ -103,7 +102,7 @@ fun Navigator() {
                     HomeScreen(
                         navigateToNoteForm = { navController.navigate(NoteForm(it, null)) },
                         navigateToAllNotes = { navController.navigate(AllNotes(it)) },
-                        navigateToProfile = { navController.navigate(Profile) }
+                        navigateToSettings = { navController.navigate(Settings) }
                     )
                 }
                 composable<NoteForm>(
@@ -143,23 +142,14 @@ fun Navigator() {
                         }
                     )
                 }
-                composable<Profile>(
-                    enterTransition = { slideInAnimation() },
-                    popExitTransition = { slideOutAnimation() },
-                ) {
-                    ProfileScreen(
-                        navigateBack = { navController.popBackStack() },
-                        onSettingsClick = { navController.navigate(Settings) },
-                        onStatisticClick = { navController.navigate(Stats) },
-                    )
-                }
                 composable<Settings>(
                     enterTransition = { slideInAnimation() },
-                    exitTransition = { slideOutAnimation() }
+                    popExitTransition = { slideOutAnimation() }
                 ) {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
-                        onCodeChangeClick = { navController.navigate(ChangeExistingPinCode) },
+                        onStatisticsNavigate = {navController.navigate(Stats)},
+                        onChangePinNavigate = { navController.navigate(ChangeExistingPinCode) }
                     )
                 }
                 composable<ChangeExistingPinCode>(

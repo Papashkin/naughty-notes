@@ -36,6 +36,12 @@ class SettingsViewModel @Inject constructor(
     val setPinCodeDialogVisibilityEvent: SharedFlow<Boolean> =
         _setPinCodeDialogVisibilityEvent.asSharedFlow()
 
+    private val _navigateToStatisticsEvent = MutableSharedFlow<Unit>()
+    val navigateToStatisticsEvent: SharedFlow<Unit> = _navigateToStatisticsEvent.asSharedFlow()
+
+    private val _navigateToChangePinEvent = MutableSharedFlow<Unit>()
+    val navigateToChangePinEvent: SharedFlow<Unit> = _navigateToChangePinEvent.asSharedFlow()
+
     init {
         getSettings()
     }
@@ -60,7 +66,24 @@ class SettingsViewModel @Inject constructor(
         _state.value = SettingsUiState.Error(e.toType())
     }
 
-    fun onThemeChanged(isDarkMode: Boolean) = viewModelScope.launch {
+    fun handleIntent(intent: SettingsIntent) = viewModelScope.launch {
+        when (intent) {
+            is SettingsIntent.OpenStatistics -> navigateToStatistics()
+            is SettingsIntent.ChangePin -> navigateToChangePin()
+            is SettingsIntent.SwitchTheme -> onThemeChanged(intent.isDarkMode)
+            is SettingsIntent.SetPin -> onPinClick(intent.isEnabled)
+        }
+    }
+
+    private suspend fun navigateToStatistics() {
+        _navigateToStatisticsEvent.emit(Unit)
+    }
+
+    private suspend fun navigateToChangePin() {
+        _navigateToChangePinEvent.emit(Unit)
+    }
+
+    private suspend fun onThemeChanged(isDarkMode: Boolean) {
         setDarkThemeUseCase(isDarkMode)
         themeSwitcher.setAppTheme(isDarkMode)
         _state.update {
@@ -71,22 +94,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onPinClick(isEnabled: Boolean) = viewModelScope.launch {
+    private suspend fun onPinClick(isEnabled: Boolean) {
         if (isEnabled) {
             _setPinCodeDialogVisibilityEvent.emit(true)
         } else {
             onPinCodeDisabled()
         }
-    }
-
-    fun onPinCodeSaved() = viewModelScope.launch {
-        _state.update {
-            when (it) {
-                is SettingsUiState.Content -> it.copy(isAppProtected = true)
-                else -> it
-            }
-        }
-        _setPinCodeDialogVisibilityEvent.emit(false)
     }
 
     private fun onPinCodeDisabled() {
@@ -101,5 +114,15 @@ class SettingsViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e(this::class.simpleName, e.message ?: e.toString())
         }
+    }
+
+    fun onPinCodeSaved() = viewModelScope.launch {
+        _state.update {
+            when (it) {
+                is SettingsUiState.Content -> it.copy(isAppProtected = true)
+                else -> it
+            }
+        }
+        _setPinCodeDialogVisibilityEvent.emit(false)
     }
 }

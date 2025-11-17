@@ -26,7 +26,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToNoteForm: (Long) -> Unit,
     navigateToAllNotes: (Long) -> Unit,
-    navigateToProfile: () -> Unit
+    navigateToSettings: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -40,8 +40,8 @@ fun HomeScreen(
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.navigateToProfileEvent.collect {
-            navigateToProfile()
+        viewModel.navigateToSettingsEvent.collect {
+            navigateToSettings()
         }
     }
 
@@ -61,7 +61,7 @@ fun HomeScreen(
                 onMonthChanged = { viewModel.onMonthChanged(it) },
                 onTodayButtonClick = { viewModel.onTodayButtonClick() },
                 onDayClick = { viewModel.onDayClick(it) },
-                onProfileClick = { viewModel.onProfileClick() }
+                onSettingsClick = { viewModel.onSettingsClick() }
             )
         }
     }

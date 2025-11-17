@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
@@ -32,16 +33,13 @@ class HomeViewModel @Inject constructor(
         get() = _state
 
     private val _navigateToNoteFormEvent: MutableSharedFlow<Long> = MutableSharedFlow()
-    val navigateToNoteFormEvent: SharedFlow<Long>
-        get() = _navigateToNoteFormEvent
+    val navigateToNoteFormEvent: SharedFlow<Long> = _navigateToNoteFormEvent.asSharedFlow()
 
     private val _navigateToAllNotesEvent: MutableSharedFlow<Long> = MutableSharedFlow()
-    val navigateToAllNotesEvent: SharedFlow<Long>
-        get() = _navigateToAllNotesEvent
+    val navigateToAllNotesEvent: SharedFlow<Long> = _navigateToAllNotesEvent.asSharedFlow()
 
-    private val _navigateToProfileEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val navigateToProfileEvent: SharedFlow<Unit>
-        get() = _navigateToProfileEvent
+    private val _navigateToSettingsEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val navigateToSettingsEvent: SharedFlow<Unit> = _navigateToSettingsEvent.asSharedFlow()
 
     private var notes: List<NoteModel> = mutableListOf()
     private val currentMonth: YearMonth = YearMonth.now()
@@ -117,8 +115,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onProfileClick() = viewModelScope.launch {
-        _navigateToProfileEvent.emit(Unit)
+    fun onSettingsClick() = viewModelScope.launch {
+        _navigateToSettingsEvent.emit(Unit)
     }
 
     private fun List<NoteModel>.getDatesForMonth(month: YearMonth): List<LocalDate> =
