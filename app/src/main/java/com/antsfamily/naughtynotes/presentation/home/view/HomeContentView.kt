@@ -31,29 +31,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.ShimmerLoading
+import com.antsfamily.naughtynotes.presentation.home.HomeIntent
 import com.antsfamily.naughtynotes.presentation.home.HomeUiState
 import com.antsfamily.naughtynotes.ui.theme.Padding
-import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
 fun HomeContentView(
-    modifier: Modifier = Modifier,
     state: HomeUiState.Content,
-    onMonthChanged: (YearMonth) -> Unit,
-    onTodayButtonClick: () -> Unit,
-    onDayClick: (LocalDate) -> Unit,
-    onSettingsClick: () -> Unit,
+    onIntentChanged: (HomeIntent) -> Unit,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(36.dp),
+            modifier = Modifier.height(36.dp),
             horizontalArrangement = Arrangement.End
         ) {
             if (!state.isCurrentMonth) {
-                TextButton(onClick = { onTodayButtonClick() }) {
+                TextButton(
+                    onClick = { onIntentChanged(HomeIntent.ShowToday) }
+                ) {
                     Text(
                         text = stringResource(R.string.home_screen_button_today),
                         fontWeight = FontWeight.SemiBold
@@ -65,8 +61,8 @@ fun HomeContentView(
         CalendarView(
             yearMonth = state.yearMonth,
             datesWithNotes = state.datesWithNotes,
-            onMonthChanged = { onMonthChanged(it) },
-            onDayClick = { onDayClick(it) }
+            onMonthChanged = { onIntentChanged(HomeIntent.ChangeMonth(it)) },
+            onDayClick = { onIntentChanged(HomeIntent.SelectDay(it)) }
         )
 
         Spacer(Modifier.height(Padding.medium))
@@ -99,7 +95,7 @@ fun HomeContentView(
                 Card(
                     modifier = Modifier
                         .weight(0.4f)
-                        .clickable { onSettingsClick() },
+                        .clickable { onIntentChanged(HomeIntent.Settings) },
                     shape = RoundedCornerShape(Padding.medium),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                     colors = CardDefaults.cardColors(
@@ -192,5 +188,5 @@ private fun HomeContentPreview() {
         datesWithNotes = listOf(),
         daysSinceLastNote = 5
     )
-    HomeContentView(Modifier, state, {}, {}, {}, {})
+    HomeContentView(state, {})
 }
