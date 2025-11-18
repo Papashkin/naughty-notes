@@ -16,14 +16,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
@@ -38,8 +36,6 @@ fun PinCodeBottomSheetDialog(
     onSuccessfulPinSaved: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val context = LocalContext.current
-
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -56,8 +52,9 @@ fun PinCodeBottomSheetDialog(
     ModalBottomSheet(
         onDismissRequest = { viewModel.onDialogDismissed() },
         sheetState = SheetState(
-            density = Density(context),
-            skipPartiallyExpanded = true
+            skipPartiallyExpanded = true,
+            positionalThreshold = { 0f },
+            velocityThreshold = { 0f },
         ),
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
