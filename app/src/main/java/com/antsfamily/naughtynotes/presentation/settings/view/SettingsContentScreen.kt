@@ -2,14 +2,12 @@ package com.antsfamily.naughtynotes.presentation.settings.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Icon
@@ -31,10 +29,10 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.settings.SettingsIntent
 import com.antsfamily.naughtynotes.presentation.settings.SettingsUiState
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
@@ -54,7 +52,7 @@ fun SettingsContentScreen(
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = MaterialTheme.shapes.medium
                     ),
             ) {
                 Text(
@@ -68,8 +66,8 @@ fun SettingsContentScreen(
                 ListItem(
                     modifier = Modifier
                         .padding(vertical = Padding.x_small)
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable {
+                        .clip(shape = MaterialTheme.shapes.medium)
+                        .debouncedClickable {
                             onActionClick(SettingsIntent.OpenStatistics)
                         },
                     colors = ListItemDefaults.colors(
@@ -100,7 +98,7 @@ fun SettingsContentScreen(
                     .padding(top = Padding.large)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = MaterialTheme.shapes.medium
                     )
             ) {
                 Text(
@@ -114,7 +112,7 @@ fun SettingsContentScreen(
                 ListItem(
                     modifier = Modifier
                         .padding(vertical = Padding.x_small)
-                        .clip(RoundedCornerShape(12.dp)),
+                        .clip(MaterialTheme.shapes.medium),
                     colors = ListItemDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer
                     ),
@@ -143,8 +141,8 @@ fun SettingsContentScreen(
                     ListItem(
                         modifier = Modifier
                             .padding(bottom = Padding.x_small)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable { onActionClick(SettingsIntent.ChangePin) },
+                            .clip(MaterialTheme.shapes.medium)
+                            .debouncedClickable { onActionClick(SettingsIntent.ChangePin) },
                         colors = ListItemDefaults.colors(
                             containerColor = MaterialTheme.colorScheme.surfaceContainer
                         ),
@@ -167,7 +165,7 @@ fun SettingsContentScreen(
                     .padding(top = Padding.large)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = MaterialTheme.shapes.medium
                     )
             ) {
 
@@ -182,7 +180,7 @@ fun SettingsContentScreen(
                 ListItem(
                     modifier = Modifier
                         .padding(vertical = Padding.x_small)
-                        .clip(RoundedCornerShape(12.dp)),
+                        .clip(MaterialTheme.shapes.medium),
                     colors = ListItemDefaults.colors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainer
                     ),

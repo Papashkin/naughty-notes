@@ -1,7 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.pincode.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.pincode.model.NumpadKey
 import com.antsfamily.naughtynotes.presentation.pincode.model.NumpadSymbol
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 private val LINE_1 = listOf(NumpadKey.ONE, NumpadKey.TWO, NumpadKey.THREE)
@@ -94,9 +93,9 @@ fun KeyButton(
             .size(64.dp)
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = RoundedCornerShape(Padding.regular)
+                shape = MaterialTheme.shapes.medium
             )
-            .clickable(
+            .debouncedClickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) { onClick() },

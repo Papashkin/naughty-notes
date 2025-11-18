@@ -39,14 +39,14 @@ fun PinCodeView(
                 modifier = Modifier
                     .height(64.dp)
                     .width(48.dp)
-                    .clip(RoundedCornerShape(Padding.small))
+                    .clip(MaterialTheme.shapes.small)
                     .background(
                         color = if (code.length > i) {
                             MaterialTheme.colorScheme.primaryContainer
                         } else {
                             MaterialTheme.colorScheme.surfaceContainer
                         },
-                        shape = RoundedCornerShape(Padding.regular)
+                        shape = MaterialTheme.shapes.medium
                     )
                     .border(
                         width = when {
@@ -59,7 +59,7 @@ fun PinCodeView(
                             isError -> MaterialTheme.colorScheme.error
                             else -> MaterialTheme.colorScheme.surfaceContainer
                         },
-                        shape = RoundedCornerShape(Padding.regular)
+                        shape = MaterialTheme.shapes.medium
                     )
             ) {
                 if (i < code.length) {

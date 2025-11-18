@@ -1,7 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.home.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -43,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.util.CALENDAR_VIEW_MONTH_AMOUNT
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
@@ -76,7 +75,7 @@ fun CalendarView(
     Column(
         modifier = modifier
             .heightIn(max = 440.dp)
-            .clip(RoundedCornerShape(Padding.regular))
+            .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         CalendarContent(
@@ -168,7 +167,7 @@ private fun Day(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(Padding.x_small)
-            .clip(RoundedCornerShape(Padding.small))
+            .clip(MaterialTheme.shapes.small)
             .background(
                 color = if (day.position == DayPosition.MonthDate && day.date == currentDay) {
                     MaterialTheme.colorScheme.primary
@@ -176,7 +175,7 @@ private fun Day(
                     Color.Transparent
                 }
             )
-            .clickable(
+            .debouncedClickable(
                 enabled = day.position == DayPosition.MonthDate,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
@@ -260,7 +259,7 @@ private fun CalendarNavigationIcon(
         .fillMaxHeight()
         .aspectRatio(1f)
         .clip(shape = CircleShape)
-        .clickable(role = Role.Button, onClick = onClick),
+        .debouncedClickable(role = Role.Button, onClick = onClick),
 ) {
     Icon(
         modifier = Modifier
