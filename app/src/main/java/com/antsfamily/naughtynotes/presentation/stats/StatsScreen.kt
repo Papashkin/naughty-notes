@@ -2,33 +2,34 @@ package com.antsfamily.naughtynotes.presentation.stats
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.antsfamily.domain.model.Other
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
-import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
-import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
-import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
-import com.antsfamily.naughtynotes.presentation.stats.view.ChipList
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChart
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChartLegend
-import com.antsfamily.naughtynotes.presentation.stats.view.TimeDropdownItem
+import com.antsfamily.naughtynotes.presentation.stats.view.StatsSubHeader
+import com.antsfamily.naughtynotes.presentation.stats.view.TrendView
 import com.antsfamily.naughtynotes.ui.theme.Padding
+import java.math.BigDecimal
 
 
 @Composable
@@ -47,22 +48,26 @@ fun StatsScreen(
             onNavigationBack = { onNavigateBack() }
         )
 
-        SubHeader(
-            modifier = Modifier.padding(Padding.large),
-            onChipClick = { viewModel.onChipChange(it) },
-            onTimeframeSelect = { viewModel.onTimeframeChange(it) }
+        HorizontalDivider(
+            thickness = Padding.x_large,
+            color = MaterialTheme.colorScheme.surface
+        )
+        StatsSubHeader(
+            modifier = Modifier.padding(horizontal = Padding.medium),
+            onIntentCreated = { viewModel.onIntentCreated(it) },
         )
 
         val state = viewModel.state.collectAsState()
 
-        Column(modifier = Modifier.fillMaxHeight()) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = Padding.medium)
+        ) {
             when (val uiState = state.value) {
                 is StatsUiState.Loading -> FullScreenLoading()
                 is StatsUiState.Error -> FullScreenError(uiState.type)
-                is StatsUiState.Content -> StatsContentView(
-                    modifier = Modifier.padding(top = Padding.medium),
-                    items = uiState.statItems
-                )
+                is StatsUiState.Content -> StatsContentView(uiState)
             }
         }
     }
@@ -70,60 +75,46 @@ fun StatsScreen(
 
 @Composable
 fun StatsContentView(
-    modifier: Modifier = Modifier,
-    items: List<StatsItem>
+    state: StatsUiState.Content
 ) {
     Column {
-        StatsChart(
-            modifier = modifier,
-            items = items
-        )
-        StatsChartLegend(items = items)
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun SubHeader(
-    modifier: Modifier = Modifier,
-    onChipClick: (StatChipType) -> Unit = {},
-    onTimeframeSelect: (TimeFrameItem) -> Unit = {}
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = stringResource(R.string.statistic_screen_subtitle),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        ChipList(
-            chips = StatChipType.entries,
-            modifier = Modifier.padding(vertical = Padding.small)
-        ) {
-            onChipClick(it)
-        }
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.height(240.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "for:",
-                style = MaterialTheme.typography.bodyMedium
+            StatsChart(
+                modifier = Modifier.weight(1f),
+                items = state.statItems
             )
-            Box {
-                TimeDropdownItem {
-                    onTimeframeSelect(it)
-                }
-            }
+            StatsChartLegend(
+                modifier = Modifier.weight(1f),
+                items = state.statItems
+            )
         }
+        HorizontalDivider(
+            thickness = Padding.x_large,
+            color = MaterialTheme.colorScheme.surface
+        )
+        TrendView(
+            modifier = Modifier.padding(vertical = Padding.medium),
+            trends = state.trends
+        )
     }
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun StatsScreenPreview1() {
-    StatsScreen {}
+private fun StatsContentViewPreview() {
+    StatsContentView(
+        StatsUiState.Content(
+            statItems = listOf(
+                StatsItem(PracticeType.ANAL, 15, BigDecimal(100 / 6)),
+                StatsItem(PracticeType.ORAL, 84, BigDecimal(100 / 7)),
+                StatsItem(PracticeType.TRIBADISM, 63, BigDecimal(54)),
+                StatsItem(Other, 15, BigDecimal(10)),
+            ),
+            trends = listOf(5f, 16f, 8f, 10f, 12f, 14f, 10f)
+        )
+
+    )
 }

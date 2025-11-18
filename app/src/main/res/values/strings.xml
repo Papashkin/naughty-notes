@@ -118,10 +118,11 @@
     <string name="statistic_screen_chip_activity">type of practice</string>
     <string name="statistic_screen_chip_place">location</string>
     <string name="statistic_screen_selector_time_for">For:</string>
-    <string name="statistic_screen_selector_time_current_month">current month</string>
-    <string name="statistic_screen_selector_time_previous_month">previous month</string>
-    <string name="statistic_screen_selector_time_this_year">this year</string>
-    <string name="statistic_screen_selector_time_all">all the time</string>
+    <string name="statistic_screen_selector_time_current_month">Current month</string>
+    <string name="statistic_screen_selector_time_previous_month">Previous month</string>
+    <string name="statistic_screen_selector_time_this_year">This year</string>
+    <string name="statistic_screen_selector_time_all">All the time</string>
+    <string name="statistic_screen_legend_other">Other</string>
 
     <string name="error_screen_message_network">There is a problem on server side.\nPlease try later</string>
     <string name="error_screen_message_database">Something\'s happened with data.\nPlease try later</string>
