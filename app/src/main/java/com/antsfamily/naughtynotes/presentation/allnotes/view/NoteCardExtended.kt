@@ -1,6 +1,5 @@
 package com.antsfamily.naughtynotes.presentation.allnotes.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
@@ -33,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.presentation.util.toDescriptionStringId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
@@ -47,7 +46,7 @@ fun NoteCardExtended(
 
     Card(
         modifier = Modifier.padding(vertical = Padding.small),
-        shape = RoundedCornerShape(12.dp)
+        shape = MaterialTheme.shapes.medium
     ) {
         ListItem(
             modifier = Modifier.fillMaxWidth(),
@@ -81,7 +80,7 @@ fun NoteCardExtended(
             },
             trailingContent = {
                 Icon(
-                    modifier = Modifier.clickable { setMenuExpanded(true) },
+                    modifier = Modifier.debouncedClickable { setMenuExpanded(true) },
                     imageVector = Icons.Rounded.MoreVert,
                     contentDescription = null
                 )

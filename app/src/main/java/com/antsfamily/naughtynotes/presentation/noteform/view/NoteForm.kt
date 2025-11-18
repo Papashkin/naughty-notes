@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -107,7 +106,7 @@ fun NoteForm(
                 .padding(top = Padding.small)
                 .background(
                     color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(Padding.x_small)
+                    shape = MaterialTheme.shapes.extraSmall
                 )
         ) {
             Row(
@@ -145,7 +144,7 @@ fun NoteForm(
                 .padding(top = Padding.small)
                 .background(
                     color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(Padding.x_small)
+                    shape = MaterialTheme.shapes.extraSmall
                 )
         ) {
             Row(
@@ -204,7 +203,7 @@ fun NoteForm(
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
             ),
-            shape = RoundedCornerShape(12.dp),
+            shape = MaterialTheme.shapes.medium,
             supportingText = {
                 Text(text = "${state.note.length}/$CREATE_NOTE_NOTE_LENGTH_MAX")
             }

@@ -100,9 +100,19 @@ fun Navigator() {
                         //no-op
                     }
                     HomeScreen(
-                        navigateToNoteForm = { navController.navigate(NoteForm(it, null)) },
-                        navigateToAllNotes = { navController.navigate(AllNotes(it)) },
-                        navigateToSettings = { navController.navigate(Settings) }
+                        navigateToNoteForm = {
+                            navController.navigate(NoteForm(it, null)) {
+                                launchSingleTop = true
+                            }
+                        },
+                        navigateToAllNotes = {
+                            navController.navigate(AllNotes(it)) {
+                                launchSingleTop = true
+                            }
+                        },
+                        navigateToSettings = {
+                            navController.navigate(Settings) { launchSingleTop = true }
+                        }
                     )
                 }
                 composable<NoteForm>(
@@ -138,7 +148,9 @@ fun Navigator() {
                         epoch = data.dateEpoch,
                         navigateBack = { navController.popBackStack() },
                         navigateToNoteForm = {
-                            navController.navigate(NoteForm(data.dateEpoch, it))
+                            navController.navigate(NoteForm(data.dateEpoch, it)) {
+                                launchSingleTop = true
+                            }
                         }
                     )
                 }
@@ -148,7 +160,9 @@ fun Navigator() {
                 ) {
                     SettingsScreen(
                         onNavigateBack = { navController.popBackStack() },
-                        onStatisticsNavigate = {navController.navigate(Stats)},
+                        onStatisticsNavigate = {
+                            navController.navigate(Stats) { launchSingleTop = true }
+                        },
                         onChangePinNavigate = { navController.navigate(ChangeExistingPinCode) }
                     )
                 }

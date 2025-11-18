@@ -2,7 +2,6 @@ package com.antsfamily.naughtynotes.presentation.noteform.view
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -44,7 +43,7 @@ inline fun <reified T> PracticeDropdown(
     ExposedDropdownMenuBox(
         modifier = modifier
             .height(48.dp)
-            .shadow(elevation = 1.dp, shape = RoundedCornerShape(12.dp)),
+            .shadow(elevation = 1.dp, shape = MaterialTheme.shapes.medium),
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded }
     ) {
@@ -64,7 +63,7 @@ inline fun <reified T> PracticeDropdown(
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
             ),
-            shape = RoundedCornerShape(12.dp),
+            shape = MaterialTheme.shapes.medium,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
             },

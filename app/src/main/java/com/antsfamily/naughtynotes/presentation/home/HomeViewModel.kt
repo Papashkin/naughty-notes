@@ -42,8 +42,11 @@ class HomeViewModel @Inject constructor(
     val navigateToSettingsEvent: SharedFlow<Unit> = _navigateToSettingsEvent.asSharedFlow()
 
     private var notes: List<NoteModel> = mutableListOf()
+    private var isClickEnabled: Boolean = true
+
     private val currentMonth: YearMonth = YearMonth.now()
     private val today: LocalDate = LocalDate.now()
+    private val debounceInterval: Long = 300L
 
     init {
         getNotes()
@@ -114,14 +117,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onDayClick(date: LocalDate) = viewModelScope.launch {
-        if (date.isAfter(today)) return@launch
+        if (date.isAfter(today) || !isClickEnabled) return@launch
 
         val notesForDate = notes.filter { it.date == date }
+        isClickEnabled = false
         if (notesForDate.isEmpty()) {
             _navigateToNoteFormEvent.emit(date.toEpochDay())
         } else {
             _navigateToAllNotesEvent.emit(date.toEpochDay())
         }
+        delay(debounceInterval)
+        isClickEnabled = true
     }
 
     fun onSettingsClick() = viewModelScope.launch {

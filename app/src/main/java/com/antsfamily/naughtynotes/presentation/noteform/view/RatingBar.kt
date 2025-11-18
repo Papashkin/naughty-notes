@@ -1,6 +1,5 @@
 package com.antsfamily.naughtynotes.presentation.noteform.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
@@ -42,7 +42,7 @@ fun RatingBar(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(52.dp)
-                    .clickable { onRatingChanged(i) }
+                    .debouncedClickable { onRatingChanged(i) }
             )
         }
     }

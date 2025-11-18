@@ -1,6 +1,5 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -27,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.presentation.stats.model.TIMEFRAME_DEFAULT
 import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
+import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -41,7 +41,7 @@ fun TimeDropdownItem(
 
     Row(
         modifier = modifier
-            .clickable { isExpanded = !isExpanded }
+            .debouncedClickable { isExpanded = !isExpanded }
             .padding(Padding.small),
         verticalAlignment = Alignment.CenterVertically
     ) {
