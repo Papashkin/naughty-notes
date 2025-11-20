@@ -36,7 +36,7 @@ fun StatsChipList(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                shape = MaterialTheme.shapes.large
+                shape = MaterialTheme.shapes.extraLarge
             ),
         horizontalArrangement = Arrangement.Center
     ) {
@@ -66,11 +66,11 @@ fun ChipItem(
             .padding(vertical = Padding.tiny, horizontal = Padding.x_small)
             .background(
                 color = if (isSelected) {
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                 } else {
                     MaterialTheme.colorScheme.surfaceContainer
                 },
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.large
             )
             .clickable {
                 if (!isSelected) onClick()
@@ -81,7 +81,7 @@ fun ChipItem(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Padding.medium)
+                .padding(Padding.small)
             ,
             text = stringResource(type.toStringId()),
             textAlign = TextAlign.Center,

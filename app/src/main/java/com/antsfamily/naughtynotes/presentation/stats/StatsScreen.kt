@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.antsfamily.domain.model.Other
 import com.antsfamily.domain.model.PracticeType
@@ -23,6 +20,7 @@ import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.home.TopBar
+import com.antsfamily.naughtynotes.presentation.home.view.InfoCard
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChart
 import com.antsfamily.naughtynotes.presentation.stats.view.StatsChartLegend
@@ -30,6 +28,7 @@ import com.antsfamily.naughtynotes.presentation.stats.view.StatsSubHeader
 import com.antsfamily.naughtynotes.presentation.stats.view.TrendView
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.math.BigDecimal
+import java.time.YearMonth
 
 
 @Composable
@@ -48,15 +47,6 @@ fun StatsScreen(
             onNavigationBack = { onNavigateBack() }
         )
 
-        HorizontalDivider(
-            thickness = Padding.x_large,
-            color = MaterialTheme.colorScheme.surface
-        )
-        StatsSubHeader(
-            modifier = Modifier.padding(horizontal = Padding.medium),
-            onIntentCreated = { viewModel.onIntentCreated(it) },
-        )
-
         val state = viewModel.state.collectAsState()
 
         Column(
@@ -67,7 +57,9 @@ fun StatsScreen(
             when (val uiState = state.value) {
                 is StatsUiState.Loading -> FullScreenLoading()
                 is StatsUiState.Error -> FullScreenError(uiState.type)
-                is StatsUiState.Content -> StatsContentView(uiState)
+                is StatsUiState.Content -> StatsContentView(uiState) {
+                    viewModel.onIntentCreated(it)
+                }
             }
         }
     }
@@ -75,11 +67,42 @@ fun StatsScreen(
 
 @Composable
 fun StatsContentView(
-    state: StatsUiState.Content
+    state: StatsUiState.Content,
+    onIntentCreated: (StatsIntent) -> Unit,
 ) {
     Column {
         Row(
-            modifier = Modifier.height(240.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = Padding.medium)
+            ,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+        ) {
+            InfoCard(
+                modifier = Modifier.weight(1f),
+                value = state.averageRate.toString(),
+                valueStyle = MaterialTheme.typography.titleMedium,
+                descriptionText = R.string.statistic_screen_card_average_rate,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            )
+            InfoCard(
+                modifier = Modifier.weight(1f),
+                value = state.mostActiveMonth.orEmpty(),
+                valueStyle = MaterialTheme.typography.titleMedium,
+                descriptionText = R.string.statistic_screen_card_most_active_month,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
+        StatsSubHeader(
+            modifier = Modifier.weight(0.7f)
+        ) { onIntentCreated(it) }
+
+        Row(
+            modifier = Modifier.weight(1.8f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             StatsChart(
@@ -91,12 +114,10 @@ fun StatsContentView(
                 items = state.statItems
             )
         }
-        HorizontalDivider(
-            thickness = Padding.x_large,
-            color = MaterialTheme.colorScheme.surface
-        )
         TrendView(
-            modifier = Modifier.padding(vertical = Padding.medium),
+            modifier = Modifier
+                .padding(vertical = Padding.medium)
+                .weight(1.5f),
             trends = state.trends
         )
     }
@@ -113,8 +134,9 @@ private fun StatsContentViewPreview() {
                 StatsItem(PracticeType.TRIBADISM, 63, BigDecimal(54)),
                 StatsItem(Other, 15, BigDecimal(10)),
             ),
+            averageRate = BigDecimal("3.76"),
+            mostActiveMonth = YearMonth.now().month.toString(),
             trends = listOf(5f, 16f, 8f, 10f, 12f, 14f, 10f)
         )
-
-    )
+    ) {}
 }

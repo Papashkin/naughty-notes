@@ -25,6 +25,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.TextStyle
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,7 +75,12 @@ class StatsViewModel @Inject constructor(
     private fun setStatContent(isInitial: Boolean = false) = viewModelScope.launch {
         val statItems = getStats(selectorType, selectorTimeframe)
         if (isInitial) {
-            _state.value = StatsUiState.Content(statItems, getTrends())
+            _state.value = StatsUiState.Content(
+                statItems = statItems,
+                averageRate = getAverageRate(),
+                mostActiveMonth = getMostActiveMonth(),
+                trends = getTrends()
+            )
         } else {
             _state.update {
                 when (it) {
@@ -99,6 +106,26 @@ class StatsViewModel @Inject constructor(
         }
 
         return trends
+    }
+
+    private fun getMostActiveMonth(): String? {
+        val mostActiveMonth = _allNotes
+            .groupBy { it.date.yearMonth }
+            .mapValues { (_, notes) -> notes.size }
+            .maxByOrNull { it.value }
+
+        return mostActiveMonth?.key?.month?.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    }
+
+    private fun getAverageRate(): BigDecimal {
+        val averageRate = _allNotes
+            .map { it.rate }
+            .average()
+            .toString()
+            .toBigDecimal()
+            .setScale(2, RoundingMode.HALF_UP)
+
+        return averageRate
     }
 
     private suspend fun getStats(
