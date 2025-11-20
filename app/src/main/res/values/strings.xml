@@ -130,4 +130,6 @@
     <string name="error_screen_message_unknown">Something went wrong</string>
 
     <string name="profile_screen_title">Profile</string>
+    <string name="statistic_screen_trend_title">Trend for last %1$d months</string>
+    <string name="statistic_screen_trend_empty">There is no enough data to show trends\nPlease add more activities</string>
 </resources>

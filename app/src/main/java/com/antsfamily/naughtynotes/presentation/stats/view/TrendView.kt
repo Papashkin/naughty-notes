@@ -12,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
@@ -26,18 +28,18 @@ fun TrendView(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(120.dp)
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = MaterialTheme.shapes.medium
             )
     ) {
-        if (trends.size < 3) {
+        if (trends.count { it > 0 } < 3) {
             Text(
                 modifier = Modifier
                     .padding(top = Padding.medium)
                     .align(Alignment.Center),
-                text = "There is no enough data to show trends\nPlease add more activities",
+                text = stringResource(R.string.statistic_screen_trend_empty),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
@@ -45,7 +47,7 @@ fun TrendView(
         } else {
             Column(modifier = Modifier.padding(Padding.medium)) {
                 Text(
-                    text = "Trend for last ${trends.size} months",
+                    text = stringResource(R.string.statistic_screen_trend_title, trends.size),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

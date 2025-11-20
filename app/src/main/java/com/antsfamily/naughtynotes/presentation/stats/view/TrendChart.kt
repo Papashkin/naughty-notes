@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview(showBackground = true)
 @Composable
 fun TrendChart(
     modifier: Modifier = Modifier,
@@ -64,4 +63,13 @@ fun TrendChart(
             style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Round)
         )
     }
+}
+
+@Preview
+@Composable
+private fun TrendChartPreview() {
+    TrendChart(
+        modifier = Modifier.fillMaxWidth(),
+        items = listOf(0f, 0f, 0f, 0f, 1f, 3f, 6f, 5f, 7f, 4f, 6f)
+    )
 }
