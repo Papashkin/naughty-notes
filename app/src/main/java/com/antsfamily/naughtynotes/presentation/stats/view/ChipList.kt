@@ -1,16 +1,18 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -20,20 +22,27 @@ import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
+@Preview(showBackground = true)
 @Composable
-fun ChipList(
-    chips: List<StatChipType>,
+fun StatsChipList(
     modifier: Modifier = Modifier,
     onChipClick: (StatChipType) -> Unit = {}
 ) {
+    val chips = remember { StatChipType.entries }
     val (selectedTypeId, setSelectedTypeId) = remember { mutableStateOf(CHIP_TYPE_DEFAULT) }
 
-    LazyRow(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(Padding.small),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                shape = MaterialTheme.shapes.large
+            ),
+        horizontalArrangement = Arrangement.Center
     ) {
-        items(chips) { chip ->
+        chips.forEach { chip ->
             ChipItem(
+                modifier = modifier.weight(1f),
                 type = chip,
                 isSelected = chip == selectedTypeId,
                 onClick = {
@@ -47,38 +56,41 @@ fun ChipList(
 
 @Composable
 fun ChipItem(
+    modifier: Modifier,
     type: StatChipType,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    Button(
-        onClick = { if (!isSelected) onClick() },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.outlineVariant
-            },
-            contentColor = if (isSelected) {
+    Box(
+        modifier = modifier
+            .padding(vertical = Padding.tiny, horizontal = Padding.x_small)
+            .background(
+                color = if (isSelected) {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                },
+                shape = MaterialTheme.shapes.medium
+            )
+            .clickable {
+                if (!isSelected) onClick()
+            }
+        ,
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Padding.medium)
+            ,
+            text = stringResource(type.toStringId()),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (isSelected) {
                 MaterialTheme.colorScheme.onPrimary
             } else {
                 MaterialTheme.colorScheme.outline
             },
-        ),
-    ) {
-        Text(
-            text = stringResource(type.toStringId()),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
         )
     }
-}
-
-
-@Preview
-@Composable
-private fun ChipListPreview() {
-    ChipList(
-        chips = StatChipType.entries
-    )
 }

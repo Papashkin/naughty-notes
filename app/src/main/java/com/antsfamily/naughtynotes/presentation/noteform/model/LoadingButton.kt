@@ -29,9 +29,6 @@ fun LoadingButton(
             .fillMaxWidth()
             .height(48.dp),
         shape = MaterialTheme.shapes.medium,
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 1.dp,
-        ),
         enabled = enabled
     ) {
         Box(contentAlignment = Alignment.Center) {

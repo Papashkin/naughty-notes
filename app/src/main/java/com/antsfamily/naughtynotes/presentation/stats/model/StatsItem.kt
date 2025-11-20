@@ -1,10 +1,12 @@
 package com.antsfamily.naughtynotes.presentation.stats.model
 
 import com.antsfamily.domain.model.StatInfo
+import java.math.BigDecimal
 
 data class StatsItem(
     val info: StatInfo,
     val value: Int,
+    val percent: BigDecimal
 ) {
 
     fun percent(totalSum: Float): Float {
