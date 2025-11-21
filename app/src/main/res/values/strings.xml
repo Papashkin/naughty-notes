@@ -123,6 +123,8 @@
     <string name="statistic_screen_selector_time_this_year">This year</string>
     <string name="statistic_screen_selector_time_all">All the time</string>
     <string name="statistic_screen_legend_other">Other</string>
+    <string name="statistic_screen_card_average_rate">Average rate</string>
+    <string name="statistic_screen_card_most_active_month">Most active month</string>
 
     <string name="error_screen_message_network">There is a problem on server side.\nPlease try later</string>
     <string name="error_screen_message_database">Something\'s happened with data.\nPlease try later</string>

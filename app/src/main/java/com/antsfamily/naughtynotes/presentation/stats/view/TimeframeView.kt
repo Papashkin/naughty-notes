@@ -42,7 +42,7 @@ fun TimeframeView(
             .height(50.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Padding.medium, Alignment.CenterHorizontally),
-        contentPadding = PaddingValues(horizontal = Padding.medium),
+        contentPadding = PaddingValues(horizontal = Padding.small),
     ) {
         items(TimeFrameItem.entries) { item ->
             Text(
