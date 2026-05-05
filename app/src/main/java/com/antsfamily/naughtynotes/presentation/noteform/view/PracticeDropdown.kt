@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.model.StatInfo
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.util.TestTag
 import com.antsfamily.naughtynotes.presentation.util.toDropdownStringId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import kotlin.enums.EnumEntries
@@ -39,7 +41,11 @@ inline fun <reified T> PracticeDropdown(
 ) where T : Enum<T> {
 
     var isExpanded by remember { mutableStateOf(false) }
-
+    val tag = when (selected) {
+        is PracticeType -> TestTag.NOTE_FORM_SCREEN_PRACTICE_TYPE_DROPDOWN
+        is PracticeLocation -> TestTag.NOTE_FORM_SCREEN_LOCATION_DROPDOWN
+        else -> throw IllegalStateException("wrong class")
+    }
     ExposedDropdownMenuBox(
         modifier = modifier
             .height(48.dp)
@@ -70,6 +76,7 @@ inline fun <reified T> PracticeDropdown(
             modifier = Modifier
                 .menuAnchor()
                 .fillMaxWidth()
+                .testTag(tag.value)
         )
 
         ExposedDropdownMenu(
@@ -79,7 +86,7 @@ inline fun <reified T> PracticeDropdown(
             entries.filter {
                 when (it) {
                     is StatInfo -> it.isNotUnknown
-                    else -> throw IllegalStateException("wrong class")
+                    else -> false
                 }
             }.forEach { item ->
                 DropdownMenuItem(

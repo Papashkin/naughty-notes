@@ -1,5 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.noteform.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,22 +12,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
+import com.antsfamily.naughtynotes.presentation.noteform.model.RatingType
+import com.antsfamily.naughtynotes.presentation.noteform.model.toDefaultIcon
+import com.antsfamily.naughtynotes.presentation.noteform.model.toSelectedIcon
 import com.antsfamily.naughtynotes.ui.theme.Padding
+
+private const val RATING_BAR_MAX_VALUE = 5
 
 @Composable
 fun RatingBar(
     modifier: Modifier = Modifier,
+    type: RatingType,
     rating: Int,
-    selectedIcon: ImageVector,
-    defaultIcon: ImageVector,
     onRatingChanged: (Int) -> Unit,
 ) {
-    val starCount = 5
+    val selectedIcon = type.toSelectedIcon()
+    val defaultIcon = type.toDefaultIcon()
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
@@ -35,14 +40,21 @@ fun RatingBar(
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        for (i in 1..starCount) {
+        for (i in 1..RATING_BAR_MAX_VALUE) {
+            val tag = ("rating_" + type.name).lowercase() + i
             Icon(
-                imageVector = if (i <= rating) selectedIcon else defaultIcon,
-                contentDescription = "Star $i",
+                imageVector =
+                    if (i <= rating) {
+                        ImageVector.vectorResource(selectedIcon)
+                    } else {
+                        ImageVector.vectorResource(defaultIcon)
+                    },
+                contentDescription = tag,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(52.dp)
-                    .debouncedClickable { onRatingChanged(i) }
+                    .testTag(tag)
+                    .clickable { onRatingChanged(i) }
             )
         }
     }
@@ -55,14 +67,12 @@ private fun RatingBarPreview() {
 
         RatingBar(
             rating = 4,
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
-            defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
+            type = RatingType.PLEASURE,
             onRatingChanged = {}
         )
         RatingBar(
             rating = 2,
-            selectedIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_filled),
-            defaultIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
+            type = RatingType.PAIN,
             onRatingChanged = {}
         )
     }

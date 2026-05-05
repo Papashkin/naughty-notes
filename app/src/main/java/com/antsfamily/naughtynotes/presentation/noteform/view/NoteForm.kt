@@ -17,10 +17,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +26,7 @@ import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormUiState
+import com.antsfamily.naughtynotes.presentation.noteform.model.RatingType
 import com.antsfamily.naughtynotes.presentation.util.CREATE_NOTE_NOTE_LENGTH_MAX
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -53,7 +52,7 @@ fun NoteForm(
             modifier = Modifier.padding(horizontal = Padding.large),
             title = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
             entries = PracticeType.entries,
-            selected = state.type
+            selected = state.type,
         ) {
             setPracticeType(it)
         }
@@ -66,7 +65,7 @@ fun NoteForm(
             ),
             title = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
             entries = PracticeLocation.entries,
-            selected = state.location
+            selected = state.location,
         ) {
             setPracticeLocation(it)
         }
@@ -127,9 +126,8 @@ fun NoteForm(
                 )
             }
             RatingBar(
+                type = RatingType.PAIN,
                 rating = state.painRate,
-                selectedIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_filled),
-                defaultIcon = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
                 onRatingChanged = { setPainRate(it) }
             )
         }
@@ -165,9 +163,8 @@ fun NoteForm(
                 )
             }
             RatingBar(
+                type = RatingType.PLEASURE,
                 rating = state.pleasureRate,
-                selectedIcon = ImageVector.vectorResource(R.drawable.ic_heart_filled),
-                defaultIcon = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
                 onRatingChanged = { setPleasureRate(it) }
             )
         }
