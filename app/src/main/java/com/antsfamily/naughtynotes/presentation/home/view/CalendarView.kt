@@ -22,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,7 +56,10 @@ import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,7 +67,6 @@ import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
-
 
 @Composable
 fun CalendarView(
@@ -96,6 +100,7 @@ fun CalendarContent(
 ) {
     val currentDay = remember { LocalDate.now() }
     val daysOfWeek = remember { daysOfWeek() }
+    val titleMonth = remember { mutableStateOf(yearMonth) }
 
     val state = rememberCalendarState(
         startMonth = yearMonth.minusMonths(CALENDAR_VIEW_MONTH_AMOUNT),
@@ -104,14 +109,32 @@ fun CalendarContent(
         firstDayOfWeek = daysOfWeek.first(),
         outDateStyle = OutDateStyle.EndOfGrid
     )
-    val coroutineScope = rememberCoroutineScope()
-    val visibleMonth = rememberFirstMostVisibleMonth(state) {
-        onMonthChanged(it)
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.layoutInfo.firstMostVisibleMonth()?.yearMonth }
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collect { month ->
+                titleMonth.value = month
+            }
     }
+
+    LaunchedEffect(state) {
+        snapshotFlow { state.isScrollInProgress }
+            .filter { !it }
+            .map { state.layoutInfo.firstMostVisibleMonth()?.yearMonth }
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collect { yearMonth ->
+                onMonthChanged(yearMonth)
+            }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
 
     CalendarTitle(
         modifier = Modifier.padding(vertical = Padding.regular, horizontal = Padding.small),
-        currentMonth = visibleMonth.yearMonth,
+        currentMonth = titleMonth.value,
         goToPrevious = {
             coroutineScope.launch {
                 state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
@@ -163,20 +186,22 @@ private fun Day(
     isWithRecords: Boolean,
     onClick: (LocalDate) -> Unit
 ) {
+    val isDayInCurrentMonth = day.position == DayPosition.MonthDate
+
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(Padding.x_small)
             .clip(MaterialTheme.shapes.small)
             .background(
-                color = if (day.position == DayPosition.MonthDate && day.date == currentDay) {
+                color = if (isDayInCurrentMonth && day.date == currentDay) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     Color.Transparent
                 }
             )
             .debouncedClickable(
-                enabled = day.position == DayPosition.MonthDate,
+                enabled = isDayInCurrentMonth,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { onClick(day.date) },
@@ -197,7 +222,7 @@ private fun Day(
         )
 
 
-        if (isWithRecords) {
+        if (isWithRecords && isDayInCurrentMonth) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_heart_filled),
                 tint = if (day.date == currentDay) {
@@ -270,24 +295,6 @@ private fun CalendarNavigationIcon(
         tint = MaterialTheme.colorScheme.primary,
         contentDescription = contentDescription,
     )
-}
-
-@Composable
-fun rememberFirstMostVisibleMonth(
-    state: CalendarState,
-    viewportPercent: Float = 50f,
-    onMonthChanged: (YearMonth) -> Unit
-): CalendarMonth {
-    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
-    LaunchedEffect(state) {
-        snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
-            .filterNotNull()
-            .collect { month ->
-                onMonthChanged(month.yearMonth)
-                visibleMonth.value = month
-            }
-    }
-    return visibleMonth.value
 }
 
 private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
