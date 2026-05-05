@@ -20,7 +20,7 @@ fun HorizontalDividerWithText(
     Column(modifier = modifier) {
         HorizontalDivider(
             thickness = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
         )
         Text(
             modifier = Modifier.padding(

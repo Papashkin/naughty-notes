@@ -53,6 +53,13 @@ class StatsViewModel @Inject constructor(
         getNotes()
     }
 
+    fun onIntentCreated(intent: StatsIntent) = viewModelScope.launch {
+        when (intent) {
+            is StatsIntent.ShowByTimeframe -> onTimeframeChanged(intent.timeFrameItem)
+            is StatsIntent.ShowByType -> onTypeChanged(intent.type)
+        }
+    }
+
     private fun getNotes() = viewModelScope.launch {
         try {
             delay(DELAY_SHORT)
@@ -69,26 +76,17 @@ class StatsViewModel @Inject constructor(
 
     private fun handleAllNotesSuccessResult(notes: List<NoteModel>) {
         _allNotes = notes
-        setStatContent(true)
+        setStatContent()
     }
 
-    private fun setStatContent(isInitial: Boolean = false) = viewModelScope.launch {
+    private fun setStatContent() = viewModelScope.launch {
         val statItems = getStats(selectorType, selectorTimeframe)
-        if (isInitial) {
-            _state.value = StatsUiState.Content(
-                statItems = statItems,
-                averageRate = getAverageRate(),
-                mostActiveMonth = getMostActiveMonth(),
-                trends = getTrends()
-            )
-        } else {
-            _state.update {
-                when (it) {
-                    is StatsUiState.Content -> it.copy(statItems = statItems)
-                    else -> it
-                }
-            }
-        }
+        _state.value = StatsUiState.Content(
+            statItems = statItems,
+            averageRate = getAverageRate(),
+            mostActiveMonth = getMostActiveMonth(),
+            trends = getTrends()
+        )
     }
 
     private fun getTrends(): List<Float> {
@@ -203,13 +201,6 @@ class StatsViewModel @Inject constructor(
             }
 
             TimeFrameItem.ALL_TIME -> _allNotes
-        }
-    }
-
-    fun onIntentCreated(intent: StatsIntent) = viewModelScope.launch {
-        when (intent) {
-            is StatsIntent.ShowByTimeframe -> onTimeframeChanged(intent.timeFrameItem)
-            is StatsIntent.ShowByType -> onTypeChanged(intent.type)
         }
     }
 

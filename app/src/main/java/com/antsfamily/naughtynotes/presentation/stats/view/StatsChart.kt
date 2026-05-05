@@ -1,5 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween

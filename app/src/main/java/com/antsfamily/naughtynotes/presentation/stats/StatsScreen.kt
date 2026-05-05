@@ -2,10 +2,13 @@ package com.antsfamily.naughtynotes.presentation.stats
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -74,8 +77,7 @@ fun StatsContentView(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .padding(vertical = Padding.medium)
-            ,
+                .padding(vertical = Padding.medium),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Padding.medium)
         ) {
@@ -97,27 +99,36 @@ fun StatsContentView(
             )
         }
 
-        StatsSubHeader(
-            modifier = Modifier.weight(0.7f)
-        ) { onIntentCreated(it) }
-
-        Row(
-            modifier = Modifier.weight(1.8f),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .weight(2.2f)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    shape = MaterialTheme.shapes.medium,
+                )
         ) {
-            StatsChart(
-                modifier = Modifier.weight(1f),
-                items = state.statItems
-            )
-            StatsChartLegend(
-                modifier = Modifier.weight(1f),
-                items = state.statItems
-            )
+            StatsSubHeader {
+                onIntentCreated(it)
+            }
+
+            Row(
+                modifier = Modifier.padding(Padding.small),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StatsChart(
+                    modifier = Modifier.weight(1f),
+                    items = state.statItems
+                )
+                StatsChartLegend(
+                    modifier = Modifier.weight(1f),
+                    items = state.statItems
+                )
+            }
         }
         TrendView(
             modifier = Modifier
                 .padding(vertical = Padding.medium)
-                .weight(1.5f),
+                .weight(1.3f),
             trends = state.trends
         )
     }

@@ -139,7 +139,7 @@ fun StatsLegendCard(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun StatsChartLegendPreview() {
+private fun StatsLegendCardPreview() {
     StatsLegendCard(
         index = 1,
         item = StatsItem(
@@ -147,5 +147,29 @@ private fun StatsChartLegendPreview() {
             value = 35,
             percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
         ),
+    )
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun StatsChartLegendPreview() {
+    StatsChartLegend(
+        items = listOf(
+            StatsItem(
+                info = PracticeType.TRIBADISM,
+                value = 35,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+            StatsItem(
+                info = PracticeType.ANAL,
+                value = 15,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+            StatsItem(
+                info = PracticeType.THREESOME,
+                value = 44,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+        )
     )
 }

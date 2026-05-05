@@ -1,6 +1,7 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -49,7 +50,10 @@ fun TimeframeView(
                 modifier = Modifier
                     .padding( vertical = Padding.medium)
                     .fillMaxHeight()
-                    .clickable {
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
                         setSelectedTimeFrame(item)
                         onTimeframeChange(item)
                     }
