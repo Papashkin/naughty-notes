@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.domain.model.ErrorType
-import com.antsfamily.domain.model.PracticeLocation
-import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.home.TopBar
@@ -70,16 +68,9 @@ fun NoteFormScreen(
         is NoteFormUiState.Error -> onErrorSnackbarShow(uiState.type)
         is NoteFormUiState.Content -> ContentView(
             uiState,
-            setPracticeType = { viewModel.setPracticeType(it) },
-            setPracticeLocation = { viewModel.setPracticeLocation(it) },
-            setIsProtected = { viewModel.setIsProtected(it) },
-            setHasOrgasm = { viewModel.setHasOrgasm(it) },
-            setHasPartnerOrgasm = { viewModel.setHasPartnerOrgasm(it) },
-            setPainRate = { viewModel.setPainRate(it) },
-            setPleasureRate = { viewModel.setPleasureRate(it) },
-            setNote = { viewModel.setNote(it) },
+            onIntentChanged = viewModel::onIntent,
             onNavigateBack = { onNavigateBack() },
-            onSaveButtonClick = { viewModel.onSaveButtonClick() }
+            onSaveButtonClick = { viewModel.onIntent(NoteFormIntent.SaveButtonClick) }
         )
     }
 
@@ -94,14 +85,7 @@ fun NoteFormScreen(
 @Composable
 fun ContentView(
     state: NoteFormUiState.Content,
-    setPracticeType: (PracticeType) -> Unit,
-    setPracticeLocation: (PracticeLocation) -> Unit,
-    setIsProtected: (Boolean) -> Unit,
-    setHasOrgasm: (Boolean) -> Unit,
-    setHasPartnerOrgasm: (Boolean) -> Unit,
-    setPainRate: (Int) -> Unit,
-    setPleasureRate: (Int) -> Unit,
-    setNote: (String) -> Unit,
+    onIntentChanged: (NoteFormIntent) -> Unit,
     onNavigateBack: () -> Unit,
     onSaveButtonClick: () -> Unit,
 ) {
@@ -144,15 +128,9 @@ fun ContentView(
             NoteForm(
                 state = state,
                 keyboardController = keyboardController,
-                setPracticeType = { setPracticeType(it) },
-                setPracticeLocation = { setPracticeLocation(it) },
-                setIsProtected = { setIsProtected(it) },
-                setHasOrgasm = { setHasOrgasm(it) },
-                setHasPartnerOrgasm = { setHasPartnerOrgasm(it) },
-                setPainRate = { setPainRate(it) },
-                setPleasureRate = { setPleasureRate(it) },
-                setNote = { setNote(it) },
-            )
+            ) {
+                onIntentChanged(it)
+            }
         }
         LoadingButton(
             modifier = Modifier
