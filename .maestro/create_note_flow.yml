@@ -1,13 +1,27 @@
 appId: com.antsfamily.naughtynotes
 ---
-- launchApp
+- launchApp:
+    clearState: true
 - tapOn: "1"
-- tapOn: "Type of practice"
-- tapOn: "Oral"
-- tapOn: "Location"
-- tapOn: "Kitchen"
 - tapOn:
-    text: "Star 4"
-    index: 1
+    id: "note_form_screen_practice_type_dropdown"
+- tapOn: "Oral"
+- tapOn:
+    id: "note_form_screen_location_dropdown"
+- tapOn: "Kitchen"
+- hideKeyboard
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element:
+      id: "rating_pleasure2"
+- extendedWaitUntil:
+    visible:
+      id: "rating_pleasure2"
+    timeout: 5000
+- tapOn:
+    id: "rating_pleasure2"
 - tapOn: "Save"
-- assertVisible: "New note was successfully saved"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+      visible: "Journal"
+      timeout: 5000

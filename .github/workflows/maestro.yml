@@ -1,0 +1,75 @@
+name: Maestro Tests
+
+on:
+  workflow_call:
+
+jobs:
+  maestro-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: app-apk
+          path: ./apk
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Start Android emulator and run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86
+          profile: pixel
+
+          emulator-options: >-
+            -no-snapshot
+            -no-window
+            -gpu swiftshader_indirect
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            
+          disable-animations: true
+
+          script: |
+            adb wait-for-device
+          
+            echo "Waiting for full boot..."
+            until adb shell getprop sys.boot_completed | grep -m 1 '1'; do sleep 2; done
+          
+            echo "Unlocking emulator..."
+            adb shell input keyevent 82
+  
+            echo "Current directory:"
+            pwd
+
+            echo "Repository files:"
+            ls -R
+
+            echo "Maestro directory:"
+            ls -R .maestro || echo ".maestro not found"
+
+            adb install -r ./apk/app-debug.apk
+
+            maestro test .maestro/create_note_flow.yml
