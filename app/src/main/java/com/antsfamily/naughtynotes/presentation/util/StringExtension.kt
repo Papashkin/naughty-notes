@@ -9,6 +9,7 @@ import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCod
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
@@ -151,3 +152,11 @@ fun ErrorType.toStringId(): Int {
         else -> R.string.error_screen_message_unknown
     }
 }
+
+@StringRes
+fun ChipType.toStringId(): Int =
+    when(this) {
+        ChipType.PROTECTION -> R.string.note_form_screen_protection_label
+        ChipType.ORGASM -> R.string.note_form_screen_your_orgasm_label
+        ChipType.PARTNER_ORGASM -> R.string.note_form_screen_partner_orgasm_label
+    }

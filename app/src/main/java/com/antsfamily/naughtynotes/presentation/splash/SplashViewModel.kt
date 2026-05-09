@@ -40,7 +40,7 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun verifyAppLocked() = viewModelScope.launch {
-        delay(300)
+        delay(SPLASH_SCREEN_ANIMATION_DURATION.toLong())
         val result = verifyAppLockedUseCase()
         when (result) {
             is UseCaseResult.Success -> handleVerifyAppLockedSuccessResult(result.data)
