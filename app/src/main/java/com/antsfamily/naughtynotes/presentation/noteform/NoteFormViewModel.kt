@@ -10,6 +10,8 @@ import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.model.toType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
+import com.antsfamily.naughtynotes.presentation.noteform.model.chip.NoteChip
 import com.antsfamily.naughtynotes.presentation.util.CREATE_NOTE_NOTE_LENGTH_MAX
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -59,6 +61,22 @@ class NoteFormViewModel @AssistedInject constructor(
         }
     }
 
+    fun onIntent(intent: NoteFormIntent) {
+        when (intent) {
+            is NoteFormIntent.SetNote -> setNote(intent.note)
+            is NoteFormIntent.SetNoteChipSelectionChanged -> setChipSelected(
+                intent.type,
+                intent.isSelected
+            )
+
+            is NoteFormIntent.SetPainRate -> setPainRate(intent.rate)
+            is NoteFormIntent.SetPleasureRate -> setPleasureRate(intent.rate)
+            is NoteFormIntent.SetPracticeLocation -> setPracticeLocation(intent.location)
+            is NoteFormIntent.SetPracticeType -> setPracticeType(intent.type)
+            is NoteFormIntent.SaveButtonClick -> onSaveButtonClick()
+        }
+    }
+
     private fun setupEditNoteContent(noteId: Int) = viewModelScope.launch {
         val result = getNoteByIdUseCase(noteId)
         when (result) {
@@ -74,14 +92,16 @@ class NoteFormViewModel @AssistedInject constructor(
                 date = selectedDate,
                 type = it.type,
                 location = it.location,
-                isProtected = it.isProtected,
-                hasOrgasm = it.hasOrgasm,
-                hasPartnerOrgasm = it.hasPartnerOrgasm,
                 pleasureRate = it.rate,
                 painRate = it.painRate,
                 note = it.personalNote,
                 isSaveButtonEnabled = true,
-                isSaveButtonLoadingVisible = false
+                isSaveButtonLoadingVisible = false,
+                chips = getNoteChips(
+                    isProtected = it.isProtected,
+                    hasOrgasm = it.hasOrgasm,
+                    hasPartnerOrgasm = it.hasPartnerOrgasm,
+                )
             )
         }
     }
@@ -100,7 +120,7 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setPainRate(painRate: Int) {
+    private fun setPainRate(painRate: Int) {
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(painRate = painRate)
@@ -110,7 +130,7 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setNote(note: String) {
+    private fun setNote(note: String) {
         if (note.length > CREATE_NOTE_NOTE_LENGTH_MAX) return
 
         _state.update {
@@ -122,7 +142,7 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setPracticeType(type: PracticeType) {
+    private fun setPracticeType(type: PracticeType) {
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(type = type)
@@ -132,7 +152,7 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setPracticeLocation(location: PracticeLocation) {
+    private fun setPracticeLocation(location: PracticeLocation) {
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(location = location)
@@ -142,32 +162,20 @@ class NoteFormViewModel @AssistedInject constructor(
         checkSaveButtonAvailability()
     }
 
-    fun setIsProtected(isProtected: Boolean) {
+    private fun setChipSelected(type: ChipType, isSelected: Boolean) {
         _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> it.copy(isProtected = isProtected)
-                else -> it
-            }
-        }
-        checkSaveButtonAvailability()
-    }
+            if (it !is NoteFormUiState.Content) return@update it
 
-    fun setHasOrgasm(hasOrgasm: Boolean) {
-        _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> it.copy(hasOrgasm = hasOrgasm)
-                else -> it
+            val updatedChips = (_state.value as NoteFormUiState.Content).chips.map { chip ->
+                if (chip.type == type) {
+                    chip.copy(isSelected = isSelected)
+                } else {
+                    chip
+                }
             }
-        }
-        checkSaveButtonAvailability()
-    }
 
-    fun setHasPartnerOrgasm(hasOrgasm: Boolean) {
-        _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> it.copy(hasPartnerOrgasm = hasOrgasm)
-                else -> it
-            }
+            it.copy(chips = updatedChips)
+
         }
         checkSaveButtonAvailability()
     }
@@ -185,17 +193,23 @@ class NoteFormViewModel @AssistedInject constructor(
         (_state.value as? NoteFormUiState.Content)?.let { state ->
             _state.value = state.copy(isSaveButtonLoadingVisible = true)
 
+            val isActivityProtected =
+                state.chips.first { it.type == ChipType.PROTECTION }.isSelected
+            val hasOrgasm = state.chips.first { it.type == ChipType.ORGASM }.isSelected
+            val hasPartnerOrgasm =
+                state.chips.first { it.type == ChipType.PARTNER_ORGASM }.isSelected
+
             val result = saveOrUpdateNoteUseCase(
                 id = noteId,
                 date = state.date,
                 type = state.type,
                 location = state.location,
-                isProtected = state.isProtected,
-                hasOrgasm = state.hasOrgasm,
-                hasPartnerOrgasm = state.hasPartnerOrgasm,
+                isProtected = isActivityProtected,
+                hasOrgasm = hasOrgasm,
+                hasPartnerOrgasm = hasPartnerOrgasm,
                 pleasureRate = state.pleasureRate,
                 painRate = state.painRate,
-                personalNote = state.note
+                personalNote = state.note,
             )
 
             when (result) {
@@ -226,4 +240,20 @@ class NoteFormViewModel @AssistedInject constructor(
     private fun setCreateNoteDefaultState() {
         _state.value = NoteFormUiState.Content.Default.copy(date = selectedDate)
     }
+
+    private fun getNoteChips(
+        isProtected: Boolean,
+        hasOrgasm: Boolean,
+        hasPartnerOrgasm: Boolean,
+    ): List<NoteChip> =
+        ChipType.entries.map { type ->
+            NoteChip(
+                type = type,
+                isSelected = when (type) {
+                    ChipType.PROTECTION -> isProtected
+                    ChipType.ORGASM -> hasOrgasm
+                    ChipType.PARTNER_ORGASM -> hasPartnerOrgasm
+                },
+            )
+        }
 }

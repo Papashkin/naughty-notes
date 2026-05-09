@@ -4,6 +4,8 @@ import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
+import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
+import com.antsfamily.naughtynotes.presentation.noteform.model.chip.NoteChip
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -15,14 +17,12 @@ sealed class NoteFormUiState {
         val date: LocalDate,
         val type: PracticeType,
         val location: PracticeLocation,
-        val isProtected: Boolean,
-        val hasOrgasm: Boolean,
-        val hasPartnerOrgasm: Boolean,
         val pleasureRate: Int,
         val painRate: Int,
         val note: String,
         val isSaveButtonEnabled: Boolean,
-        val isSaveButtonLoadingVisible: Boolean
+        val isSaveButtonLoadingVisible: Boolean,
+        val chips: List<NoteChip>,
     ) : NoteFormUiState() {
 
         companion object {
@@ -31,14 +31,12 @@ sealed class NoteFormUiState {
                 date = LocalDate.now(),
                 type = PracticeType.UNKNOWN,
                 location = PracticeLocation.UNKNOWN,
-                isProtected = false,
-                hasOrgasm = false,
-                hasPartnerOrgasm = false,
                 pleasureRate = 0,
                 painRate = 0,
                 note = "",
                 isSaveButtonEnabled = false,
-                isSaveButtonLoadingVisible = false
+                isSaveButtonLoadingVisible = false,
+                chips = getDefaultNoteChips()
             )
         }
 
@@ -50,3 +48,7 @@ sealed class NoteFormUiState {
 }
 
 fun LocalDate.formatToString(): String = this.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+
+private fun getDefaultNoteChips() = ChipType.entries.map {
+    NoteChip(it, false)
+}
