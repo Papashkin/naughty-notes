@@ -57,6 +57,17 @@ class AllNotesViewModel @AssistedInject constructor(
         getNotes()
     }
 
+    fun onIntentReceived(intent: AllNotesIntent) {
+        when(intent) {
+            is AllNotesIntent.AddNote -> addNote()
+            is AllNotesIntent.BringDeletedNoteBack -> onDeletedNoteBringBack()
+            is AllNotesIntent.NoteSuccessfullyDeleted -> onDeleteNoteSucceeded()
+            is AllNotesIntent.Retry -> retry()
+            is AllNotesIntent.NoteCardIntent.DeleteNote -> onDeleteNote(intent.note)
+            is AllNotesIntent.NoteCardIntent.EditNote -> onEditNote(intent.note)
+        }
+    }
+
     private fun getNotes() = viewModelScope.launch {
         try {
             val date = LocalDate.ofEpochDay(epoch)
@@ -96,11 +107,11 @@ class AllNotesViewModel @AssistedInject constructor(
         }
     }
 
-    fun onEditClick(note: NoteModel) = viewModelScope.launch {
+    private fun onEditNote(note: NoteModel) = viewModelScope.launch {
         _navigationToNoteFormFlow.emit(note.id)
     }
 
-    fun onDeleteClick(note: NoteModel) = viewModelScope.launch {
+    private fun onDeleteNote(note: NoteModel) = viewModelScope.launch {
         noteToDelete = note
         deleteNoteUseCase(note)
 
@@ -116,7 +127,7 @@ class AllNotesViewModel @AssistedInject constructor(
         _deleteNoteFlow.emit(Unit)
     }
 
-    fun onDeleteNoteReverted() = viewModelScope.launch {
+    private fun onDeletedNoteBringBack() = viewModelScope.launch {
         noteToDelete?.let { note ->
             addNoteUseCase(note)
             _state.update { state ->
@@ -133,15 +144,15 @@ class AllNotesViewModel @AssistedInject constructor(
         noteToDelete = null
     }
 
-    fun onDeleteNoteSuccess() {
+    private fun onDeleteNoteSucceeded() {
         noteToDelete = null
     }
 
-    fun onAddNoteClick() = viewModelScope.launch {
+    private fun addNote() = viewModelScope.launch {
         _navigationToNoteFormFlow.emit(null)
     }
 
-    fun onRetryClick() {
+    private fun retry() {
         _state.value = AllNotesUiState.Loading
         getNotes()
     }

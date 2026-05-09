@@ -33,13 +33,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCardExtended
+import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCard
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
-import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
+import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.noteform.formatToString
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.ui.theme.Padding
@@ -73,7 +73,7 @@ fun AllNotesScreen(
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = RoundedCornerShape(bottomStart = 20.dp, topStart = 20.dp)
                     ),
-                    onClick = { viewModel.onAddNoteClick() }
+                    onClick = { viewModel.onIntentReceived(AllNotesIntent.AddNote) }
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
@@ -95,18 +95,20 @@ fun AllNotesScreen(
         when (val uiState = state.value) {
             is AllNotesUiState.Loading -> FullScreenLoading()
             is AllNotesUiState.EmptyContent -> EmptyNotesList()
-            is AllNotesUiState.Error -> FullScreenError(uiState.type, true) {
-                viewModel.onRetryClick()
+            is AllNotesUiState.Error -> FullScreenError(
+                type = uiState.type,
+                hasRetry = true,
+            ) {
+                viewModel.onIntentReceived(AllNotesIntent.Retry)
             }
 
             is AllNotesUiState.Content -> LazyColumn(
                 modifier = Modifier.padding(Padding.regular)
             ) {
                 items(uiState.notes) { note ->
-                    NoteCardExtended(
+                    NoteCard(
                         note = note,
-                        onEditClick = { viewModel.onEditClick(note) },
-                        onDeleteClick = { viewModel.onDeleteClick(note) }
+                        onIntent = viewModel::onIntentReceived,
                     )
                 }
             }
@@ -130,10 +132,11 @@ fun AllNotesScreen(
                         actionLabel = context.getString(R.string.all_notes_screen_snackbar_undo),
                         duration = SnackbarDuration.Short
                     )
-                when (snackbarResult) {
-                    SnackbarResult.Dismissed -> viewModel.onDeleteNoteSuccess()
-                    SnackbarResult.ActionPerformed -> viewModel.onDeleteNoteReverted()
+                val intent = when (snackbarResult) {
+                    SnackbarResult.Dismissed -> AllNotesIntent.NoteSuccessfullyDeleted
+                    SnackbarResult.ActionPerformed -> AllNotesIntent.BringDeletedNoteBack
                 }
+                viewModel.onIntentReceived(intent)
             }
         }
     }
@@ -173,10 +176,9 @@ fun EmptyNotesList() {
 private fun AllNotesWithIconPreview() {
     LazyColumn(modifier = Modifier.padding(Padding.regular)) {
         items(PREVIEW_NOTES) { note ->
-            NoteCardExtended(
+            NoteCard(
                 note = note,
-                onEditClick = { },
-                onDeleteClick = { }
+                onIntent = { },
             )
         }
     }

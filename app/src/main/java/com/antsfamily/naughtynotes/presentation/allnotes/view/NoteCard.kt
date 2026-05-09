@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.R
+import com.antsfamily.naughtynotes.presentation.allnotes.AllNotesIntent
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.presentation.util.toDescriptionStringId
@@ -37,10 +38,9 @@ import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
-fun NoteCardExtended(
+fun NoteCard(
     note: NoteModel,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onIntent: (AllNotesIntent.NoteCardIntent) -> Unit,
 ) {
     val (menuExpanded, setMenuExpanded) = remember { mutableStateOf(false) }
 
@@ -92,14 +92,14 @@ fun NoteCardExtended(
                         text = { Text(stringResource(R.string.all_notes_screen_menu_edit)) },
                         onClick = {
                             setMenuExpanded(false)
-                            onEditClick()
+                            onIntent.invoke(AllNotesIntent.NoteCardIntent.EditNote(note))
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.all_notes_screen_menu_delete)) },
                         onClick = {
                             setMenuExpanded(false)
-                            onDeleteClick()
+                            onIntent.invoke(AllNotesIntent.NoteCardIntent.DeleteNote(note))
                         }
                     )
                 }
@@ -182,5 +182,5 @@ fun NoteCardExtended(
 @Composable
 private fun NoteCardExtendedPreview() {
     val note = PREVIEW_NOTES.first()
-    NoteCardExtended(note, {}, {})
+    NoteCard(note, {})
 }

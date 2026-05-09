@@ -22,7 +22,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
+
+private const val CHIP_ANIMATION_DURATION = 250
 
 @Composable
 fun ChipList(
@@ -38,7 +41,6 @@ fun ChipList(
         maxLines = 2
     ) {
         chips.forEach { chip ->
-
             ChipWithAnimation(
                 labelId = chip.type.toStringId(),
                 isSelected = chip.isSelected
@@ -62,7 +64,7 @@ fun ChipWithAnimation(
             } else {
                 MaterialTheme.colorScheme.surface
             },
-        animationSpec = tween(250),
+        animationSpec = tween(CHIP_ANIMATION_DURATION),
         label = "chip_container_animation"
     )
 
@@ -73,7 +75,7 @@ fun ChipWithAnimation(
             } else {
                 MaterialTheme.colorScheme.onSurface
             },
-        animationSpec = tween(250),
+        animationSpec = tween(CHIP_ANIMATION_DURATION),
         label = "chip_content_animation"
     )
 
