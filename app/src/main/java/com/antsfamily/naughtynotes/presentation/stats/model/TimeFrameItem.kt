@@ -7,5 +7,3 @@ enum class TimeFrameItem {
     ALL_TIME,
     ;
 }
-
-val TIMEFRAME_DEFAULT = TimeFrameItem.CURRENT_MONTH

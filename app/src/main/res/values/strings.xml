@@ -123,8 +123,11 @@
     <string name="statistic_screen_selector_time_this_year">This year</string>
     <string name="statistic_screen_selector_time_all">All the time</string>
     <string name="statistic_screen_legend_other">Other</string>
+    <string name="statistic_screen_legend_label">%1$s (%2$s%%)</string>
     <string name="statistic_screen_card_average_rate">Average rate</string>
     <string name="statistic_screen_card_most_active_month">Most active month</string>
+    <string name="statistic_screen_card_most_popular_activity">Most popular activity</string>
+    <string name="statistic_screen_card_most_popular_location">Most popular location</string>
 
     <string name="error_screen_message_network">There is a problem on server side.\nPlease try later</string>
     <string name="error_screen_message_database">Something\'s happened with data.\nPlease try later</string>
@@ -132,6 +135,4 @@
     <string name="error_screen_message_unknown">Something went wrong</string>
 
     <string name="profile_screen_title">Profile</string>
-    <string name="statistic_screen_trend_title">Trend for last %1$d months</string>
-    <string name="statistic_screen_trend_empty">There is no enough data to show trends\nPlease add more activities</string>
 </resources>
