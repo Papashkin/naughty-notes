@@ -70,3 +70,14 @@ fun Modifier.debouncedClickable(
         }
     }
 }
+
+fun Modifier.clickableWithoutIndication(
+    action: () -> Unit
+): Modifier = composed {
+    this.clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
+        action()
+    }
+}

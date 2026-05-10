@@ -11,6 +11,7 @@ import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErr
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.stats.model.StatInfoType
 import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
 import com.antsfamily.naughtynotes.presentation.verifypincode.model.VerificationErrorType
 
@@ -159,4 +160,13 @@ fun ChipType.toStringId(): Int =
         ChipType.PROTECTION -> R.string.note_form_screen_protection_label
         ChipType.ORGASM -> R.string.note_form_screen_your_orgasm_label
         ChipType.PARTNER_ORGASM -> R.string.note_form_screen_partner_orgasm_label
+    }
+
+@StringRes
+fun StatInfoType.toStringId(): Int =
+    when(this) {
+        StatInfoType.AVERAGE_RATE -> R.string.statistic_screen_card_average_rate
+        StatInfoType.MOST_ACTIVE_MONTH -> R.string.statistic_screen_card_most_active_month
+        StatInfoType.MOST_POPULAR_ACTIVITY -> R.string.statistic_screen_card_most_popular_activity
+        StatInfoType.MOST_POPULAR_LOCATION -> R.string.statistic_screen_card_most_popular_location
     }

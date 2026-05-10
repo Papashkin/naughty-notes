@@ -1,7 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.stats.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.antsfamily.naughtynotes.presentation.stats.model.CHIP_TYPE_DEFAULT
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
+import com.antsfamily.naughtynotes.presentation.util.clickableWithoutIndication
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -34,6 +34,7 @@ fun StatsChipList(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = Padding.medium)
             .background(
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = MaterialTheme.shapes.extraLarge
@@ -56,14 +57,14 @@ fun StatsChipList(
 
 @Composable
 fun ChipItem(
-    modifier: Modifier,
     type: StatChipType,
     isSelected: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
-            .padding(vertical = Padding.tiny, horizontal = Padding.x_small)
+            .padding(Padding.x_small)
             .background(
                 color = if (isSelected) {
                     MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
@@ -72,7 +73,7 @@ fun ChipItem(
                 },
                 shape = MaterialTheme.shapes.large
             )
-            .clickable {
+            .clickableWithoutIndication {
                 if (!isSelected) onClick()
             }
         ,

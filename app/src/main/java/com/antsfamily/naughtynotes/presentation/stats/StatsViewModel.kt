@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.model.Other
+import com.antsfamily.domain.model.PracticeLocation
+import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.model.toType
 import com.antsfamily.domain.repository.NoteRepository
-import com.antsfamily.naughtynotes.presentation.stats.model.CHIP_TYPE_DEFAULT
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
-import com.antsfamily.naughtynotes.presentation.stats.model.TIMEFRAME_DEFAULT
-import com.antsfamily.naughtynotes.presentation.stats.model.TimeFrameItem
-import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.time.LocalDate
-import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 import javax.inject.Inject
@@ -35,8 +31,7 @@ class StatsViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        private val currentDate = LocalDate.now()
-        private const val DELAY_SHORT = 20L
+        private const val STATS_INIT_DELAY = 200L
         private const val TOP_NOTES_AMOUNT = 3
         private const val PERCENTAGE_100 = 100.0
     }
@@ -44,8 +39,7 @@ class StatsViewModel @Inject constructor(
     private val _state: MutableStateFlow<StatsUiState> = MutableStateFlow(StatsUiState.Loading)
     val state: StateFlow<StatsUiState> get() = _state
 
-    private var selectorType: StatChipType = CHIP_TYPE_DEFAULT
-    private var selectorTimeframe: TimeFrameItem = TIMEFRAME_DEFAULT
+    private var selectorType: StatChipType = StatChipType.ACTIVITY
 
     private lateinit var _allNotes: List<NoteModel>
 
@@ -55,7 +49,7 @@ class StatsViewModel @Inject constructor(
 
     private fun getNotes() = viewModelScope.launch {
         try {
-            delay(DELAY_SHORT)
+            delay(STATS_INIT_DELAY)
             val notes = repository.getAllNotes()
             handleAllNotesSuccessResult(notes)
         } catch (e: Exception) {
@@ -69,17 +63,28 @@ class StatsViewModel @Inject constructor(
 
     private fun handleAllNotesSuccessResult(notes: List<NoteModel>) {
         _allNotes = notes
-        setStatContent(true)
+        val activitiesByMonth = notes
+            .groupBy { note -> note.date.month }
+            .toSortedMap()
+            .mapKeys { keys -> keys.key.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+            .mapValues { value -> value.value.size }
+        setStatContent(true, activitiesByMonth)
     }
 
-    private fun setStatContent(isInitial: Boolean = false) = viewModelScope.launch {
-        val statItems = getStats(selectorType, selectorTimeframe)
+    private fun setStatContent(
+        isInitial: Boolean = false,
+        activitiesByMonth: Map<String, Int> = mapOf(),
+    ) = viewModelScope.launch {
+        val statItems = getStats(selectorType)
+
         if (isInitial) {
             _state.value = StatsUiState.Content(
                 statItems = statItems,
                 averageRate = getAverageRate(),
                 mostActiveMonth = getMostActiveMonth(),
-                trends = getTrends()
+                activitiesByMonth = activitiesByMonth,
+                mostPopularActivity = getMostPopularActivity(),
+                mostPopularLocation = getMostPopularLocation()
             )
         } else {
             _state.update {
@@ -89,23 +94,6 @@ class StatsViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun getTrends(): List<Float> {
-
-        val notesByMonth: Map<YearMonth, Int> = _allNotes
-            .groupBy { YearMonth.from(it.date) }
-            .mapValues { (_, list) -> list.size }
-
-        val lastYearByMonths = (0 until 12).map {
-            currentDate.yearMonth.minusMonths(it.toLong())
-        }.reversed()
-
-        val trends: List<Float> = lastYearByMonths.map { month ->
-            notesByMonth.getOrElse(month) { 0 }.toFloat()
-        }
-
-        return trends
     }
 
     private fun getMostActiveMonth(): String? {
@@ -128,14 +116,32 @@ class StatsViewModel @Inject constructor(
         return averageRate
     }
 
+    private fun getMostPopularActivity(): PracticeType? {
+        val mostPopularActivity = _allNotes
+            .groupingBy { it.type }
+            .eachCount()
+            .maxByOrNull { it.value }
+            ?.key
+
+        return mostPopularActivity
+    }
+
+    private fun getMostPopularLocation(): PracticeLocation? {
+        val mostPopularLocation = _allNotes
+            .groupingBy { it.location }
+            .eachCount()
+            .maxByOrNull { it.value }
+            ?.key
+
+        return mostPopularLocation
+    }
+
     private suspend fun getStats(
         chipType: StatChipType,
-        timeframe: TimeFrameItem
     ) = withContext(Dispatchers.IO) {
-        val notesByTimeframe = filterNotesByTimeFrameItem(timeframe)
-        val allItems = notesByTimeframe.size
+        val allItemsAmount = _allNotes.size
 
-        val sortedNotes = notesByTimeframe
+        val sortedNotes = _allNotes
             .groupBy {
                 when (chipType) {
                     StatChipType.ACTIVITY -> it.type
@@ -152,7 +158,7 @@ class StatsViewModel @Inject constructor(
                         info = type,
                         value = notes.size,
                         percent = BigDecimal
-                            .valueOf(PERCENTAGE_100 * notes.size / allItems)
+                            .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
                             .setScale(1, RoundingMode.HALF_UP)
                     )
                 }
@@ -169,7 +175,7 @@ class StatsViewModel @Inject constructor(
                     info = type,
                     value = notes.size,
                     percent = BigDecimal
-                        .valueOf(PERCENTAGE_100 * notes.size / allItems)
+                        .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
                         .setScale(1, RoundingMode.HALF_UP)
                 )
             }
@@ -179,7 +185,7 @@ class StatsViewModel @Inject constructor(
                 info = Other,
                 value = otherNotesSize,
                 percent = BigDecimal
-                    .valueOf(PERCENTAGE_100 * otherNotesSize / allItems)
+                    .valueOf(PERCENTAGE_100 * otherNotesSize / allItemsAmount)
                     .setScale(1, RoundingMode.HALF_UP)
             )
         } else {
@@ -187,39 +193,14 @@ class StatsViewModel @Inject constructor(
         }
     }
 
-    private fun filterNotesByTimeFrameItem(timeframe: TimeFrameItem): List<NoteModel> {
-        return when (timeframe) {
-            TimeFrameItem.CURRENT_MONTH -> {
-                _allNotes.filter { it.date.month == currentDate.month }
-            }
-
-            TimeFrameItem.PREV_MONTH -> {
-                val previousMonth = YearMonth.now().previousMonth
-                _allNotes.filter { it.date.month == previousMonth.month }
-            }
-
-            TimeFrameItem.THIS_YEAR -> {
-                _allNotes.filter { it.date.year == currentDate.year }
-            }
-
-            TimeFrameItem.ALL_TIME -> _allNotes
-        }
-    }
-
     fun onIntentCreated(intent: StatsIntent) = viewModelScope.launch {
         when (intent) {
-            is StatsIntent.ShowByTimeframe -> onTimeframeChanged(intent.timeFrameItem)
             is StatsIntent.ShowByType -> onTypeChanged(intent.type)
         }
     }
 
     private fun onTypeChanged(type: StatChipType) {
         selectorType = type
-        setStatContent()
-    }
-
-    private fun onTimeframeChanged(timeframe: TimeFrameItem) {
-        selectorTimeframe = timeframe
         setStatContent()
     }
 }

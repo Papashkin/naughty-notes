@@ -7,10 +7,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,11 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,11 +37,9 @@ import com.antsfamily.naughtynotes.presentation.stats.model.StatsItem
 import com.antsfamily.naughtynotes.presentation.util.COLORS_LIST
 import com.antsfamily.naughtynotes.presentation.util.STATS_ANIMATION_DURATION
 import com.antsfamily.naughtynotes.presentation.util.toStringId
-import com.antsfamily.naughtynotes.ui.theme.Padding
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.RoundingMode
-
 
 @Composable
 fun StatsChartLegend(
@@ -64,7 +58,9 @@ fun StatsChartLegend(
     }
 
     LazyColumn(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .requiredHeight(250.dp),
         verticalArrangement = Arrangement.Center
     ) {
         itemsIndexed(items) { index, item ->
@@ -89,50 +85,39 @@ fun StatsLegendCard(
     item: StatsItem,
 ) {
     ListItem(
-        modifier = modifier
-            .padding(vertical = Padding.tiny)
-            .height(52.dp)
-            .clip(MaterialTheme.shapes.medium),
+        modifier = modifier.height(32.dp),
         colors = ListItemDefaults.colors(
-            containerColor = COLORS_LIST[index].copy(alpha = 0.2f),
             headlineColor = MaterialTheme.colorScheme.onSurface,
             supportingColor = MaterialTheme.colorScheme.onSurface
         ),
+        leadingContent = {
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .background(
+                        color = COLORS_LIST[index],
+                        shape = CircleShape
+                    )
+            )
+        },
         headlineContent = {
+            val legendLabel = when (val type = item.info) {
+                is PracticeType -> stringResource(type.toStringId())
+                is PracticeLocation -> stringResource(type.toStringId())
+                is Other -> stringResource(R.string.statistic_screen_legend_other)
+                else -> throw IllegalArgumentException("Unknown type")
+            }
             Text(
-                text = when (val type = item.info) {
-                    is PracticeType -> stringResource(type.toStringId())
-                    is PracticeLocation -> stringResource(type.toStringId())
-                    is Other -> stringResource(R.string.statistic_screen_legend_other)
-                    else -> throw IllegalArgumentException("Unknown type")
-                },
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
+                text =
+                    stringResource(
+                        id = R.string.statistic_screen_legend_label,
+                        legendLabel, item.percent.toString()
+                    ),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-        },
-        supportingContent = {
-            Row(
-                modifier = modifier.padding(vertical = Padding.tiny),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Padding.small, Alignment.CenterHorizontally)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .background(
-                            color = COLORS_LIST[index],
-                            shape = CircleShape
-                        )
-                )
-                Text(
-                    text = "${item.percent}%",
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
         },
     )
 }
@@ -140,12 +125,23 @@ fun StatsLegendCard(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun StatsChartLegendPreview() {
-    StatsLegendCard(
-        index = 1,
-        item = StatsItem(
-            info = PracticeType.TRIBADISM,
-            value = 35,
-            percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
-        ),
+    StatsChartLegend(
+        items = listOf(
+            StatsItem(
+                info = PracticeType.TRIBADISM,
+                value = 25,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+            StatsItem(
+                info = PracticeType.ORAL,
+                value = 55,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+            StatsItem(
+                info = PracticeType.MASTURBATION,
+                value = 15,
+                percent = BigDecimal.valueOf(67.34535).setScale(2, RoundingMode.HALF_EVEN)
+            ),
+        )
     )
 }

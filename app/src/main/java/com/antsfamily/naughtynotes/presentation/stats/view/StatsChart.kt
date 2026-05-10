@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import com.antsfamily.domain.model.PracticeType
@@ -59,13 +60,13 @@ fun StatsChart(
         ) {
             Canvas(modifier = Modifier.fillMaxWidth()) {
                 val width = size.width
-                val radius = width
-                val strokeWidth = radius * .2f
+                val strokeWidth = size.width * 0.2f
 
                 var startAngle = -90f
 
                 items.forEachIndexed { index, item ->
-                    val sweepAngle = item.percent(totalStatsSum) / 2f
+                    val gapAngle = 2f
+                    val sweepAngle = item.percent(totalStatsSum) / 2f - gapAngle
 
                     if (startAngle <= currentSweepAngle) {
                         drawArc(
@@ -73,12 +74,15 @@ fun StatsChart(
                             startAngle = startAngle,
                             sweepAngle = sweepAngle.coerceAtMost(currentSweepAngle - startAngle),
                             useCenter = false,
-                            topLeft = Offset(-strokeWidth, strokeWidth / 2),
+                            topLeft = Offset(-strokeWidth*2f, strokeWidth / 2),
                             size = Size(width - strokeWidth, width - strokeWidth),
-                            style = Stroke(strokeWidth)
+                            style = Stroke(
+                                width = strokeWidth,
+                                cap = StrokeCap.Round
+                            )
                         )
                     }
-                    startAngle += sweepAngle
+                    startAngle += sweepAngle + gapAngle
                 }
             }
         }
