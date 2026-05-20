@@ -1,8 +1,9 @@
 package com.antsfamily.naughtynotes.presentation.home.view
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -11,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,32 +22,33 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
 fun InfoCard(
-    modifier: Modifier = Modifier,
     value: String,
-    valueStyle: TextStyle = MaterialTheme.typography.displaySmall,
     @StringRes descriptionText: Int,
-    containerColor: Color,
-    contentColor: Color,
+    modifier: Modifier = Modifier,
+    valueStyle: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = contentColor
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Box(Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = Padding.large),
+            verticalArrangement = Arrangement.spacedBy(Padding.large),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                modifier = Modifier.align(Alignment.Center),
                 text = value,
                 style = valueStyle,
             )
             Text(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(Padding.regular),
+                modifier = Modifier.padding(top = Padding.large),
                 style = MaterialTheme.typography.labelSmall,
                 text = stringResource(descriptionText)
             )
@@ -61,7 +62,5 @@ private fun InfoCardPreview() {
     InfoCard(
         value = "Title",
         descriptionText = R.string.home_screen_title,
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary
     )
 }
