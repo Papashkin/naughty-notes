@@ -31,19 +31,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
-    val state: StateFlow<HomeUiState>
-        get() = _state
+    val state: StateFlow<HomeUiState> = _state
 
-    private val _navigateToNoteFormEvent: MutableSharedFlow<Long> = MutableSharedFlow()
-    val navigateToNoteFormEvent: SharedFlow<Long> = _navigateToNoteFormEvent.asSharedFlow()
+    private val _navigationEvent: MutableSharedFlow<HomeNavigationEvent> = MutableSharedFlow()
+    val navigationEvent: SharedFlow<HomeNavigationEvent> = _navigationEvent.asSharedFlow()
 
-    private val _navigateToAllNotesEvent: MutableSharedFlow<Long> = MutableSharedFlow()
-    val navigateToAllNotesEvent: SharedFlow<Long> = _navigateToAllNotesEvent.asSharedFlow()
-
-    private val _navigateToSettingsEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val navigateToSettingsEvent: SharedFlow<Unit> = _navigateToSettingsEvent.asSharedFlow()
-
-    //    private var notes: List<NoteModel> = mutableListOf()
     private var groupedNotes: Map<YearMonth, List<NoteModel>> = mutableMapOf()
     private var isClickEnabled: Boolean = true
 
@@ -66,6 +58,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun handleNotes(notes: List<NoteModel>) {
+        val lastThreeNotes = notes
+            .sortedBy { it.date }
+            .takeLast(3)
+            .sortedByDescending { it.date }
+
         groupedNotes = notes.groupBy { it.date.yearMonth }
 
         val lastNoteDate = notes.maxByOrNull { it.date }?.date ?: today
@@ -80,6 +77,7 @@ class HomeViewModel @Inject constructor(
                 isCurrentMonth = true,
                 datesWithNotes = notes.getDatesForMonth(currentMonth),
                 daysSinceLastNote = abs(daysSinceLastNote),
+                lastThreeNotes = lastThreeNotes
             )
         }
     }
@@ -130,20 +128,21 @@ class HomeViewModel @Inject constructor(
         if (date.isAfter(today) || !isClickEnabled) return@launch
 
         isClickEnabled = false
-
         val notesForDate = groupedNotes[date.yearMonth].orEmpty().filter { it.date == date }
 
-        if (notesForDate.isEmpty()) {
-            _navigateToNoteFormEvent.emit(date.toEpochDay())
+        val todayDate = date.toEpochDay()
+        val navigationEvent = if (notesForDate.isEmpty()) {
+            HomeNavigationEvent.NavigateToNoteForm(todayDate)
         } else {
-            _navigateToAllNotesEvent.emit(date.toEpochDay())
+            HomeNavigationEvent.NavigateToAllNotes(todayDate)
         }
+        _navigationEvent.emit(navigationEvent)
         delay(debounceInterval)
         isClickEnabled = true
     }
 
     fun onSettingsClick() = viewModelScope.launch {
-        _navigateToSettingsEvent.emit(Unit)
+        _navigationEvent.emit(HomeNavigationEvent.NavigateToSettings)
     }
 
     private fun List<NoteModel>.getDatesForMonth(month: YearMonth): List<LocalDate> =

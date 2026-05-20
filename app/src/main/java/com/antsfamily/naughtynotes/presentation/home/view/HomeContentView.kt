@@ -5,25 +5,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.naughtynotes.R
@@ -31,7 +25,7 @@ import com.antsfamily.naughtynotes.presentation.common.DebouncedTextButton
 import com.antsfamily.naughtynotes.presentation.common.ShimmerLoading
 import com.antsfamily.naughtynotes.presentation.home.HomeIntent
 import com.antsfamily.naughtynotes.presentation.home.HomeUiState
-import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
+import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.YearMonth
 
@@ -40,7 +34,14 @@ fun HomeContentView(
     state: HomeUiState.Content,
     onIntentChanged: (HomeIntent) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.home_screen_subtitle),
+            style = MaterialTheme.typography.bodyMedium
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,60 +67,20 @@ fun HomeContentView(
             onDayClick = { onIntentChanged(HomeIntent.SelectDay(it)) }
         )
 
-        Spacer(Modifier.height(Padding.medium))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
-        ) {
-            InfoCard(
-                modifier = Modifier.weight(1f),
-                value = state.datesWithNotes.size.toString(),
-                descriptionText = R.string.home_screen_banner_total_notes_of_month,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+        if (state.lastThreeNotes.isNotEmpty()) {
+            Spacer(Modifier.height(Padding.large))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Last three notes:",
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium
             )
-
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Padding.regular)
+                modifier = Modifier.padding(vertical = Padding.small),
+                verticalArrangement = Arrangement.spacedBy(Padding.x_small)
             ) {
-
-                InfoCard(
-                    modifier = Modifier.weight(0.6f),
-                    value = state.daysSinceLastNote.toString(),
-                    descriptionText = R.string.home_screen_banner_days_since_last_note,
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary
-                )
-
-                Card(
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .debouncedClickable { onIntentChanged(HomeIntent.Settings) },
-                    shape = MaterialTheme.shapes.large,
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    )
-                ) {
-                    Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_settings),
-                            contentDescription = null
-                        )
-                        Text(
-                            modifier = Modifier.padding(top = Padding.x_small),
-                            style = MaterialTheme.typography.labelMedium,
-                            text = stringResource(R.string.home_screen_banner_settings)
-                        )
-                    }
+                state.lastThreeNotes.forEach { note ->
+                    HomeNoteCard(note)
                 }
             }
         }
@@ -142,51 +103,41 @@ fun HomeContentLoadingView(modifier: Modifier = Modifier) {
                 ),
         )
 
-        Spacer(Modifier.height(Padding.medium))
+        Spacer(Modifier.height(Padding.large))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Padding.medium)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Padding.x_small)
         ) {
             ShimmerLoading(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .size(60.dp)
+                    .height(90.dp)
+                    .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
                         shape = MaterialTheme.shapes.large
                     ),
                 durationMillis = 1000
             )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(Padding.regular)
-            ) {
-
-                ShimmerLoading(
-                    modifier = Modifier
-                        .weight(0.6f)
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            shape = MaterialTheme.shapes.large
-                        ),
-                    durationMillis = 1000
-                )
-
-                ShimmerLoading(
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceContainer,
-                            shape = MaterialTheme.shapes.large
-                        ),
-                    durationMillis = 1000
-                )
-            }
+            ShimmerLoading(
+                modifier = Modifier
+                    .height(90.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        shape = MaterialTheme.shapes.large
+                    ),
+                durationMillis = 1000
+            )
+            ShimmerLoading(
+                modifier = Modifier
+                    .height(90.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        shape = MaterialTheme.shapes.large
+                    ),
+                durationMillis = 1000
+            )
         }
     }
 }
@@ -199,7 +150,8 @@ private fun HomeContentPreview() {
         yearMonth = YearMonth.now().minusMonths(1),
         isCurrentMonth = false,
         datesWithNotes = listOf(),
-        daysSinceLastNote = 5
+        daysSinceLastNote = 5,
+        lastThreeNotes = PREVIEW_NOTES.take(3)
     )
     HomeContentView(state, {})
 }
