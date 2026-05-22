@@ -21,6 +21,7 @@ espressoCore = "3.7.0"
 material = "1.13.0"
 crypto = "1.1.0"
 lottie = "0.12.3"
+gson = "2.14.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,7 @@ mockito =  { group = "org.mockito", name = "mockito-core", version.ref = "mockit
 room = {group = "androidx.room", name="room-compiler", version.ref = "room" }
 room-runtime = {group = "androidx.room", name="room-runtime", version.ref = "room" }
 room-ktx = {group = "androidx.room", name="room-ktx", version.ref = "room" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

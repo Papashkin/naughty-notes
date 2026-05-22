@@ -1,26 +1,19 @@
 package com.antsfamily.naughtynotes.presentation.noteform
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +26,7 @@ import com.antsfamily.naughtynotes.presentation.home.TopBar
 import com.antsfamily.naughtynotes.presentation.noteform.model.LoadingButton
 import com.antsfamily.naughtynotes.presentation.noteform.view.NoteForm
 import com.antsfamily.naughtynotes.presentation.noteform.view.SuccessDialog
+import com.antsfamily.naughtynotes.presentation.util.formatToString
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -90,61 +84,66 @@ fun ContentView(
     onSaveButtonClick: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
 
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .fillMaxSize()
-            .imePadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 90.dp)
-                .verticalScroll(rememberScrollState())
-                .pointerInput(Unit) {
-                    detectTapGestures(onPress = { focusManager.clearFocus() })
-                }
-        ) {
-            TopBar(
-                modifier = Modifier
-                    .padding(start = Padding.tiny)
-                    .fillMaxWidth(),
-                title = stringResource(state.formType.toStringId()),
-                onNavigationBack = { onNavigateBack() }
-            )
-            Text(
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = Padding.gigantic),
-                text = stringResource(
-                    R.string.note_form_screen_subtitle,
-                    state.date.formatToString()
-                ),
-                style = MaterialTheme.typography.bodySmall
-            )
-            HorizontalDivider(thickness = Padding.medium, color = MaterialTheme.colorScheme.surface)
-            NoteForm(
-                state = state,
-                keyboardController = keyboardController,
+                    .shadow(2.dp)
+                    .background(color = MaterialTheme.colorScheme.surface)
             ) {
-                onIntentChanged(it)
+                TopBar(
+                    modifier = Modifier
+                        .padding(start = Padding.tiny)
+                        .fillMaxWidth(),
+                    title = stringResource(state.formType.toStringId()),
+                    onNavigationBack = { onNavigateBack() }
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = Padding.gigantic, bottom = Padding.small),
+                    text = stringResource(
+                        R.string.note_form_screen_subtitle,
+                        state.date.formatToString()
+                    ),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        },
+        bottomBar = {
+            Box(
+                modifier =
+                    Modifier
+                        .shadow(8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surface
+                        ),
+            ) {
+                LoadingButton(
+                    textId = R.string.note_form_screen_button_save,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Padding.medium),
+                    onClick = {
+                        keyboardController?.hide()
+                        onSaveButtonClick()
+                    },
+                    loading = state.isSaveButtonLoadingVisible,
+                    enabled = state.isSaveButtonEnabled,
+                )
             }
         }
-        LoadingButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(20.dp)
-                .fillMaxWidth(),
-            onClick = {
-                keyboardController?.hide()
-                onSaveButtonClick()
-            },
-            loading = state.isSaveButtonLoadingVisible,
-            enabled = state.isSaveButtonEnabled,
+    ) { paddingValues ->
+        NoteForm(
+            state = state,
+            modifier =
+                Modifier
+                    .padding(paddingValues)
         ) {
-            Text(text = stringResource(R.string.note_form_screen_button_save))
+            onIntentChanged(it)
         }
     }
 }

@@ -8,6 +8,7 @@ import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeButtonState
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
+import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
@@ -25,14 +26,6 @@ fun PracticeType.toStringId(): Int {
         PracticeType.TRIBADISM -> R.string.practice_type_tribadism
         PracticeType.BDSM -> R.string.practice_type_bdsm
         PracticeType.THREESOME -> R.string.practice_type_threesome
-        PracticeType.UNKNOWN -> R.string.practice_type_unknown
-    }
-}
-@StringRes
-fun PracticeType.toDropdownStringId(): Int {
-    return when (this) {
-        PracticeType.UNKNOWN -> R.string.note_form_screen_practice_type_dropdown_label
-        else  -> this.toStringId()
     }
 }
 
@@ -46,7 +39,6 @@ fun PracticeType.toDescriptionStringId(): Int {
         PracticeType.TRIBADISM -> R.string.practice_type_description_tribadism
         PracticeType.BDSM -> R.string.practice_type_description_bdsm
         PracticeType.THREESOME -> R.string.practice_type_description_threesome
-        PracticeType.UNKNOWN -> R.string.practice_type_description_unknown
     }
 }
 
@@ -73,15 +65,6 @@ fun PracticeLocation.toStringId(): Int {
         PracticeLocation.AIRPLANE -> R.string.practice_location_airplane
         PracticeLocation.TRAIN -> R.string.practice_location_train
         PracticeLocation.OTHER -> R.string.practice_location_other
-        PracticeLocation.UNKNOWN -> R.string.practice_location_unknown
-    }
-}
-
-@StringRes
-fun PracticeLocation.toDropdownStringId(): Int {
-    return when (this) {
-        PracticeLocation.UNKNOWN -> R.string.note_form_screen_practice_location_dropdown_label
-        else  -> this.toStringId()
     }
 }
 
@@ -169,4 +152,13 @@ fun StatInfoType.toStringId(): Int =
         StatInfoType.MOST_ACTIVE_MONTH -> R.string.statistic_screen_card_most_active_month
         StatInfoType.MOST_POPULAR_ACTIVITY -> R.string.statistic_screen_card_most_popular_activity
         StatInfoType.MOST_POPULAR_LOCATION -> R.string.statistic_screen_card_most_popular_location
+    }
+@StringRes
+fun ExperienceType.toStringId(): Int =
+    when(this) {
+        ExperienceType.BAD -> R.string.note_form_screen_experience_bad
+        ExperienceType.BELOW_AVERAGE -> R.string.note_form_screen_experience_below_average
+        ExperienceType.OKAY -> R.string.note_form_screen_experience_ok
+        ExperienceType.GOOD -> R.string.note_form_screen_experience_good
+        ExperienceType.AMAZING -> R.string.note_form_screen_experience_amazing
     }

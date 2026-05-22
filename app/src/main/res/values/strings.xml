@@ -52,7 +52,6 @@
     <string name="note_form_screen_pleasure_rate_max_label">Super!</string>
     <string name="note_form_screen_practice_type_dropdown_label">Type of practice</string>
     <string name="note_form_screen_practice_location_dropdown_label">Location</string>
-    <string name="note_form_screen_rate_bar_pain_label">Any discomfort?</string>
     <string name="note_form_screen_rate_bar_pleasure_label">How was your experience?</string>
     <string name="note_form_screen_note_text_field_label">Note (optional)</string>
     <string name="note_form_screen_subtitle">for %1$s</string>
@@ -60,6 +59,13 @@
     <string name="note_form_screen_your_orgasm_label">Your orgasm</string>
     <string name="note_form_screen_partner_orgasm_label">Partner(s) orgasm</string>
     <string name="note_form_screen_button_save">Save</string>
+
+    <string name="note_form_screen_experience_very_bad">Totally off</string>
+    <string name="note_form_screen_experience_bad">Didn\’t feel right</string>
+    <string name="note_form_screen_experience_below_average">So-so</string>
+    <string name="note_form_screen_experience_ok">Quite nice</string>
+    <string name="note_form_screen_experience_good">Loved it</string>
+    <string name="note_form_screen_experience_amazing">Absolutely incredible</string>
 
     <string name="home_screen_title">Journal</string>
     <string name="home_screen_subtitle">Psst! Want to add a naughty note? Just click on a date 😉</string>

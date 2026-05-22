@@ -16,25 +16,23 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
     suspend operator fun invoke(
         id: Int?,
         date: LocalDate,
-        type: PracticeType,
+        types: List<PracticeType>,
         location: PracticeLocation,
         isProtected: Boolean,
         hasOrgasm: Boolean,
         hasPartnerOrgasm: Boolean,
-        painRate: Int,
-        pleasureRate: Int,
+        experienceRate: Float,
         personalNote: String,
     ): UseCaseResult<Unit> = try {
         val note = NoteModel(
             id = id ?: Random.nextInt(),
             date = date,
-            type = type,
+            types = types,
             location = location,
             isProtected = isProtected,
             hasOrgasm = hasOrgasm,
             hasPartnerOrgasm = hasPartnerOrgasm,
-            rate = pleasureRate,
-            painRate = painRate,
+            experienceRate = experienceRate,
             personalNote = personalNote
         )
 

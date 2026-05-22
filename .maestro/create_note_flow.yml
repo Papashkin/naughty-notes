@@ -3,23 +3,20 @@ appId: com.antsfamily.naughtynotes
 - launchApp:
     clearState: true
 - tapOn: "1"
-- tapOn:
-    id: "note_form_screen_practice_type_dropdown"
 - tapOn: "Oral"
-- tapOn:
-    id: "note_form_screen_location_dropdown"
+- tapOn: "Show more"
 - tapOn: "Kitchen"
-- hideKeyboard
+#- hideKeyboard
 - waitForAnimationToEnd
-- scrollUntilVisible:
-    element:
-      id: "rating_pleasure2"
-- extendedWaitUntil:
-    visible:
-      id: "rating_pleasure2"
-    timeout: 5000
-- tapOn:
-    id: "rating_pleasure2"
+#- scrollUntilVisible:
+#    element:
+#      id: "experience_slider"
+#- extendedWaitUntil:
+#    visible:
+#      id: "experience_slider"
+#    timeout: 5000
+#- tapOn:
+#    id: "experience_slider"
 - tapOn: "Save"
 - waitForAnimationToEnd
 - extendedWaitUntil:

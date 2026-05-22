@@ -2,7 +2,6 @@ package com.antsfamily.domain.model
 
 
 enum class PracticeLocation: StatInfo {
-    UNKNOWN,
     BEDROOM,
     LIVING_ROOM,
     SHOWER,
@@ -26,5 +25,5 @@ enum class PracticeLocation: StatInfo {
     ;
 
     override val isNotUnknown: Boolean
-        get() = this != UNKNOWN
+        get() = true
 }

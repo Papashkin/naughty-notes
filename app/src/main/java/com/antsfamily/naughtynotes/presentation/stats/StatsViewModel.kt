@@ -3,7 +3,6 @@ package com.antsfamily.naughtynotes.presentation.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
-import com.antsfamily.domain.model.Other
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.domain.model.toType
@@ -107,7 +106,7 @@ class StatsViewModel @Inject constructor(
 
     private fun getAverageRate(): BigDecimal {
         val averageRate = _allNotes
-            .map { it.rate }
+            .map { it.experienceRate }
             .average()
             .toString()
             .toBigDecimal()
@@ -118,7 +117,9 @@ class StatsViewModel @Inject constructor(
 
     private fun getMostPopularActivity(): PracticeType? {
         val mostPopularActivity = _allNotes
-            .groupingBy { it.type }
+            .map { it.types }
+            .flatten()
+            .groupingBy { it }
             .eachCount()
             .maxByOrNull { it.value }
             ?.key
@@ -139,58 +140,59 @@ class StatsViewModel @Inject constructor(
     private suspend fun getStats(
         chipType: StatChipType,
     ) = withContext(Dispatchers.IO) {
-        val allItemsAmount = _allNotes.size
-
-        val sortedNotes = _allNotes
-            .groupBy {
-                when (chipType) {
-                    StatChipType.ACTIVITY -> it.type
-                    StatChipType.PLACE -> it.location
-                }
-            }
-            .toList()
-            .sortedByDescending { (_, notes) -> notes.size }
-
-        if (sortedNotes.size == TOP_NOTES_AMOUNT + 1) {
-            return@withContext sortedNotes
-                .map { (type, notes) ->
-                    StatsItem(
-                        info = type,
-                        value = notes.size,
-                        percent = BigDecimal
-                            .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
-                            .setScale(1, RoundingMode.HALF_UP)
-                    )
-                }
-                .sortedByDescending { it.percent }
-        }
-
-        val topNotes = sortedNotes.take(TOP_NOTES_AMOUNT)
-        val otherNotes = sortedNotes.drop(TOP_NOTES_AMOUNT)
-        val otherNotesSize = otherNotes.sumOf { (_, notes) -> notes.size }
-
-        val statItems = topNotes
-            .map { (type, notes) ->
-                StatsItem(
-                    info = type,
-                    value = notes.size,
-                    percent = BigDecimal
-                        .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
-                        .setScale(1, RoundingMode.HALF_UP)
-                )
-            }
-
-        if (otherNotes.isNotEmpty()) {
-            statItems + StatsItem(
-                info = Other,
-                value = otherNotesSize,
-                percent = BigDecimal
-                    .valueOf(PERCENTAGE_100 * otherNotesSize / allItemsAmount)
-                    .setScale(1, RoundingMode.HALF_UP)
-            )
-        } else {
-            statItems
-        }
+        listOf<StatsItem>()
+//        val allItemsAmount = _allNotes.size
+//
+//        val sortedNotes = _allNotes
+//            .groupBy {
+//                when (chipType) {
+//                    StatChipType.ACTIVITY -> it.type
+//                    StatChipType.PLACE -> it.location
+//                }
+//            }
+//            .toList()
+//            .sortedByDescending { (_, notes) -> notes.size }
+//
+//        if (sortedNotes.size == TOP_NOTES_AMOUNT + 1) {
+//            return@withContext sortedNotes
+//                .map { (type, notes) ->
+//                    StatsItem(
+//                        info = type,
+//                        value = notes.size,
+//                        percent = BigDecimal
+//                            .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
+//                            .setScale(1, RoundingMode.HALF_UP)
+//                    )
+//                }
+//                .sortedByDescending { it.percent }
+//        }
+//
+//        val topNotes = sortedNotes.take(TOP_NOTES_AMOUNT)
+//        val otherNotes = sortedNotes.drop(TOP_NOTES_AMOUNT)
+//        val otherNotesSize = otherNotes.sumOf { (_, notes) -> notes.size }
+//
+//        val statItems = topNotes
+//            .map { (type, notes) ->
+//                StatsItem(
+//                    info = type,
+//                    value = notes.size,
+//                    percent = BigDecimal
+//                        .valueOf(PERCENTAGE_100 * notes.size / allItemsAmount)
+//                        .setScale(1, RoundingMode.HALF_UP)
+//                )
+//            }
+//
+//        if (otherNotes.isNotEmpty()) {
+//            statItems + StatsItem(
+//                info = Other,
+//                value = otherNotesSize,
+//                percent = BigDecimal
+//                    .valueOf(PERCENTAGE_100 * otherNotesSize / allItemsAmount)
+//                    .setScale(1, RoundingMode.HALF_UP)
+//            )
+//        } else {
+//            statItems
+//        }
     }
 
     fun onIntentCreated(intent: StatsIntent) = viewModelScope.launch {

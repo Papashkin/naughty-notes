@@ -40,8 +40,8 @@ import com.antsfamily.naughtynotes.presentation.allnotes.view.NoteCard
 import com.antsfamily.naughtynotes.presentation.common.FullScreenError
 import com.antsfamily.naughtynotes.presentation.common.FullScreenLoading
 import com.antsfamily.naughtynotes.presentation.home.TopBar
-import com.antsfamily.naughtynotes.presentation.noteform.formatToString
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
+import com.antsfamily.naughtynotes.presentation.util.formatToString
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import java.time.LocalDate
 

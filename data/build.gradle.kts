@@ -41,6 +41,7 @@ dependencies {
     ksp(libs.room)
     implementation(libs.room.ktx)
     implementation(libs.crypto)
+    implementation(libs.gson)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
