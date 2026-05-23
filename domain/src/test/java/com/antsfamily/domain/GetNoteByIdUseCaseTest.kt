@@ -52,13 +52,12 @@ class GetNoteByIdUseCaseTest {
         private val USE_CASE_SUCCESS_NOTE = NoteModel(
             3643,
             LocalDate.of(2025, Month.JULY, 12),
-            PracticeType.ANAL,
+            listOf(PracticeType.ANAL),
             PracticeLocation.CAR,
             isProtected = true,
             hasOrgasm = false,
             hasPartnerOrgasm = false,
-            painRate = 2,
-            rate = 4,
+            experienceRate = 0.5f,
             personalNote = ""
         )
     }

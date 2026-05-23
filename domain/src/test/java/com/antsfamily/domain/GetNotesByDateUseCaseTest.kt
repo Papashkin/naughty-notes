@@ -54,25 +54,27 @@ class GetNotesByDateUseCaseTest {
             NoteModel(
                 3643,
                 LocalDate.of(2025, Month.JULY, 12),
-                PracticeType.ANAL,
+                listOf(
+                    PracticeType.ANAL,
+                    PracticeType.ORAL,
+                    PracticeType.VAGINAL,
+                ),
                 PracticeLocation.CAR,
                 isProtected = true,
                 hasOrgasm = false,
                 hasPartnerOrgasm = false,
-                painRate = 2,
-                rate = 4,
+                experienceRate = 0.5f,
                 personalNote = ""
             ),
             NoteModel(
                 2452,
                 LocalDate.of(2025, Month.JULY, 22),
-                PracticeType.VAGINAL,
+                listOf(PracticeType.VAGINAL),
                 PracticeLocation.SHOWER,
                 isProtected = true,
                 hasOrgasm = false,
                 hasPartnerOrgasm = true,
-                painRate = 2,
-                rate = 4,
+                experienceRate = 0.8f,
                 personalNote = "That was something crazy"
             )
         )
