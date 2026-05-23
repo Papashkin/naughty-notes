@@ -21,49 +21,57 @@ val PREVIEW_NOTES = listOf(
     NoteModel(
         3643,
         LocalDate.of(2025, Month.JULY, 12),
-        PracticeType.ANAL,
-        PracticeLocation.CAR,
+        listOf(
+            PracticeType.ANAL,
+            PracticeType.ORAL,
+        ),
+        location = PracticeLocation.CAR,
         isProtected = true,
         hasOrgasm = false,
         hasPartnerOrgasm = false,
-        painRate = 2,
-        rate = 4,
-        personalNote = ""
+        experienceRate = 29f,
+        personalNote = "",
     ),
     NoteModel(
         2452,
         LocalDate.of(2025, Month.JULY, 22),
-        PracticeType.VAGINAL,
+        listOf(
+            PracticeType.ANAL,
+            PracticeType.ORAL,
+        ),
         PracticeLocation.SHOWER,
         isProtected = true,
         hasOrgasm = false,
         hasPartnerOrgasm = true,
-        painRate = 2,
-        rate = 4,
+        experienceRate = 45f,
         personalNote = "That was something crazy"
     ),
     NoteModel(
         1231,
         LocalDate.of(2025, Month.JULY, 15),
-        PracticeType.ANAL,
+        listOf(
+            PracticeType.MASTURBATION,
+            PracticeType.ORAL,
+        ),
         PracticeLocation.CHANGING_ROOM,
         isProtected = false,
         hasOrgasm = false,
         hasPartnerOrgasm = true,
-        painRate = 2,
-        rate = 4,
+        experienceRate = 15f,
         personalNote = ""
     ),
     NoteModel(
         75765,
         LocalDate.of(2025, Month.JULY, 20),
-        PracticeType.THREESOME,
+        listOf(
+            PracticeType.ANAL,
+            PracticeType.THREESOME,
+        ),
         PracticeLocation.HOTEL,
         isProtected = true,
         hasOrgasm = true,
         hasPartnerOrgasm = false,
-        painRate = 2,
-        rate = 4,
+        experienceRate = 66f,
         personalNote = "That was something crazy"
     )
 )

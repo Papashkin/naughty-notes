@@ -22,9 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.noteform.formatToString
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
-import com.antsfamily.naughtynotes.presentation.util.toStringId
+import com.antsfamily.naughtynotes.presentation.util.formatToString
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
@@ -41,7 +40,7 @@ fun HomeNoteCard(
             headlineContent = {
                 Text(
                     modifier = Modifier.padding(bottom = Padding.x_small),
-                    text = stringResource(note.type.toStringId()),
+                    text = note.types.joinToString(", "),
                     style = MaterialTheme.typography.bodyMedium
                 )
             },
@@ -70,21 +69,7 @@ fun HomeNoteCard(
                                 tint = MaterialTheme.colorScheme.primary
                             )
                             Text(
-                                text = note.rate.toString(),
-                                style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier.padding(horizontal = Padding.x_small)
-                            )
-                        }
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                modifier = Modifier.size(14.dp),
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_broken_heart_outlined),
-                                contentDescription = "pain_rate",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Text(
-                                text = note.painRate.toString(),
+                                text = note.experienceRate.toString(),
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.padding(horizontal = Padding.x_small)
                             )

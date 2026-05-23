@@ -5,12 +5,11 @@ import java.time.LocalDate
 data class NoteModel(
     val id: Int,
     val date: LocalDate,
-    val type: PracticeType,
+    val types: List<PracticeType>,
     val location: PracticeLocation,
     val isProtected: Boolean,
     val hasOrgasm: Boolean,
     val hasPartnerOrgasm: Boolean,
-    val painRate: Int,
+    val experienceRate: Float,
     val personalNote: String,
-    val rate: Int
 )

@@ -1,7 +1,6 @@
 package com.antsfamily.domain.model
 
 enum class PracticeType : StatInfo {
-    UNKNOWN,
     VAGINAL,
     ORAL,
     ANAL,
@@ -15,5 +14,5 @@ enum class PracticeType : StatInfo {
         get() = this != MASTURBATION
 
     override val isNotUnknown: Boolean
-        get() = this != UNKNOWN
+        get() = true
 }

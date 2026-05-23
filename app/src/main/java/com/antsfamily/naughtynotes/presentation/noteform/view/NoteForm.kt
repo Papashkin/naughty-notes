@@ -1,26 +1,23 @@
 package com.antsfamily.naughtynotes.presentation.noteform.view
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.antsfamily.domain.model.PracticeLocation
-import com.antsfamily.domain.model.PracticeType
 import com.antsfamily.naughtynotes.R
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormIntent
 import com.antsfamily.naughtynotes.presentation.noteform.NoteFormUiState
-import com.antsfamily.naughtynotes.presentation.noteform.model.RatingType
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipList
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.NoteChip
@@ -30,42 +27,43 @@ import com.antsfamily.naughtynotes.ui.theme.Padding
 @Composable
 fun NoteForm(
     state: NoteFormUiState.Content,
-    keyboardController: SoftwareKeyboardController?,
+    modifier: Modifier = Modifier,
     onIntentChanged: (NoteFormIntent) -> Unit,
 ) {
-    Column {
-        HorizontalDividerWithText(
-            modifier = Modifier.padding(bottom = Padding.medium),
-            text = "General"
-        )
-        PracticeDropdown<PracticeType>(
-            modifier = Modifier.padding(horizontal = Padding.large),
-            title = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
-            entries = PracticeType.entries,
-            selected = state.type,
-        ) {
-            onIntentChanged(
-                NoteFormIntent.SetPracticeType(it)
-            )
-        }
-
-        PracticeDropdown<PracticeLocation>(
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
             modifier = Modifier.padding(
                 top = Padding.medium,
-                start = Padding.large,
-                end = Padding.large
+                bottom = Padding.small,
+                start = Padding.medium,
             ),
-            title = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
-            entries = PracticeLocation.entries,
-            selected = state.location,
-        ) {
-            onIntentChanged(
-                NoteFormIntent.SetPracticeLocation(it)
-            )
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            text = stringResource(R.string.note_form_screen_practice_type_dropdown_label),
+        )
+        PracticeTypeChipGrid(
+            chipList = state.types
+        ) { type, isSelected ->
+            onIntentChanged(NoteFormIntent.SetPracticeType(type, isSelected))
         }
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(vertical = Padding.medium),
+            modifier = Modifier.padding(bottom = Padding.small),
+            text = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
+        )
+        PracticeLocationChipGrid(
+            items = state.locations
+        ) { location, isSelected ->
+            onIntentChanged(NoteFormIntent.SetPracticeLocation(location, isSelected))
+        }
+
+        HorizontalDividerWithText(
+            modifier = Modifier.padding(vertical = Padding.small),
             text = "Details"
         )
 
@@ -79,89 +77,19 @@ fun NoteForm(
         }
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(vertical = Padding.medium),
-            text = stringResource(R.string.note_form_screen_rate_bar_pain_label),
-        )
-
-        Column(
-            modifier = Modifier
-                .padding(top = Padding.small)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = MaterialTheme.shapes.extraSmall
-                )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = Padding.x_small, horizontal = Padding.large),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(R.string.note_form_screen_pain_rate_min_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-                Text(
-                    text = stringResource(R.string.note_form_screen_pain_rate_max_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-            RatingBar(
-                type = RatingType.PAIN,
-                rating = state.painRate,
-                onRatingChanged = {
-                    onIntentChanged(
-                        NoteFormIntent.SetPainRate(it)
-                    )
-                }
-            )
-        }
-
-        HorizontalDividerWithText(
-            modifier = Modifier.padding(vertical = Padding.medium),
+            modifier = Modifier.padding(vertical = Padding.small),
             text = stringResource(R.string.note_form_screen_rate_bar_pleasure_label),
         )
-
-        Column(
+        BubbleSlider(
             modifier = Modifier
-                .padding(top = Padding.small)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = MaterialTheme.shapes.extraSmall
-                )
+                .testTag("experience_slider"),
+            rate = state.experienceRate,
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = Padding.x_small, horizontal = Padding.large),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(R.string.note_form_screen_pleasure_rate_min_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-                Text(
-                    text = stringResource(R.string.note_form_screen_pleasure_rate_max_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-            RatingBar(
-                type = RatingType.PLEASURE,
-                rating = state.pleasureRate,
-                onRatingChanged = {
-                    onIntentChanged(
-                        NoteFormIntent.SetPleasureRate(it)
-                    )
-                }
-            )
+            onIntentChanged(NoteFormIntent.SetExperienceRate(it))
         }
 
         HorizontalDividerWithText(
-            modifier = Modifier.padding(vertical = Padding.medium),
+            modifier = Modifier.padding(vertical = Padding.small),
             text = "Feedback",
         )
 
@@ -212,7 +140,6 @@ private fun NoteFormPreview() {
 
     NoteForm(
         state = NoteFormUiState.Content.Default.copy(chips = chips),
-        keyboardController = null,
         onIntentChanged = {}
     )
 }

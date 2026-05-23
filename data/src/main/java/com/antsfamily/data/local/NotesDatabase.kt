@@ -8,7 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.antsfamily.data.model.NoteDTO
 
 @Database(entities = [NoteDTO::class], version = 2, exportSchema = false)
-@TypeConverters(LocalDateConverter::class)
+@TypeConverters(
+    LocalDateConverter::class,
+    RoomTypeConverters::class
+    )
 abstract class NotesDatabase : RoomDatabase() {
     abstract fun NotesDao(): NotesDao
 }
