@@ -1,5 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
@@ -51,14 +52,17 @@ class HomeViewModel @Inject constructor(
         delay(DURATION_ANIMATION.toLong())
         repository.notes
             .onStart { _state.value = HomeUiState.Loading }
-            .catch { /* no-op */ }
+            .catch {
+                Log.wtf(this@HomeViewModel::class.java.name, "Something's happened while reading notes: $it")
+            /* no-op */
+            }
             .collect {
                 handleNotes(it)
             }
     }
 
     private suspend fun handleNotes(notes: List<NoteModel>) {
-        val lastThreeNotes = notes
+        val recentActivities = notes
             .sortedBy { it.date }
             .takeLast(3)
             .sortedByDescending { it.date }
@@ -77,7 +81,7 @@ class HomeViewModel @Inject constructor(
                 isCurrentMonth = true,
                 datesWithNotes = notes.getDatesForMonth(currentMonth),
                 daysSinceLastNote = abs(daysSinceLastNote),
-                lastThreeNotes = lastThreeNotes
+                recentActivities = recentActivities
             )
         }
     }

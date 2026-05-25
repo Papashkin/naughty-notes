@@ -19,11 +19,11 @@ const val STATS_ANIMATION_DURATION = 500
 
 val PREVIEW_NOTES = listOf(
     NoteModel(
-        3643,
+        1,
         LocalDate.of(2025, Month.JULY, 12),
         listOf(
             PracticeType.ANAL,
-            PracticeType.ORAL,
+            PracticeType.MASTURBATION,
         ),
         location = PracticeLocation.CAR,
         isProtected = true,
@@ -33,7 +33,7 @@ val PREVIEW_NOTES = listOf(
         personalNote = "",
     ),
     NoteModel(
-        2452,
+        2,
         LocalDate.of(2025, Month.JULY, 22),
         listOf(
             PracticeType.ANAL,
@@ -47,7 +47,7 @@ val PREVIEW_NOTES = listOf(
         personalNote = "That was something crazy"
     ),
     NoteModel(
-        1231,
+        3,
         LocalDate.of(2025, Month.JULY, 15),
         listOf(
             PracticeType.MASTURBATION,
@@ -61,7 +61,7 @@ val PREVIEW_NOTES = listOf(
         personalNote = ""
     ),
     NoteModel(
-        75765,
+        4,
         LocalDate.of(2025, Month.JULY, 20),
         listOf(
             PracticeType.ANAL,

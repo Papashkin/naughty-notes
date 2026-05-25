@@ -67,19 +67,20 @@ fun HomeContentView(
             onDayClick = { onIntentChanged(HomeIntent.SelectDay(it)) }
         )
 
-        if (state.lastThreeNotes.isNotEmpty()) {
-            Spacer(Modifier.height(Padding.large))
+        if (state.recentActivities.isNotEmpty()) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Last three notes:",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Padding.medium)
+                ,
+                text = stringResource(R.string.home_screen_subtitle_recent_activity),
                 textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.titleSmall
             )
             Column(
-                modifier = Modifier.padding(vertical = Padding.small),
-                verticalArrangement = Arrangement.spacedBy(Padding.x_small)
+                verticalArrangement = Arrangement.spacedBy(Padding.regular)
             ) {
-                state.lastThreeNotes.forEach { note ->
+                state.recentActivities.forEach { note ->
                     HomeNoteCard(note)
                 }
             }
@@ -106,35 +107,35 @@ fun HomeContentLoadingView(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(Padding.large))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(Padding.x_small)
+            verticalArrangement = Arrangement.spacedBy(Padding.regular)
         ) {
             ShimmerLoading(
                 modifier = Modifier
-                    .height(90.dp)
+                    .height(80.dp)
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.extraLarge
                     ),
                 durationMillis = 1000
             )
             ShimmerLoading(
                 modifier = Modifier
-                    .height(90.dp)
+                    .height(80.dp)
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.extraLarge
                     ),
                 durationMillis = 1000
             )
             ShimmerLoading(
                 modifier = Modifier
-                    .height(90.dp)
+                    .height(80.dp)
                     .fillMaxWidth()
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.extraLarge
                     ),
                 durationMillis = 1000
             )
@@ -151,7 +152,7 @@ private fun HomeContentPreview() {
         isCurrentMonth = false,
         datesWithNotes = listOf(),
         daysSinceLastNote = 5,
-        lastThreeNotes = PREVIEW_NOTES.take(3)
+        recentActivities = PREVIEW_NOTES.take(3)
     )
     HomeContentView(state, {})
 }

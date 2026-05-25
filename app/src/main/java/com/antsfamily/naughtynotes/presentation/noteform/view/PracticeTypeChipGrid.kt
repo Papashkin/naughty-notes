@@ -25,7 +25,7 @@ fun PracticeTypeChipGrid(
         FlowRow(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(Padding.x_small),
+                .padding(Padding.small),
             verticalArrangement = Arrangement.Center,
             itemVerticalAlignment = Alignment.CenterVertically,
         ) {

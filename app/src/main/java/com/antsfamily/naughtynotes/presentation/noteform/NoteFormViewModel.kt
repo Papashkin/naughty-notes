@@ -11,6 +11,7 @@ import com.antsfamily.domain.model.UseCaseResult
 import com.antsfamily.domain.model.toType
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceRate
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.model.PracticeLocationItem
 import com.antsfamily.naughtynotes.presentation.noteform.model.PracticeTypeItem
@@ -74,6 +75,7 @@ class NoteFormViewModel @AssistedInject constructor(
             )
 
             is NoteFormIntent.SetPracticeLocation -> setPracticeLocation(intent.location, intent.isSelected)
+            is NoteFormIntent.SetLocationGridState -> setPracticeLocationState(intent.state)
             is NoteFormIntent.SetPracticeType -> setPracticeType(intent.type, intent.isSelected)
             is NoteFormIntent.SaveButtonClick -> onSaveButtonClick()
             is NoteFormIntent.SetExperienceRate -> setExperienceRate(intent.rate)
@@ -108,6 +110,7 @@ class NoteFormViewModel @AssistedInject constructor(
                 formType = NoteFormType.EDIT,
                 date = selectedDate,
                 types = types,
+                locationGridState = LocationChipGridState.COLLAPSED,
                 locations = locations,
                 experienceRate = experienceRate,
                 note = it.personalNote,
@@ -151,31 +154,45 @@ class NoteFormViewModel @AssistedInject constructor(
     }
 
     private fun setPracticeType(type: PracticeType, isSelected: Boolean) {
-        //FIXME
-        _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> {
-                    val types = it.types.map { practice ->
-                        if (practice.type == type) practice.copy(isSelected = isSelected) else practice
-                    }
-                    it.copy(types = types)
+        _state.update { currentState ->
+            if (currentState is NoteFormUiState.Content) {
+                val types = currentState.types.map { practice ->
+                    if (practice.type == type) practice.copy(isSelected = isSelected) else practice
                 }
-                else -> it
+                currentState.copy(types = types)
+            } else {
+                currentState
             }
         }
         checkSaveButtonAvailability()
     }
 
     private fun setPracticeLocation(location: PracticeLocation, isSelected: Boolean) {
-        _state.update {
-            when (it) {
-                is NoteFormUiState.Content -> {
-                    val locations = it.locations.map { practice ->
-                        if (practice.location == location) practice.copy(isSelected = isSelected) else practice.copy(isSelected = false)
-                    }.sortedByDescending { it.isSelected }
-                    it.copy(locations = locations)
-                }
-                else -> it
+        _state.update { currentState ->
+            if (currentState is NoteFormUiState.Content) {
+                val locations = currentState.locations
+                    .map { practice ->
+                        if (practice.location == location) {
+                            practice.copy(isSelected = isSelected)
+                        } else {
+                            practice.copy(isSelected = false)
+                        }
+                    }
+                    .sortedByDescending { it.isSelected }
+                currentState.copy(locations = locations)
+            } else {
+                currentState
+            }
+        }
+        checkSaveButtonAvailability()
+    }
+
+    private fun setPracticeLocationState(locationState: LocationChipGridState) {
+        _state.update { currentState ->
+            if (currentState is NoteFormUiState.Content) {
+                currentState.copy(locationGridState = locationState)
+            } else {
+                currentState
             }
         }
         checkSaveButtonAvailability()

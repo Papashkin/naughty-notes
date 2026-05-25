@@ -2,6 +2,7 @@ package com.antsfamily.naughtynotes.presentation.noteform
 
 import com.antsfamily.domain.model.PracticeLocation
 import com.antsfamily.domain.model.PracticeType
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 
 sealed class NoteFormIntent {
@@ -13,6 +14,10 @@ sealed class NoteFormIntent {
     data class SetPracticeLocation(
         val location: PracticeLocation,
         val isSelected: Boolean,
+    ) : NoteFormIntent()
+
+    data class SetLocationGridState(
+        val state: LocationChipGridState,
     ) : NoteFormIntent()
 
     data class SetNoteChipSelectionChanged(

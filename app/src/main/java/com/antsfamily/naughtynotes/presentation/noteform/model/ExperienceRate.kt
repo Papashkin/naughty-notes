@@ -17,6 +17,11 @@ data class ExperienceRate(
     val value: Float
 ) {
     companion object {
-        fun getDefault(): ExperienceRate = ExperienceRate(ExperienceType.OKAY, 50f)
+        fun getDefault(): ExperienceRate = ExperienceRate(ExperienceType.BAD, 0f)
+
+        fun getTypeByValue(value: Float): ExperienceType =
+            ExperienceType.entries.firstOrNull {
+                value in it.minValue..it.maxValue
+            } ?: getDefault().type
     }
 }

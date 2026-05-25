@@ -11,6 +11,6 @@ sealed class HomeUiState {
         val isCurrentMonth: Boolean,
         val datesWithNotes: List<LocalDate>,
         val daysSinceLastNote: Int,
-        val lastThreeNotes: List<NoteModel>,
+        val recentActivities: List<NoteModel>,
     ): HomeUiState()
 }

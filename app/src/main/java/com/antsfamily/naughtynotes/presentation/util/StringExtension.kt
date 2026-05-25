@@ -9,6 +9,9 @@ import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCod
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinCodeStep
 import com.antsfamily.naughtynotes.presentation.changepincode.model.ChangePinErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState.COLLAPSED
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState.EXPANDED
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.model.chip.ChipType
 import com.antsfamily.naughtynotes.presentation.stats.model.StatChipType
@@ -61,6 +64,7 @@ fun PracticeLocation.toStringId(): Int {
         PracticeLocation.WORKPLACE -> R.string.practice_location_workspace
         PracticeLocation.ELEVATOR -> R.string.practice_location_lift
         PracticeLocation.SAUNA -> R.string.practice_location_sauna
+        PracticeLocation.JACUZZI -> R.string.practice_location_jacuzzi
         PracticeLocation.ROOFTOP -> R.string.practice_location_rooftop
         PracticeLocation.AIRPLANE -> R.string.practice_location_airplane
         PracticeLocation.TRAIN -> R.string.practice_location_train
@@ -139,7 +143,7 @@ fun ErrorType.toStringId(): Int {
 
 @StringRes
 fun ChipType.toStringId(): Int =
-    when(this) {
+    when (this) {
         ChipType.PROTECTION -> R.string.note_form_screen_protection_label
         ChipType.ORGASM -> R.string.note_form_screen_your_orgasm_label
         ChipType.PARTNER_ORGASM -> R.string.note_form_screen_partner_orgasm_label
@@ -147,18 +151,36 @@ fun ChipType.toStringId(): Int =
 
 @StringRes
 fun StatInfoType.toStringId(): Int =
-    when(this) {
+    when (this) {
         StatInfoType.AVERAGE_RATE -> R.string.statistic_screen_card_average_rate
         StatInfoType.MOST_ACTIVE_MONTH -> R.string.statistic_screen_card_most_active_month
         StatInfoType.MOST_POPULAR_ACTIVITY -> R.string.statistic_screen_card_most_popular_activity
         StatInfoType.MOST_POPULAR_LOCATION -> R.string.statistic_screen_card_most_popular_location
     }
+
 @StringRes
 fun ExperienceType.toStringId(): Int =
-    when(this) {
+    when (this) {
         ExperienceType.BAD -> R.string.note_form_screen_experience_bad
         ExperienceType.BELOW_AVERAGE -> R.string.note_form_screen_experience_below_average
         ExperienceType.OKAY -> R.string.note_form_screen_experience_ok
         ExperienceType.GOOD -> R.string.note_form_screen_experience_good
         ExperienceType.AMAZING -> R.string.note_form_screen_experience_amazing
+    }
+
+@StringRes
+fun LocationChipGridState.toStringId(): Int =
+    when (this) {
+        COLLAPSED -> R.string.grid_state_collapsed_button_text
+        EXPANDED -> R.string.grid_state_expanded_button_text
+    }
+
+@StringRes
+fun ExperienceType.toBadgeStringId(): Int =
+    when (this) {
+        ExperienceType.BAD -> R.string.experience_type_badge_text_bad
+        ExperienceType.BELOW_AVERAGE -> R.string.experience_type_badge_text_below_average
+        ExperienceType.OKAY -> R.string.experience_type_badge_text_okay
+        ExperienceType.GOOD -> R.string.experience_type_badge_text_good
+        ExperienceType.AMAZING -> R.string.experience_type_badge_text_amazing
     }

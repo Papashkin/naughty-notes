@@ -57,10 +57,15 @@ fun NoteForm(
             text = stringResource(R.string.note_form_screen_practice_location_dropdown_label),
         )
         PracticeLocationChipGrid(
-            items = state.locations
-        ) { location, isSelected ->
-            onIntentChanged(NoteFormIntent.SetPracticeLocation(location, isSelected))
-        }
+            state = state.locationGridState,
+            items = state.locations,
+            onStateChanged = {
+                onIntentChanged(NoteFormIntent.SetLocationGridState(it))
+            },
+            onChipClick = { location, isSelected ->
+                onIntentChanged(NoteFormIntent.SetPracticeLocation(location, isSelected))
+            }
+        )
 
         HorizontalDividerWithText(
             modifier = Modifier.padding(vertical = Padding.small),
@@ -80,7 +85,7 @@ fun NoteForm(
             modifier = Modifier.padding(vertical = Padding.small),
             text = stringResource(R.string.note_form_screen_rate_bar_pleasure_label),
         )
-        BubbleSlider(
+        NoteFormSlider(
             modifier = Modifier
                 .testTag("experience_slider"),
             rate = state.experienceRate,

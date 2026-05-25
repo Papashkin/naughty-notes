@@ -39,14 +39,14 @@ class SaveOrUpdateNoteUseCase @Inject constructor(
         id?.let {
             updateNote(note)
         } ?: run {
-            saveNote(note)
+            addNote(note)
         }
         UseCaseResult.Success(Unit)
     } catch (e: Exception) {
         UseCaseResult.Error(e)
     }
 
-    private suspend fun saveNote(note: NoteModel) {
+    private suspend fun addNote(note: NoteModel) {
         repository.addNote(note)
     }
 

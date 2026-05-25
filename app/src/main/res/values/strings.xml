@@ -26,20 +26,21 @@
 
     <string name="practice_location_bedroom">Bedroom</string>
     <string name="practice_location_living_room">Living room</string>
-    <string name="practice_location_shower">Shower / Bathtub</string>
+    <string name="practice_location_shower">Bathtub</string>
     <string name="practice_location_kitchen">Kitchen</string>
     <string name="practice_location_floor">Floor</string>
     <string name="practice_location_car">Car</string>
     <string name="practice_location_hotel">Hotel</string>
     <string name="practice_location_public_restroom">Public restroom</string>
     <string name="practice_location_changing_room">Changing room</string>
-    <string name="practice_location_balcony">Balcony / Terrace</string>
+    <string name="practice_location_balcony">Balcony</string>
     <string name="practice_location_beach">Beach</string>
-    <string name="practice_location_forest">Forest / Park</string>
-    <string name="practice_location_tent">Tent / Camping</string>
-    <string name="practice_location_workspace">Office / Workplace</string>
+    <string name="practice_location_forest">Forest</string>
+    <string name="practice_location_tent">Tent</string>
+    <string name="practice_location_workspace">Office</string>
     <string name="practice_location_lift">Elevator</string>
-    <string name="practice_location_sauna">Sauna / Jacuzzi</string>
+    <string name="practice_location_sauna">Sauna</string>
+    <string name="practice_location_jacuzzi">Jacuzzi</string>
     <string name="practice_location_rooftop">Rooftop</string>
     <string name="practice_location_airplane">Airplane</string>
     <string name="practice_location_train">Train</string>
@@ -76,6 +77,7 @@
     <string name="home_screen_banner_total_notes_of_month">Total notes this month</string>
     <string name="home_screen_banner_days_since_last_note">Days since last note</string>
     <string name="home_screen_banner_settings">Settings</string>
+    <string name="home_screen_subtitle_recent_activity">Recent Activity</string>
     <string name="home_screen_note_card_subtitle_date">Created %1$s</string>
 
     <string name="all_notes_screen_title">All notes</string>
@@ -142,4 +144,14 @@
     <string name="error_screen_message_unknown">Something went wrong</string>
 
     <string name="profile_screen_title">Profile</string>
+
+    <string name="grid_state_collapsed_button_text">Show more</string>
+    <string name="grid_state_expanded_button_text">Show less</string>
+
+    <string name="experience_type_badge_text_bad">bad</string>
+    <string name="experience_type_badge_text_below_average">below average</string>
+    <string name="experience_type_badge_text_okay">okay</string>
+    <string name="experience_type_badge_text_good">good</string>
+    <string name="experience_type_badge_text_amazing">amazing</string>
+    <string name="home_scre_recent_activity_multiple_activities">Multiple activities</string>
 </resources>
