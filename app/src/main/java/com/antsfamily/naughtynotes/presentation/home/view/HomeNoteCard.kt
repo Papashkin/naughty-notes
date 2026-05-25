@@ -4,11 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Badge
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -24,25 +23,24 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.naughtynotes.R
-import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceRate
+import com.antsfamily.naughtynotes.presentation.home.model.HomeNoteCardModel
+import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
 import com.antsfamily.naughtynotes.presentation.noteform.view.RevealedText
 import com.antsfamily.naughtynotes.presentation.util.PREVIEW_NOTES
 import com.antsfamily.naughtynotes.presentation.util.formatToString
-import com.antsfamily.naughtynotes.presentation.util.toBadgeStringId
+import com.antsfamily.naughtynotes.presentation.util.toColor
 import com.antsfamily.naughtynotes.presentation.util.toDescriptionStringId
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
 @Composable
 fun HomeNoteCard(
-    note: NoteModel,
+    note: HomeNoteCardModel,
 ) {
     Card(shape = MaterialTheme.shapes.large) {
         Box {
             ListItem(
-                modifier = Modifier.fillMaxWidth(),
                 colors = ListItemDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 ),
@@ -70,7 +68,7 @@ fun HomeNoteCard(
                             .width(180.dp)
                             .padding(bottom = Padding.x_small),
                         textId = if (note.types.size > 1) {
-                            R.string.home_scre_recent_activity_multiple_activities
+                            R.string.home_screen_recent_activity_multiple_activities
                         } else {
                             note.types.first().toStringId()
                         },
@@ -87,26 +85,23 @@ fun HomeNoteCard(
                 }
             )
             Column(
-                modifier = Modifier.align(Alignment.TopEnd),
-                horizontalAlignment = Alignment.End
+                modifier = Modifier
+                    .matchParentSize()
+                    .align(Alignment.CenterEnd),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Badge(
-                    modifier = Modifier.padding(Padding.small)
-                ) {
-                    Text(
-                        modifier =
-                            Modifier
-                                .padding(Padding.x_small),
-                        text = stringResource(
-                            ExperienceRate
-                                .getTypeByValue(note.experienceRate)
-                                .toBadgeStringId()
-                        ),
-                        style = MaterialTheme.typography.labelSmall,
-                    )
-                }
+                Box(
+                    modifier = Modifier
+                        .padding(Padding.small)
+                        .size(16.dp)
+                        .background(
+                            color = note.experienceType.toColor(),
+                            shape = CircleShape
+                        )
+                )
                 Text(
-                    modifier = Modifier.padding(horizontal = Padding.regular),
+                    modifier = Modifier.padding(Padding.small),
                     text = note.date.formatToString(),
                     style = MaterialTheme.typography.labelSmall,
                 )
@@ -118,10 +113,17 @@ fun HomeNoteCard(
 @Preview
 @Composable
 private fun HomeNoteCard_Preview() {
+    val activities = PREVIEW_NOTES.map {
+        HomeNoteCardModel(
+            it.date,
+            it.types,
+            ExperienceType.getTypeByValue(it.experienceRate)
+        )
+    }
     Column(
         verticalArrangement = Arrangement.spacedBy(Padding.medium)
     ) {
-        PREVIEW_NOTES.forEach { note ->
+        activities.forEach { note ->
             HomeNoteCard(note)
         }
     }

@@ -1,15 +1,26 @@
 package com.antsfamily.naughtynotes.presentation.noteform.model
 
+import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceRate.Companion.getDefault
+
 enum class ExperienceType(
-    val minValue: Float,
-    val maxValue: Float,
+    val value: Float,
 ) {
-    BAD(0f, 20f),
-    BELOW_AVERAGE(20f, 40f),
-    OKAY(40f, 60f),
-    GOOD(60f, 80f),
-    AMAZING(80f, 100f),
+    EMPTY( 0f),
+    BAD( 1f),
+    BELOW_AVERAGE( 2f),
+    OKAY( 3f),
+    GOOD( 4f),
+    AMAZING( 5f),
     ;
+
+    companion object {
+        fun toClosedRange() = EMPTY.value..AMAZING.value
+
+        fun getTypeByValue(value: Float): ExperienceType =
+            ExperienceType.entries.firstOrNull {
+                value.toInt() == it.value.toInt()
+            } ?: getDefault().type
+    }
 }
 
 data class ExperienceRate(
@@ -17,11 +28,6 @@ data class ExperienceRate(
     val value: Float
 ) {
     companion object {
-        fun getDefault(): ExperienceRate = ExperienceRate(ExperienceType.BAD, 0f)
-
-        fun getTypeByValue(value: Float): ExperienceType =
-            ExperienceType.entries.firstOrNull {
-                value in it.minValue..it.maxValue
-            } ?: getDefault().type
+        fun getDefault(): ExperienceRate = ExperienceRate(ExperienceType.EMPTY, 0f)
     }
 }

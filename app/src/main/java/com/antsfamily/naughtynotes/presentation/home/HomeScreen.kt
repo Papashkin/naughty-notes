@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,19 +36,6 @@ fun HomeScreen(
     navigateToAllNotes: (Long) -> Unit,
     navigateToSettings: () -> Unit
 ) {
-    val view = LocalView.current
-
-    LaunchedEffect(Unit) {
-        viewModel.navigationEvent.collect { event ->
-            when (event) {
-                is HomeNavigationEvent.NavigateToAllNotes -> navigateToAllNotes(event.date)
-                is HomeNavigationEvent.NavigateToNoteForm -> navigateToNoteForm(event.date)
-                HomeNavigationEvent.NavigateToSettings -> navigateToSettings()
-            }
-
-        }
-    }
-
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     Column(
@@ -62,6 +48,17 @@ fun HomeScreen(
         when (val uiState = state.value) {
             is HomeUiState.Loading -> HomeContentLoadingView()
             is HomeUiState.Content -> HomeContentView(uiState, viewModel::handleIntent)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is HomeNavigationEvent.NavigateToAllNotes -> navigateToAllNotes(event.date)
+                is HomeNavigationEvent.NavigateToNoteForm -> navigateToNoteForm(event.date)
+                HomeNavigationEvent.NavigateToSettings -> navigateToSettings()
+            }
+
         }
     }
 }

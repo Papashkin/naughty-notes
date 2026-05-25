@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.antsfamily.domain.model.NoteModel
 import com.antsfamily.domain.repository.NoteRepository
 import com.antsfamily.naughtynotes.design.navigation.DURATION_ANIMATION
+import com.antsfamily.naughtynotes.presentation.home.model.HomeNoteCardModel
+import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
 import com.kizitonwose.calendar.core.yearMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +68,13 @@ class HomeViewModel @Inject constructor(
             .sortedBy { it.date }
             .takeLast(3)
             .sortedByDescending { it.date }
+            .map {
+                HomeNoteCardModel(
+                    date = it.date,
+                    types = it.types,
+                    experienceType = ExperienceType.getTypeByValue(it.experienceRate),
+                )
+            }
 
         groupedNotes = notes.groupBy { it.date.yearMonth }
 

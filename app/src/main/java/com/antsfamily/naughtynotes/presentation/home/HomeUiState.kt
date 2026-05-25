@@ -1,6 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.home
 
-import com.antsfamily.domain.model.NoteModel
+import com.antsfamily.naughtynotes.presentation.home.model.HomeNoteCardModel
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -11,6 +11,6 @@ sealed class HomeUiState {
         val isCurrentMonth: Boolean,
         val datesWithNotes: List<LocalDate>,
         val daysSinceLastNote: Int,
-        val recentActivities: List<NoteModel>,
+        val recentActivities: List<HomeNoteCardModel>,
     ): HomeUiState()
 }

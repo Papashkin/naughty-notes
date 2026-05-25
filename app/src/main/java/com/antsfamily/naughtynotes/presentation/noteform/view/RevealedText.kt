@@ -33,7 +33,7 @@ fun RevealedText(
                         revealed = true
                         tryAwaitRelease()
                         revealed = false
-                    }
+                    },
                 )
             }
             .blur(

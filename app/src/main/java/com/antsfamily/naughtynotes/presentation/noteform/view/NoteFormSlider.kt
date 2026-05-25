@@ -1,11 +1,6 @@
 package com.antsfamily.naughtynotes.presentation.noteform.view
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -20,16 +15,13 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceRate
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceType
+import com.antsfamily.naughtynotes.presentation.util.toAlphaValue
 import com.antsfamily.naughtynotes.presentation.util.toStringId
 import com.antsfamily.naughtynotes.ui.theme.Padding
 
@@ -41,16 +33,10 @@ fun NoteFormSlider(
     modifier: Modifier = Modifier,
     onValueChanged: (Float) -> Unit,
 ) {
-    val valueRange = ExperienceType.BAD.minValue..ExperienceType.AMAZING.maxValue
+    val valueRange = ExperienceType.toClosedRange()
 
     val rateAlpha = remember(rate) {
-        when (rate.type) {
-            ExperienceType.BAD -> 0.2f
-            ExperienceType.BELOW_AVERAGE -> 0.4f
-            ExperienceType.OKAY -> 0.6f
-            ExperienceType.GOOD -> 0.8f
-            ExperienceType.AMAZING -> 1.0f
-        }
+        rate.type.toAlphaValue()
     }
 
     Box(
@@ -91,7 +77,6 @@ fun NoteFormSlider(
             },
             label = "rate_text_animation"
         ) { targetType ->
-
             Text(
                 text = stringResource(targetType.toStringId()),
                 modifier = Modifier.fillMaxWidth(),
@@ -105,7 +90,7 @@ fun NoteFormSlider(
                 onValueChanged(it)
             },
             valueRange = valueRange,
-            steps = 3,
+            steps = 4,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Padding.large),
