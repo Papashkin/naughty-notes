@@ -18,6 +18,7 @@ enum class PracticeLocation: StatInfo {
     WORKPLACE,
     ELEVATOR,
     SAUNA,
+    JACUZZI,
     ROOFTOP,
     AIRPLANE,
     TRAIN,

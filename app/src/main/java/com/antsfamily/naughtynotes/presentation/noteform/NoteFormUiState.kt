@@ -2,6 +2,7 @@ package com.antsfamily.naughtynotes.presentation.noteform
 
 import com.antsfamily.domain.model.ErrorType
 import com.antsfamily.naughtynotes.presentation.noteform.model.ExperienceRate
+import com.antsfamily.naughtynotes.presentation.noteform.model.LocationChipGridState
 import com.antsfamily.naughtynotes.presentation.noteform.model.NoteFormType
 import com.antsfamily.naughtynotes.presentation.noteform.model.PracticeLocationItem
 import com.antsfamily.naughtynotes.presentation.noteform.model.PracticeTypeItem
@@ -15,6 +16,7 @@ sealed class NoteFormUiState {
         val formType: NoteFormType,
         val date: LocalDate,
         val types: List<PracticeTypeItem>,
+        val locationGridState: LocationChipGridState,
         val locations: List<PracticeLocationItem>,
         val experienceRate: ExperienceRate,
         val note: String,
@@ -28,6 +30,7 @@ sealed class NoteFormUiState {
                 formType = NoteFormType.CREATE,
                 date = LocalDate.now(),
                 types = PracticeTypeItem.getDefaultTypes(),
+                locationGridState = LocationChipGridState.COLLAPSED,
                 locations = PracticeLocationItem.getDefaultLocations(),
                 experienceRate = ExperienceRate.getDefault(),
                 note = "",

@@ -8,15 +8,15 @@ appId: com.antsfamily.naughtynotes
 - tapOn: "Kitchen"
 #- hideKeyboard
 - waitForAnimationToEnd
-#- scrollUntilVisible:
-#    element:
-#      id: "experience_slider"
+- scrollUntilVisible:
+    element:
+      id: "experience_slider"
 #- extendedWaitUntil:
 #    visible:
 #      id: "experience_slider"
 #    timeout: 5000
-#- tapOn:
-#    id: "experience_slider"
+- tapOn:
+    id: "experience_slider"
 - tapOn: "Save"
 - waitForAnimationToEnd
 - extendedWaitUntil:

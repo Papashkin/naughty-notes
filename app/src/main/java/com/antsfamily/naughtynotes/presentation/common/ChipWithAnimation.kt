@@ -59,15 +59,6 @@ fun ChipWithAnimation(
         label = "chip_content_animation"
     )
 
-    val scale by animateFloatAsState(
-        targetValue = if (isSelected) 1.02f else 0.97f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMediumLow
-        ),
-        label = "chip_scale_animation"
-    )
-
     Button(
         onClick = {
             onChipClick(!isSelected)
@@ -75,11 +66,7 @@ fun ChipWithAnimation(
         modifier =
             modifier
                 .height(42.dp)
-                .padding(Padding.x_small)
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                },
+                .padding(Padding.x_small),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor,

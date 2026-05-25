@@ -80,7 +80,7 @@ fun CalendarView(
         modifier = modifier
             .heightIn(max = 440.dp)
             .clip(MaterialTheme.shapes.medium)
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         CalendarContent(
             yearMonth = yearMonth,
@@ -147,7 +147,7 @@ fun CalendarContent(
         },
     )
     HorizontalCalendar(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         state = state,
         dayContent = { day ->
             Day(

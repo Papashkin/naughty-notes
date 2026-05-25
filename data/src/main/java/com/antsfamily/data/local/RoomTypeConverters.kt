@@ -1,8 +1,8 @@
 package com.antsfamily.data.local
 
 import androidx.room.TypeConverter
-import com.antsfamily.data.model.TypesList
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class RoomTypeConverters {
 
@@ -11,6 +11,8 @@ class RoomTypeConverters {
         Gson().toJson(list)
 
     @TypeConverter
-    fun convertJSONStringToInvoiceList(jsonString: String): List<String> =
-        Gson().fromJson(jsonString, TypesList::class.java).types
+    fun convertJSONStringToStringList(json: String): List<String> {
+        val type = object : TypeToken<List<String>>() {}.type
+        return Gson().fromJson(json, type)
+    }
 }
