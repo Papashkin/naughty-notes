@@ -161,6 +161,7 @@ fun StatInfoType.toStringId(): Int =
 @StringRes
 fun ExperienceType.toStringId(): Int =
     when (this) {
+        ExperienceType.EMPTY -> R.string.note_form_screen_experience_empty
         ExperienceType.BAD -> R.string.note_form_screen_experience_bad
         ExperienceType.BELOW_AVERAGE -> R.string.note_form_screen_experience_below_average
         ExperienceType.OKAY -> R.string.note_form_screen_experience_ok
@@ -173,14 +174,4 @@ fun LocationChipGridState.toStringId(): Int =
     when (this) {
         COLLAPSED -> R.string.grid_state_collapsed_button_text
         EXPANDED -> R.string.grid_state_expanded_button_text
-    }
-
-@StringRes
-fun ExperienceType.toBadgeStringId(): Int =
-    when (this) {
-        ExperienceType.BAD -> R.string.experience_type_badge_text_bad
-        ExperienceType.BELOW_AVERAGE -> R.string.experience_type_badge_text_below_average
-        ExperienceType.OKAY -> R.string.experience_type_badge_text_okay
-        ExperienceType.GOOD -> R.string.experience_type_badge_text_good
-        ExperienceType.AMAZING -> R.string.experience_type_badge_text_amazing
     }

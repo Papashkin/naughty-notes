@@ -92,11 +92,10 @@ class NoteFormViewModel @AssistedInject constructor(
 
     private fun handleSuccessNoteResult(note: NoteModel?) {
         note?.let {
-            val experienceType = ExperienceType
-                .entries
-                .first { type -> it.experienceRate in type.minValue..type.maxValue }
-
-            val experienceRate = ExperienceRate(experienceType, it.experienceRate)
+            val experienceRate = ExperienceRate(
+                ExperienceType.getTypeByValue(it.experienceRate),
+                it.experienceRate
+            )
 
             val types = PracticeType.entries.map { type ->
                 PracticeTypeItem(type, type in it.types)
@@ -130,8 +129,10 @@ class NoteFormViewModel @AssistedInject constructor(
     }
 
     fun setExperienceRate(rate: Float) {
-        val experienceType = ExperienceType.entries.first { rate in it.minValue..it.maxValue }
-        val experienceRate = ExperienceRate(experienceType, rate)
+        val experienceRate = ExperienceRate(
+            ExperienceType.getTypeByValue(rate),
+            rate
+        )
         _state.update {
             when (it) {
                 is NoteFormUiState.Content -> it.copy(experienceRate = experienceRate)
