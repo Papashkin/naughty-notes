@@ -214,7 +214,6 @@ private fun Day(
             },
         )
 
-
         if (isWithRecords && isDayInCurrentMonth) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_heart_filled),
