@@ -9,7 +9,7 @@ sealed class HomeUiState {
     data class Content(
         val yearMonth: YearMonth,
         val isCurrentMonth: Boolean,
-        val datesWithNotes: List<LocalDate>,
+        val datesWithNotes: Set<LocalDate>,
         val daysSinceLastNote: Int,
         val recentActivities: List<HomeNoteCardModel>,
     ): HomeUiState()

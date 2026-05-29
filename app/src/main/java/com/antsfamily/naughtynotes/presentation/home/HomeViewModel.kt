@@ -84,11 +84,15 @@ class HomeViewModel @Inject constructor(
             .between(lastNoteDate, today)
             .toInt()
 
+        val datesWithNotes = notes
+            .getDatesForMonth(currentMonth)
+            .toSet()
+
         withContext(Dispatchers.Main) {
             _state.value = HomeUiState.Content(
                 yearMonth = currentMonth,
                 isCurrentMonth = true,
-                datesWithNotes = notes.getDatesForMonth(currentMonth),
+                datesWithNotes = datesWithNotes,
                 daysSinceLastNote = abs(daysSinceLastNote),
                 recentActivities = recentActivities
             )
@@ -106,7 +110,7 @@ class HomeViewModel @Inject constructor(
 
     private fun onMonthChanged(month: YearMonth) = viewModelScope.launch(Dispatchers.Default) {
         if (month == (_state.value as? HomeUiState.Content)?.yearMonth) return@launch
-        val properNotes = groupedNotes.getDatesForMonth(month)
+        val properNotes = groupedNotes.getDatesForMonth(month).toSet()
 
         withContext(Dispatchers.Main) {
             _state.update {
@@ -126,11 +130,16 @@ class HomeViewModel @Inject constructor(
     private fun onTodayButtonClick() {
         _state.update {
             when (it) {
-                is HomeUiState.Content -> it.copy(
-                    yearMonth = currentMonth,
-                    datesWithNotes = groupedNotes.getDatesForMonth(currentMonth),
-                    isCurrentMonth = true
-                )
+                is HomeUiState.Content -> {
+                    val datesWithNotes = groupedNotes
+                        .getDatesForMonth(currentMonth)
+                        .toSet()
+                    it.copy(
+                        yearMonth = currentMonth,
+                        datesWithNotes = datesWithNotes,
+                        isCurrentMonth = true,
+                    )
+                }
 
                 else -> it
             }
