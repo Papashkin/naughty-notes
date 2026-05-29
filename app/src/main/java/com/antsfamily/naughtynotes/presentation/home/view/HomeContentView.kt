@@ -98,7 +98,7 @@ private fun HomeContentPreview() {
     val state = HomeUiState.Content(
         yearMonth = YearMonth.now().minusMonths(1),
         isCurrentMonth = false,
-        datesWithNotes = listOf(),
+        datesWithNotes = setOf(),
         daysSinceLastNote = 5,
         recentActivities = recentActivities
     )

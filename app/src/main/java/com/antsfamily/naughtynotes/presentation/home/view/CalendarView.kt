@@ -22,8 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
@@ -46,7 +45,6 @@ import com.antsfamily.naughtynotes.presentation.util.CALENDAR_VIEW_MONTH_AMOUNT
 import com.antsfamily.naughtynotes.presentation.util.debouncedClickable
 import com.antsfamily.naughtynotes.ui.theme.Padding
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
-import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -57,22 +55,19 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
-import java.util.Locale
 
 @Composable
 fun CalendarView(
     modifier: Modifier = Modifier,
     yearMonth: YearMonth,
-    datesWithNotes: List<LocalDate>,
+    datesWithNotes: Set<LocalDate>,
     onMonthChanged: (YearMonth) -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
@@ -94,7 +89,7 @@ fun CalendarView(
 @Composable
 fun CalendarContent(
     yearMonth: YearMonth,
-    datesWithNotes: List<LocalDate>,
+    datesWithNotes: Set<LocalDate>,
     onMonthChanged: (YearMonth) -> Unit,
     onDayClick: (LocalDate) -> Unit,
 ) {
@@ -110,23 +105,19 @@ fun CalendarContent(
         outDateStyle = OutDateStyle.EndOfGrid
     )
 
+    LaunchedEffect(yearMonth) {
+        if (state.firstVisibleMonth.yearMonth != yearMonth) {
+            state.animateScrollToMonth(yearMonth)
+        }
+    }
+
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleMonth()?.yearMonth }
             .filterNotNull()
             .distinctUntilChanged()
             .collect { month ->
                 titleMonth.value = month
-            }
-    }
-
-    LaunchedEffect(state) {
-        snapshotFlow { state.isScrollInProgress }
-            .filter { !it }
-            .map { state.layoutInfo.firstMostVisibleMonth()?.yearMonth }
-            .filterNotNull()
-            .distinctUntilChanged()
-            .collect { yearMonth ->
-                onMonthChanged(yearMonth)
+                onMonthChanged(month)
             }
     }
 
@@ -165,10 +156,12 @@ fun CalendarContent(
 
 @Composable
 private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
+    val locale = LocalLocale.current
+
     Row(modifier = Modifier.fillMaxWidth()) {
         for (dayOfWeek in daysOfWeek) {
             Text(
-                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                text = dayOfWeek.getDisplayName(TextStyle.SHORT, locale.platformLocale),
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = 8.dp),
@@ -247,6 +240,8 @@ fun CalendarTitle(
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
+    val locale = LocalLocale.current
+
     Row(
         modifier = modifier.height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -260,7 +255,7 @@ fun CalendarTitle(
             modifier = Modifier
                 .weight(1f)
                 .testTag("MonthTitle"),
-            text = currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).plus(" ")
+            text = currentMonth.month.getDisplayName(TextStyle.FULL, locale.platformLocale).plus(" ")
                 .plus(currentMonth.year),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
@@ -315,14 +310,16 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun CalendarViewPreview() {
+    val dateWithNotes = setOf(
+        LocalDate.of(2025, Month.JULY, 19),
+        LocalDate.of(2025, Month.JULY, 21),
+        LocalDate.of(2025, Month.JULY, 25),
+        LocalDate.of(2025, Month.JULY, 30),
+    )
+
     CalendarView(
         yearMonth = YearMonth.of(2025, Month.MARCH),
-        datesWithNotes = listOf(
-            LocalDate.of(2025, Month.JULY, 19),
-            LocalDate.of(2025, Month.JULY, 21),
-            LocalDate.of(2025, Month.JULY, 25),
-            LocalDate.now(),
-        ),
+        datesWithNotes = dateWithNotes,
         onMonthChanged = {},
         onDayClick = {})
 }
