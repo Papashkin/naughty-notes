@@ -8,5 +8,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
 
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.2.20"
 }
