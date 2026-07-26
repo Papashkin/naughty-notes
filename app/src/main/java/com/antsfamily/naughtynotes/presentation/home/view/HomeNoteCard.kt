@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -48,8 +49,7 @@ fun HomeNoteCard(
                     Box(
                         modifier =
                             Modifier
-                                .size(48.dp)
-                                .padding(Padding.tiny)
+                                .size(40.dp)
                                 .background(
                                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
                                     shape = MaterialTheme.shapes.medium
@@ -60,12 +60,22 @@ fun HomeNoteCard(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_heart_outlined),
                             contentDescription = null,
                         )
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .offset(x = 2.dp, y = -2.dp)
+                                .size(12.dp)
+                                .background(
+                                    color = note.experienceType.toColor(),
+                                    shape = CircleShape
+                                )
+                        )
                     }
                 },
                 headlineContent = {
                     RevealedText(
                         modifier = Modifier
-                            .width(180.dp)
+                            .width(200.dp)
                             .padding(bottom = Padding.x_small),
                         textId = if (note.types.size > 1) {
                             R.string.home_screen_recent_activity_multiple_activities
@@ -76,7 +86,7 @@ fun HomeNoteCard(
                 },
                 supportingContent = {
                     Text(
-                        modifier = Modifier.width(180.dp),
+                        modifier = Modifier.width(240.dp),
                         text = stringResource(note.types.first().toDescriptionStringId()),
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
@@ -84,28 +94,13 @@ fun HomeNoteCard(
                     )
                 }
             )
-            Column(
+            Text(
                 modifier = Modifier
-                    .matchParentSize()
-                    .align(Alignment.CenterEnd),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(Padding.small)
-                        .size(16.dp)
-                        .background(
-                            color = note.experienceType.toColor(),
-                            shape = CircleShape
-                        )
-                )
-                Text(
-                    modifier = Modifier.padding(Padding.small),
-                    text = note.date.formatToString(),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
+                    .align(Alignment.TopEnd)
+                    .padding(Padding.small),
+                text = note.date.formatToString(),
+                style = MaterialTheme.typography.labelSmall,
+            )
         }
     }
 }
